@@ -1,0 +1,104 @@
+.nav-list a {
+	cursor: pointer;
+}
+
+
+.oj_problem_specification {
+	border-top: solid 1px #eee;
+	padding-top: 1em;
+	margin-bottom: 1em;
+}
+
+.oj_contest_specification {
+	border-top:none;
+}
+
+.oj_problem_specification > div > i{
+	font-size:20px;
+	margin-right:0.3em;
+}
+.oj_problem_specification > div > span{
+	font-size:16px;
+}
+
+.oj_problem_view {
+	border-top: solid 1px #eee;
+}
+
+.oj_problem_view h2 {
+	margin-top:2em;
+	margin-bottom: 0.2em;
+}
+
+.oj_problem_view p {
+	font-size:1.6rem;
+	text-align: justify;
+	font-family:"Open Sans";
+}
+
+.oj_problem_image {
+	width:400px;
+	margin:0 auto;
+	box-shadow: 1px 1px 5px #000;
+}
+
+.oj_problem_image > img {
+	display: block;
+	width:100%;
+	max-width:100%;
+}
+
+.oj_problem_tag {
+	margin-left: 0;
+}
+
+.oj_problem_tag > li {
+    margin: 0.1em;
+    float:right;
+} 
+
+.oj_tag_column {
+	max-width: 200px;
+}
+
+@media screen and (max-width: 767px) {
+    .oj_problem_tag > li {
+        float: left !important;
+    }
+}
+
+.oj_description_column {
+	max-width: 300px;
+}
+
+.oj_option_col {
+	max-width: 120px;
+}
+
+.oj_tl_ml {
+	min-width: 50px;
+}
+
+.tag_pill {
+	border:none;
+	margin-bottom: 0.3em;
+}
+
+.tag_pill > a {
+	color:#fff;
+	text-shadow:1px 1px 1px #000;
+}
+
+.dataTables_wrapper {
+	margin-top:0.5em;
+}
+
+
+.modal-dialog {
+	width:90%;
+}
+
+.modal-dialog .dataTables_wrapper {
+	max-height: 500px;
+	overflow: scroll;
+}
