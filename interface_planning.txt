@@ -1,0 +1,107 @@
+Admin View Map:
+
+1. Dashboard
+	a) Running Contests Summary List =================================================
+
+2. Contests
+	a) Contests Summary List (Ordered according to start time, descending)
+		i. Overview 
+		ii. Problem Set	===========================================================
+		iii. Submission
+		iv. Clarification
+		v. Standings
+			Global Rejudge
+			Disqualify/Requalify a contestant.
+			Generate Resultant HTML file for the final Ranklist
+	b) Create Contest =================================================================
+		i. Choose Problems ========================================================
+		ii. Set Time ==============================================================
+		iii. Set contestants and judges.
+	c) Edit Contest
+		i. Edit Problems ==========================================================
+		ii. Edit Time Range
+		iii. Edit contestants and judges.
+	d) Delete Contest =================================================================
+
+3. Problem Volume
+	a) List of Problems (Descending order with time) ==================================
+	b) Side panel for Category Volume
+	c) Input a new problem ============================================================
+		i. Input all data =========================================================
+		ii. Upload Image (Optional) ===============================================
+	d) Edit a problem
+	e) Delete a problem ===============================================================
+4. User Management
+	a) Judge Management
+	i. List all judges
+	ii. Create a new judge.
+	iii. Edit a judge
+	iv. Delete a judge
+	v. Bulk Judge Management (not now)
+		List all bulk judges
+		Auto generate specific numbers of judges (names are optional) and their username, passwords and add them to a specific contest. Generate a printable page containing tabular formatted usernames and passwords of these judges.
+		Increase/Decrease number of judges in bulk judge package
+	b) Contestant Management
+		i. List all contestants
+		ii. Create a new contestant.
+		iii. Edit a contestant
+		iv. Delete a contestant
+		v. Bulk Contestant Management
+			Auto generate specific numbers of contestants (names are mandatory) and their username, passwords and add them to a specific contest. Generate a printable page containing tabular formatted usernames and passwords of these contestants.
+			Add more bulk contestants to a bulk package.
+5. Profile  + Logout
+
+==============================================
+
+Judge View Map:
+
+1. Dashboard
+	a) Running Contests Summary List (Descending)
+	b) New Clarification from any running contest with access
+2. Contests
+	a) Contests Summary List (Descending)
+	i. Overview
+	ii. Problem Set
+		Edit Judge Input
+	iii. Submission
+		View Source
+		Rejudge with Manual Input
+		Declare manual verdict for a submission
+		Rejudge with Manual/Original Input for Non-AC Submissions.
+	iv. Clarification
+		Reply New Clarifications.
+		Declare General Clarification for All Contestants.
+		Ignore a clarification.
+		Remove a clarification.
+	v. Standings
+		Disqualify/Requalify a contestant.
+		Generate Resultant HTML file for the final Ranklist
+3. Problem Volume
+	a) List of Problems (Descending order with time)
+	b) Side panel for Category Volume
+	c) Input a new problem
+		i. Input all data
+		ii. Upload Image (Optional)
+	d) Edit a problem
+4. Profile (Change Password) + Logout
+
+===================================================
+
+User View Map:
+
+1. Dashboard
+	a) Running Contests With Access
+	b) Upcoming Contests With Access
+	c) Running Contest Details (Overview) if Participated
+2. Contests
+	a) Overview
+	b) Problem Set
+		i. Submit Solution
+	c) Submission
+		i. My
+		ii. All
+	d) Clarification
+		i. My
+		ii. All
+	e) Standings
+3. Profile (Change Password) + Logout
