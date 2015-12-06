@@ -65,7 +65,7 @@
 		</li>
 
 		<li class="hover">
-			<a href="<?php echo base_url($module.'/user_management'); ?>">
+			<a class="dropdown-toggle" href="<?php echo base_url($module.'/user_management'); ?>">
 				<i class="menu-icon fa fa-user"></i>
 				<span class="menu-text"> User Management </span>
 
@@ -76,7 +76,7 @@
 
 			<ul class="submenu">
 				<li class="hover">
-					<a href="<?php echo base_url($module.'/user_management/judge'); ?>">
+					<a class="dropdown-toggle">
 						<i class="menu-icon fa fa-user-secret"></i>
 						Manage Judges
 
@@ -86,6 +86,12 @@
 
 					<ul class="submenu">
 						<li class="hover">
+							<a href="<?php echo base_url($module.'/user_management/judge'); ?>">
+								<i class="menu-icon fa fa-user-plus"></i>
+								All Judges
+							</a>
+						</li>
+						<li class="hover">
 							<a href="<?php echo base_url($module.'/user_management/create_judge'); ?>">
 								<i class="menu-icon fa fa-user-plus"></i>
 								Add a New Judge
@@ -94,7 +100,7 @@
 					</ul>
 				</li>
 				<li class="hover">
-					<a href="<?php echo base_url($module.'/user_management/contestant'); ?>">
+					<a class="dropdown-toggle">
 						<i class="menu-icon fa fa-user"></i>
 						Manage Contestants
 						<b class="arrow fa fa-angle-right"></b>
@@ -103,13 +109,19 @@
 
 					<ul class="submenu">
 						<li class="hover">
+							<a href="<?php echo base_url($module.'/user_management/contestant'); ?>">
+								<i class="menu-icon fa fa-user-plus"></i>
+								All Contestants
+							</a>
+						</li>
+						<li class="hover">
 							<a href="<?php echo base_url($module.'/user_management/create_contestant'); ?>">
 								<i class="menu-icon fa fa-user-plus"></i>
 								Add a New Contestant
 							</a>
 						</li>
 						<li class="hover">
-							<a href="<?php echo base_url($module.'/user_management/bulk_contestant'); ?>">
+							<a class="dropdown-toggle">
 								<i class="menu-icon fa fa-users"></i>
 								Bulk Contestant Pack
 								<b class="arrow fa fa-angle-right"></b>
@@ -117,6 +129,12 @@
 							<b class="arrow"></b>
 
 							<ul class="submenu">
+								<li class="hover">
+									<a href="<?php echo base_url($module.'/user_management/bulk_contestant'); ?>">
+										<i class="menu-icon fa fa-user-plus"></i>
+										All Bulk Contestant Packs
+									</a>
+								</li>
 								<li class="hover">
 									<a href="<?php echo base_url($module.'/user_management/create_bulk_contestant'); ?>">
 										<i class="menu-icon fa fa-user-plus"></i>

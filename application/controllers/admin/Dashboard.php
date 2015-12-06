@@ -29,6 +29,18 @@ class Dashboard extends OJ_Controller {
     	$data = $this->data;
     	$data['title'] .= 'Dashboard';
 
+        // Page CSS Files
+        $data['page_css'] = array();
+
+        // Page JS Scripts
+        $data['page_scripts'] = array('js_table_tools.php');
+
+        $updated = $this->m_admin->get_contests(0);
+        $not_updated = $this->m_admin->get_contests(1);
+
+        $data['running_contests'] = array_merge($updated, $not_updated);
+        $data['upcoming_contests'] = $this->m_admin->get_contests(-1);
+
     	$data['content'] = 'v_home.php';
     	$this->load->view($this->viewpath.'v_main', $data);
     }
@@ -40,16 +52,6 @@ class Dashboard extends OJ_Controller {
             $start = new DateTime(date($contest->contest_start));
             $end = new DateTime(date($contest->contest_end));
             $now = new DateTime(date('Y-m-d H:i:s'));
-
-            // echo '<pre>';
-            // echo 'Contest: '.$contest->contest_id.'<br />';
-            // var_dump($start);
-            // var_dump($end);
-            // var_dump($now);
-            // var_dump($now >= $start);
-            // var_dump($now >= $end);
-            // echo '===============================';
-            // echo '</pre>';
 
             $data = array();
 

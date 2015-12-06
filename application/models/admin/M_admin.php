@@ -72,6 +72,11 @@ class M_admin extends Ci_model {
         return $this->db->get('contest')->result();
     }
 
+    public function get_contests($status) {
+        $this->db->where('contest_status', $status);
+        return $this->db->get('contest')->result();
+    }
+
     public function get_single_contest($contest_id) {
         $this->db->where('contest_id', $contest_id);
         return $this->db->get('contest')->row();
