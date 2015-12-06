@@ -128,7 +128,7 @@ class Contest extends OJ_Controller {
 
         foreach($data['problems'] as $key => $problem) {
             array_push($data['individual_tags'], $this->m_admin->tags_for_problem($problem->problem_id));
-            $data['problems'][$key]->problem_description = $this->__excerpt($problem->problem_description);
+            $data['problems'][$key]->problem_excerpt = $this->__excerpt($problem->problem_description);
 
             if($data['problems'][$key]->problem_time_limit >= 1000) {
                 $data['problems'][$key]->problem_time_limit /= 1000;

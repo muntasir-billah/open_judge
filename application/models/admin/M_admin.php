@@ -7,6 +7,20 @@ class M_admin extends Ci_model {
         return $result->result();
     }
 
+    public function all_users() {
+        return $this->db->get('user')->result();
+    }
+
+    public function get_single_user($user_id) {
+        $this->db->where('user_id', $user_id);
+        return $this->db->get('user')->row();
+    }
+
+    public function add_contestant($user) {
+        $this->db->insert('user', $user);
+        return $this->db->insert_id();
+    }
+
     public function get_contest_status($status) {
         $this->db->select('contest_id, contest_start, contest_end');
         $this->db->where('contest_status', $status);

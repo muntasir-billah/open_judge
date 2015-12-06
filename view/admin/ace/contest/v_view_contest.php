@@ -91,7 +91,7 @@
 							</td>
 							<td class="hidden-480 oj_tl_ml"><?php echo $problem->problem_time_limit; ?></td>
 							<td class="hidden-480 oj_tl_ml"><?php echo $problem->problem_memory_limit; ?></td>
-							<td class="oj_description_column"><?php echo $problem->problem_description; ?></td>
+							<td class="oj_description_column"><?php echo $problem->problem_excerpt; ?></td>
 
 							<td><?php echo $problem->problem_setter; ?></td>
 							<td class="hidden-480"><?php echo date('h:i A, M d, Y', strtotime($problem->problem_add_date)); ?></td>

@@ -357,4 +357,16 @@ $(document).one('ajaxloadstart.page', function(e) {
 });
 
 });
+
+
+
+$('form.password_field_form').submit(function(event) {
+	var pass1 = $('input.pass1').val();
+	var pass2 = $('input.pass2').val();
+	if(pass1 != pass2) {
+		alert("Passwords didn't match");
+		event.preventDefault();
+	}
+});
+
 </script>

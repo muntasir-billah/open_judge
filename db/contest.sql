@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50625
 File Encoding         : 65001
 
-Date: 2015-11-24 20:00:22
+Date: 2015-12-07 04:58:21
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -131,15 +131,16 @@ CREATE TABLE `contest` (
   `contest_end` datetime NOT NULL,
   `contest_status` tinyint(2) DEFAULT '-1',
   PRIMARY KEY (`contest_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of contest
 -- ----------------------------
-INSERT INTO `contest` VALUES ('1', 'SUST IUPC 2015', '1', 'admin', '2015-11-28 09:00:00', '2015-11-28 14:00:00', '-1');
-INSERT INTO `contest` VALUES ('2', 'IUT IUPC 2016', '0', null, '2015-11-22 21:30:00', '2015-11-26 21:30:00', '-1');
-INSERT INTO `contest` VALUES ('3', 'IST Internal Programming Contest 2015', '1', 'admin', '2015-11-24 21:42:00', '2015-11-28 21:42:00', '-1');
-INSERT INTO `contest` VALUES ('4', 'pcIST Beginners Contest', '0', null, '2015-11-24 22:16:00', '2015-11-28 22:16:00', '-1');
+INSERT INTO `contest` VALUES ('1', 'SUST IUPC 2015', '1', 'admin', '2015-11-28 09:00:00', '2015-11-28 14:00:00', '2');
+INSERT INTO `contest` VALUES ('2', 'IUT IUPC 2016', '0', null, '2015-11-22 21:30:00', '2015-11-26 21:30:00', '2');
+INSERT INTO `contest` VALUES ('3', 'IST Internal Programming Contest 2015', '1', 'admin', '2015-11-24 21:42:00', '2015-11-28 21:42:00', '2');
+INSERT INTO `contest` VALUES ('4', 'pcIST Beginners Contest', '0', null, '2015-11-24 22:16:00', '2015-11-28 22:16:00', '2');
+INSERT INTO `contest` VALUES ('5', 'Desktop Contest', '1', 'amarpc', '2015-12-07 03:39:00', '2016-01-06 03:38:00', '1');
 
 -- ----------------------------
 -- Table structure for `judge`
@@ -239,7 +240,7 @@ CREATE TABLE `prob_cont_rel` (
   KEY `prob_cont_cont_FK2` (`contest_id`),
   CONSTRAINT `prob_cont_cont_FK2` FOREIGN KEY (`contest_id`) REFERENCES `contest` (`contest_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `prob_cont_prob_FK1` FOREIGN KEY (`problem_id`) REFERENCES `problem` (`problem_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of prob_cont_rel
@@ -253,6 +254,9 @@ INSERT INTO `prob_cont_rel` VALUES ('6', '3', '3');
 INSERT INTO `prob_cont_rel` VALUES ('7', '2', '3');
 INSERT INTO `prob_cont_rel` VALUES ('9', '4', '3');
 INSERT INTO `prob_cont_rel` VALUES ('10', '4', '2');
+INSERT INTO `prob_cont_rel` VALUES ('11', '1', '5');
+INSERT INTO `prob_cont_rel` VALUES ('12', '2', '5');
+INSERT INTO `prob_cont_rel` VALUES ('13', '3', '5');
 
 -- ----------------------------
 -- Table structure for `problem`
@@ -358,12 +362,32 @@ CREATE TABLE `user` (
   `user_type` tinyint(2) NOT NULL DEFAULT '0',
   PRIMARY KEY (`user_id`,`user_handle`,`user_email`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
 INSERT INTO `user` VALUES ('1', 'user', 'ee11cbb19052e40b07aac0ca060c23ee', 'Test User', 'test@user.com', '1234567890', '0');
+INSERT INTO `user` VALUES ('2', 'lights_on_me', '202cb962ac59075b964b07152d234b70', 'Muntasir Billah Munna', 'user@mail.com', '2345678', '0');
+
+-- ----------------------------
+-- Table structure for `user_cont_rel`
+-- ----------------------------
+DROP TABLE IF EXISTS `user_cont_rel`;
+CREATE TABLE `user_cont_rel` (
+  `user_cont_rel` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `contest_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`user_cont_rel`),
+  KEY `user_cont_user_FK1` (`user_id`),
+  KEY `user_cont_cont_FK2` (`contest_id`),
+  CONSTRAINT `user_cont_cont_FK2` FOREIGN KEY (`contest_id`) REFERENCES `contest` (`contest_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_cont_user_FK1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of user_cont_rel
+-- ----------------------------
 
 -- ----------------------------
 -- View structure for `prob_for_display`

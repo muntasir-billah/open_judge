@@ -6,7 +6,7 @@ class User_management extends OJ_Controller {
 	public $module = 'admin';	// defines the module
 	public $template = 'ace';	// Current Template Name
 	public $viewpath = '';
-    public $subview = 'User_management';
+    public $subview = 'user_management';
 	//========================
 	public $data = array();
 
@@ -26,7 +26,8 @@ class User_management extends OJ_Controller {
     //====================================//
 
     public function index() {
-    	echo 'U-man';
+    	$url = site_url().$this->module.'/User_management/contestant';
+        redirect($url);
     }
 
     public function judge() {
@@ -38,12 +39,84 @@ class User_management extends OJ_Controller {
 	}
 
 	public function contestant() {
-    	echo 'U-man';
+        echo 'U-man';
+        // $data = $this->data;
+        // $data['title'] .= 'Contests';
+
+        // // Page CSS Files
+        // $data['page_css'] = array();
+
+        // // Page JS Scripts
+        // $data['page_scripts'] = array('js_table_tools.php', 'js_view_contest.php');
+
+        // $data['contests'] = $this->m_admin->all_contests();
+
+        // $data['content'] = $this->subview.'/v_all_contests.php';
+        // $this->load->view($this->viewpath.'v_main', $data);
 	}
 
 	public function create_contestant() {
-    	echo 'U-man';
+        $data = $this->data;
+        $data['title'] .= 'Create Contestant';
+
+        // Page CSS Files
+        $data['page_css'] = array('css_form_elements.php');
+
+        // Page JS Scripts
+        $data['page_scripts'] = array('js_form_elements.php');
+
+        $data['content'] = $this->subview.'/v_create_user.php';
+        $this->load->view($this->viewpath.'v_main', $data);
 	}
+
+    public function store_contestant() {
+        // echo '<pre>';
+        // print_r($_POST);
+        // echo '</pre>';
+
+        if($_POST['user_pass1'] != $_POST['user_pass2']) {
+            redirect($url);
+        }
+
+        $url = site_url().$this->module.'/user_management/create_contestant';
+
+        $user = array();
+        $user['user_name'] = $_POST['user_name'];
+        $user['user_handle'] = $_POST['user_handle'];
+        $user['user_phone'] = $_POST['user_phone'];
+        $user['user_email'] = $_POST['user_email'];
+        $user['user_pass'] = md5($_POST['user_pass1']);
+
+        $insert_id = $this->m_admin->add_contestant($user);
+
+        if($insert_id) {
+            redirect(site_url().$this->module.'/user_management/view_contestant?user_id='.$insert_id);
+        }
+        else {
+            redirect($url);
+        }
+    }
+
+    public function view_contestant() {
+        if(isset($_GET['user_id'])) $user_id = $_GET['user_id'];
+        else redirect(base_url($this->module.'/'.$this->subview));
+
+        $data = $this->data;
+        $data['title'] .= 'Contestants';
+
+        // Page CSS Files
+        $data['page_css'] = array();
+
+        // Page JS Scripts
+        $data['page_scripts'] = array('js_table_tools.php', 'js_view_contest.php');
+
+        if(!$data['user'] = $this->m_admin->get_single_user($user_id)) {
+            redirect(site_url().'four');
+        }
+
+        $data['content'] = $this->subview.'/v_view_user.php';
+        $this->load->view($this->viewpath.'v_main', $data);
+    }
 
 	public function bulk_contestant() {
 		echo 'U-man';
