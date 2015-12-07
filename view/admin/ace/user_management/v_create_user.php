@@ -46,7 +46,7 @@
 					<label class="col-sm-3 control-label no-padding-right" for="user_email"> Contestant Email </label>
 
 					<div class="col-sm-9">
-						<input type="text" name="user_email" placeholder="Email" class="col-xs-10 col-sm-5" />
+						<input type="email" name="user_email" placeholder="Email" class="col-xs-10 col-sm-5" />
 					</div>
 				</div>
 

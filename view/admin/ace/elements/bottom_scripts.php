@@ -4,6 +4,14 @@
 <script src="<?php echo $fullpath; ?>assets/js/ace.min.js"></script>
 
 <script>
+	$('.delete_button').click(function() {
+		var text = $(this).attr('title');
+		text = 'Are You Sure To ' + text + '?';
+		if(!confirm(text)) return false;
+	});
+</script>
+
+<script>
 	var ajax_call = function() {
 
 		var url = "<?php echo base_url($module.'/Dashboard/check_contest_status'); ?>/";

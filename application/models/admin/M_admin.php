@@ -7,6 +7,8 @@ class M_admin extends Ci_model {
         return $result->result();
     }
 
+    // Contestant Functions
+
     public function all_contestants() {
         return $this->db->get('user')->result();
     }
@@ -26,6 +28,119 @@ class M_admin extends Ci_model {
         $this->db->update('user', $user);
         return $this->db->affected_rows();
     }
+
+    public function user_handle_check($user_handle) {
+        $this->db->where('user_handle', $user_handle);
+        $result = $this->db->get('user');
+        return $result->num_rows();
+    }
+
+    public function delete_contestant($user_id) {
+        $this->db->where('user_id', $user_id);
+        $this->db->delete('user');
+        return $this->db->affected_rows();
+    }
+
+    public function get_users_for_contest($contest_id) {
+        $this->db->select('*');
+        $this->db->join('user_cont_rel', 'user_cont_rel.user_id = user.user_id');
+        $this->db->where('contest_id', $contest_id);
+        $this->db->where('user_type', 0);
+        return $this->db->get('user')->result();
+    }
+
+     public function users_except_contest($contest_id) {
+        $query = "SELECT * FROM user WHERE 
+    `user`.`user_id` NOT IN (SELECT user_id FROM user_cont_rel WHERE contest_id = $contest_id)";
+
+        return $this->db->query($query)->result();
+    }
+
+    public function get_user_cont_rel($user_id, $contest_id) {
+        $this->db->where('user_id', $user_id);
+        $this->db->where('contest_id', $contest_id);
+        return $this->db->get('user_cont_rel')->row();
+    }
+
+    public function add_user_cont_rel($data) {
+        $this->db->insert('user_cont_rel', $data);
+        return $this->db->insert_id();
+    }
+
+    public function remove_user_cont_rel($user_id, $contest_id) {
+        $this->db->where('user_id', $user_id);
+        $this->db->where('contest_id', $contest_id);
+        $this->db->delete('user_cont_rel');
+        return $this->db->affected_rows();
+    }
+
+    // Judges Functions
+
+    public function all_judges() {
+        return $this->db->get('judge')->result();
+    }
+
+    public function get_single_judge($judge_id) {
+        $this->db->where('judge_id', $judge_id);
+        return $this->db->get('judge')->row();
+    }
+
+    public function add_judge($judge) {
+        $this->db->insert('judge', $judge);
+        return $this->db->insert_id();
+    }
+
+    public function update_judge($judge_id, $judge) {
+        $this->db->where('judge_id', $judge_id);
+        $this->db->update('judge', $judge);
+        return $this->db->affected_rows();
+    }
+
+    public function judge_handle_check($judge_user) {
+        $this->db->where('judge_user', $judge_user);
+        $result = $this->db->get('judge');
+        return $result->num_rows();
+    }
+
+    public function delete_judge($judge_id) {
+        $this->db->where('judge_id', $judge_id);
+        $this->db->delete('judge');
+        return $this->db->affected_rows();
+    }
+
+    public function get_judges_for_contest($contest_id) {
+        $this->db->select('*');
+        $this->db->join('judge_cont_rel', 'judge_cont_rel.judge_id = judge.judge_id');
+        $this->db->where('contest_id', $contest_id);
+        return $this->db->get('judge')->result();
+    }
+
+     public function judges_except_contest($contest_id) {
+        $query = "SELECT * FROM judge WHERE 
+    `judge`.`judge_id` NOT IN (SELECT judge_id FROM judge_cont_rel WHERE contest_id = $contest_id)";
+
+        return $this->db->query($query)->result();
+    }
+
+    public function get_judge_cont_rel($judge_id, $contest_id) {
+        $this->db->where('judge_id', $judge_id);
+        $this->db->where('contest_id', $contest_id);
+        return $this->db->get('judge_cont_rel')->row();
+    }
+
+    public function add_judge_cont_rel($data) {
+        $this->db->insert('judge_cont_rel', $data);
+        return $this->db->insert_id();
+    }
+
+    public function remove_judge_cont_rel($judge_id, $contest_id) {
+        $this->db->where('judge_id', $judge_id);
+        $this->db->where('contest_id', $contest_id);
+        $this->db->delete('judge_cont_rel');
+        return $this->db->affected_rows();
+    }
+
+    // Others
 
     public function get_contest_status($status) {
         $this->db->select('contest_id, contest_start, contest_end');

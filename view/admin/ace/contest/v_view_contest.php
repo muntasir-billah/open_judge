@@ -46,10 +46,10 @@
 						</a>
 					</li>
 					<li class="active">
-						<a href="#">Manage Judges</a>
+						<a href="<?php echo site_url().$this->module.'/contest/manage_judges?contest_id='.$contest->contest_id; ?>">Manage Judges</a>
 					</li>
 					<li class="active">
-						<a href="#">Manage Contestants</a>
+						<a href="<?php echo site_url().$this->module.'/contest/manage_contestants?contest_id='.$contest->contest_id; ?>">Manage Contestants</a>
 					</li>
 					<div class="clearfix"></div>
 				</ul>

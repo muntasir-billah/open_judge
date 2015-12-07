@@ -20,7 +20,7 @@ Admin View Map:
 	c) Edit Contest
 		i. Edit Problems ==========================================================
 		ii. Edit Time Range
-		iii. Edit contestants and judges.
+		iii. Edit contestants and judges. =========================================
 	d) Delete Contest =================================================================
 
 3. Problem Volume
@@ -33,19 +33,19 @@ Admin View Map:
 	e) Delete a problem ===============================================================
 4. User Management
 	a) Judge Management
-	i. List all judges
-	ii. Create a new judge.
-	iii. Edit a judge
-	iv. Delete a judge
-	v. Bulk Judge Management (not now)
-		List all bulk judges
-		Auto generate specific numbers of judges (names are optional) and their username, passwords and add them to a specific contest. Generate a printable page containing tabular formatted usernames and passwords of these judges.
-		Increase/Decrease number of judges in bulk judge package
+		i. List all judges ========================================================
+		ii. Create a new judge.====================================================
+		iii. Edit a judge =========================================================
+		iv. Delete a judge ========================================================
+		v. Bulk Judge Management (not now) !!!!!!!!!!!!!!!!!!!!!
+			List all bulk judges
+			Auto generate specific numbers of judges (names are optional) and their username, passwords and add them to a specific contest. Generate a printable page containing tabular formatted usernames and passwords of these judges.
+			Increase/Decrease number of judges in bulk judge package
 	b) Contestant Management
 		i. List all contestants ====================================================
 		ii. Create a new contestant. ===============================================
 		iii. Edit a contestant =====================================================
-		iv. Delete a contestant 
+		iv. Delete a contestant ====================================================
 		v. Bulk Contestant Management
 			Auto generate specific numbers of contestants (names are mandatory) and their username, passwords and add them to a specific contest. Generate a printable page containing tabular formatted usernames and passwords of these contestants.
 			Add more bulk contestants to a bulk package.

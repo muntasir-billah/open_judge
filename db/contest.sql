@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50625
 File Encoding         : 65001
 
-Date: 2015-12-07 04:58:21
+Date: 2015-12-08 04:03:37
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -41,7 +41,10 @@ DROP TABLE IF EXISTS `bulk_user_package`;
 CREATE TABLE `bulk_user_package` (
   `bulk_user_package_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `bulk_user_package_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`bulk_user_package_id`)
+  `contest_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`bulk_user_package_id`),
+  KEY `bulkuser_cont_FK1` (`contest_id`),
+  CONSTRAINT `bulkuser_cont_FK1` FOREIGN KEY (`contest_id`) REFERENCES `contest` (`contest_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
@@ -155,12 +158,14 @@ CREATE TABLE `judge` (
   `judge_phone` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`judge_id`,`judge_user`,`judge_email`),
   KEY `judge_id` (`judge_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of judge
 -- ----------------------------
 INSERT INTO `judge` VALUES ('1', 'judge', '1562eb3f6d9c5ac7e159c04a96ff4dfe', 'Test Judge', 'test@judge.com', '1234567890');
+INSERT INTO `judge` VALUES ('2', 'mukti.ist', '202cb962ac59075b964b07152d234b70', 'Khaleqdad Khan', 'muktiist@yahoo.com', '34567');
+INSERT INTO `judge` VALUES ('3', 'sadian10', '202cb962ac59075b964b07152d234b70', 'Sadia Nahreen', 'sadia@buet.com', '34569900');
 
 -- ----------------------------
 -- Table structure for `judge_cont_rel`
@@ -175,11 +180,13 @@ CREATE TABLE `judge_cont_rel` (
   KEY `judge_cont_cont_FK2` (`contest_id`),
   CONSTRAINT `judge_cont_cont_FK2` FOREIGN KEY (`contest_id`) REFERENCES `contest` (`contest_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `judge_cont_judge_FK1` FOREIGN KEY (`judge_id`) REFERENCES `judge` (`judge_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of judge_cont_rel
 -- ----------------------------
+INSERT INTO `judge_cont_rel` VALUES ('1', '2', '5');
+INSERT INTO `judge_cont_rel` VALUES ('3', '3', '5');
 
 -- ----------------------------
 -- Table structure for `language`
@@ -362,13 +369,15 @@ CREATE TABLE `user` (
   `user_type` tinyint(2) NOT NULL DEFAULT '0',
   PRIMARY KEY (`user_id`,`user_handle`,`user_email`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
 INSERT INTO `user` VALUES ('1', 'user', 'ee11cbb19052e40b07aac0ca060c23ee', 'Test User', 'test@user.com', '1234567890', '0');
 INSERT INTO `user` VALUES ('2', 'lights_on_me', '202cb962ac59075b964b07152d234b70', 'Muntasir Billah Munna', 'user@mail.com', '2345678', '0');
+INSERT INTO `user` VALUES ('3', 'traveler.amit', '202cb962ac59075b964b07152d234b70', 'Ashraful Hoque Amit', 'amit@sample.com', '56803312', '0');
+INSERT INTO `user` VALUES ('6', 'alamin.opu10', '202cb962ac59075b964b07152d234b70', 'Md. Al-Amin Opu', 'sample@example.com', '456789', '0');
 
 -- ----------------------------
 -- Table structure for `user_cont_rel`
