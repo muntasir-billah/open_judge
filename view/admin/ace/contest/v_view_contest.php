@@ -1,8 +1,8 @@
 <div class="page-content">
 	<div class="page-header">
 		<div class="page_actions pull-right">
-			<button class="btn btn-sm btn-info active" id="contestant_view">View</button>
-			<button class="btn btn-sm btn-warning" id="admin_view">Edit</button>
+			<button class="btn btn-sm btn-info active" id="view_row">View</button>
+			<button class="btn btn-sm btn-warning" id="edit_row">Edit</button>
 		</div>
 		<h1><?php echo $contest->contest_name; ?></h1>
 	</div><!-- /.page-header -->
@@ -36,7 +36,7 @@
 				<div style="width: 60%" class="progress-bar progress-bar-success <?php if($contest->contest_status == 0 || $contest->contest_status == 1) echo 'active'; ?>"></div>
 			</div>
 		</div>
-		<div class="col-xs-12 admin_view" style="display:none">
+		<div class="col-xs-12 edit_row" style="display:none">
 			<div class="clearfix">
 				<div class="pull-left tableTools-container"></div>
 				<ul class="pull-right nav nav-pills">
@@ -113,7 +113,7 @@
 				</table>
 			</div>
 		</div><!-- col-xs-12, admin_view -->
-		<div class="col-xs-12 contestant_view">
+		<div class="col-xs-12 view_row">
 			<div class="tabbable">
 				<ul class="nav nav-tabs">
 					<li class="active">

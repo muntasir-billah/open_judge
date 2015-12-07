@@ -24,18 +24,18 @@
 				</thead>
 
 				<tbody>
-					<?php foreach ($contests as $key => $contest) { ?>
-					<tr id="contest<?php echo $contest->contest_id; ?>">
+					<?php foreach ($users as $key => $user) { ?>
+					<tr id="user<?php echo $user->user_id; ?>">
 
 						<td>
-							<a href="<?php echo base_url($module.'/contest/view_contest?contest_id='.$contest->contest_id); ?>">
-								<?php echo $contest->contest_name; ?>
+							<a href="<?php echo base_url($module.'/user_management/view_contestant?user_id='.$user->user_id); ?>">
+								<?php echo $user->user_name; ?>
 							</a>
 						</td>
-						<td><?php echo $type[$contest->contest_type]; ?></td>
-						<td><?php echo date('h:i A, M d, Y', strtotime($contest->contest_start)); ?></td>
-						<td><?php echo date('h:i A, M d, Y', strtotime($contest->contest_end)); ?></td>
-						<td><?php echo $status[$contest->contest_status]; ?></td>
+						<td><?php echo $type[$user->user_type]; ?></td>
+						<td><?php echo $user->user_handle; ?></td>
+						<td><?php echo $user->user_phone; ?></td>
+						<td><?php echo $user->user_email; ?></td>
 						<td>
 							<div class="action-buttons">
 
@@ -43,7 +43,7 @@
 									<i class="ace-icon fa fa-pencil bigger-130"></i>
 								</a>
 
-								<a class="red col-xs-2 delete_contest" href="#" contestid="<?php echo $contest->contest_id; ?>" title="Delete this Contest">
+								<a class="red col-xs-2 delete_contestant" href="#" userid="<?php echo $user->user_id; ?>" title="Delete this Contestant">
 									<i class="ace-icon fa fa-trash-o bigger-130"></i>
 								</a>
 							</div>

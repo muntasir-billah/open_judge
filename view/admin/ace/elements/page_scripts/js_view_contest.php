@@ -35,19 +35,18 @@
 		else return false;
 	});
 
-	
-	$('#admin_view').click(function() {
-		$('.contestant_view').hide();
-		$('#contestant_view').removeClass('active');
-		$('.admin_view').show();
-		$('#admin_view').addClass('active');
+	$('#edit_row').click(function() {
+		$('.view_row').hide();
+		$('#view_row').removeClass('active');
+		$('.edit_row').show();
+		$('#edit_row').addClass('active');
 	});
 
-	$('#contestant_view').click(function() {
-		$('.admin_view').hide();
-		$('#admin_view').removeClass('active');
-		$('.contestant_view').show();
-		$('#contestant_view').addClass('active');
+	$('#view_row').click(function() {
+		$('.edit_row').hide();
+		$('#edit_row').removeClass('active');
+		$('.view_row').show();
+		$('#view_row').addClass('active');
 	});
 
 </script>

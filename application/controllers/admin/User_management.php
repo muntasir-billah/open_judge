@@ -39,20 +39,19 @@ class User_management extends OJ_Controller {
 	}
 
 	public function contestant() {
-        echo 'U-man';
-        // $data = $this->data;
-        // $data['title'] .= 'Contests';
+        $data = $this->data;
+        $data['title'] .= 'Contests';
 
-        // // Page CSS Files
-        // $data['page_css'] = array();
+        // Page CSS Files
+        $data['page_css'] = array();
 
-        // // Page JS Scripts
-        // $data['page_scripts'] = array('js_table_tools.php', 'js_view_contest.php');
+        // Page JS Scripts
+        $data['page_scripts'] = array('js_table_tools.php', 'js_view_contest.php');
 
-        // $data['contests'] = $this->m_admin->all_contests();
+        $data['users'] = $this->m_admin->all_contestants();
 
-        // $data['content'] = $this->subview.'/v_all_contests.php';
-        // $this->load->view($this->viewpath.'v_main', $data);
+        $data['content'] = $this->subview.'/v_all_users.php';
+        $this->load->view($this->viewpath.'v_main', $data);
 	}
 
 	public function create_contestant() {
@@ -70,15 +69,11 @@ class User_management extends OJ_Controller {
 	}
 
     public function store_contestant() {
-        // echo '<pre>';
-        // print_r($_POST);
-        // echo '</pre>';
+        $url = site_url().$this->module.'/user_management/create_contestant';
 
         if($_POST['user_pass1'] != $_POST['user_pass2']) {
             redirect($url);
         }
-
-        $url = site_url().$this->module.'/user_management/create_contestant';
 
         $user = array();
         $user['user_name'] = $_POST['user_name'];
@@ -97,6 +92,33 @@ class User_management extends OJ_Controller {
         }
     }
 
+    public function update_contestant() {
+        $user_id = $_POST['user_id'];
+
+        $url = site_url().$this->module.'/user_management/view_contestant?user_id='.$user_id;
+
+        if($_POST['user_pass1'] != $_POST['user_pass2']) {
+            redirect($url);
+        }
+
+        $user = array();
+        $user['user_name'] = $_POST['user_name'];
+        $user['user_handle'] = $_POST['user_handle'];
+        $user['user_phone'] = $_POST['user_phone'];
+        $user['user_email'] = $_POST['user_email'];
+        if($_POST['user_pass1'] != '')
+            $user['user_pass'] = md5($_POST['user_pass1']);
+
+        $aff = $this->m_admin->update_contestant($user_id, $user);
+
+        if($aff) {
+            redirect(site_url().$this->module.'/user_management/view_contestant?user_id='.$user_id);
+        }
+        else {
+            redirect($url);
+        }
+    }
+
     public function view_contestant() {
         if(isset($_GET['user_id'])) $user_id = $_GET['user_id'];
         else redirect(base_url($this->module.'/'.$this->subview));
@@ -108,7 +130,7 @@ class User_management extends OJ_Controller {
         $data['page_css'] = array();
 
         // Page JS Scripts
-        $data['page_scripts'] = array('js_table_tools.php', 'js_view_contest.php');
+        $data['page_scripts'] = array('js_table_tools.php', 'js_view_contest.php', 'js_form_elements.php');
 
         if(!$data['user'] = $this->m_admin->get_single_user($user_id)) {
             redirect(site_url().'four');

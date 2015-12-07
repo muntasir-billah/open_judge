@@ -42,10 +42,10 @@ Admin View Map:
 		Auto generate specific numbers of judges (names are optional) and their username, passwords and add them to a specific contest. Generate a printable page containing tabular formatted usernames and passwords of these judges.
 		Increase/Decrease number of judges in bulk judge package
 	b) Contestant Management
-		i. List all contestants
-		ii. Create a new contestant.
-		iii. Edit a contestant
-		iv. Delete a contestant
+		i. List all contestants ====================================================
+		ii. Create a new contestant. ===============================================
+		iii. Edit a contestant =====================================================
+		iv. Delete a contestant 
 		v. Bulk Contestant Management
 			Auto generate specific numbers of contestants (names are mandatory) and their username, passwords and add them to a specific contest. Generate a printable page containing tabular formatted usernames and passwords of these contestants.
 			Add more bulk contestants to a bulk package.

@@ -7,7 +7,7 @@ class M_admin extends Ci_model {
         return $result->result();
     }
 
-    public function all_users() {
+    public function all_contestants() {
         return $this->db->get('user')->result();
     }
 
@@ -19,6 +19,12 @@ class M_admin extends Ci_model {
     public function add_contestant($user) {
         $this->db->insert('user', $user);
         return $this->db->insert_id();
+    }
+
+    public function update_contestant($user_id, $user) {
+        $this->db->where('user_id', $user_id);
+        $this->db->update('user', $user);
+        return $this->db->affected_rows();
     }
 
     public function get_contest_status($status) {
