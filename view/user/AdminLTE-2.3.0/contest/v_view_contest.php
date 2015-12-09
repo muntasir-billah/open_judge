@@ -196,6 +196,7 @@
 	                  <div id="ranklist" class="tab-pane">
 	                    <b>Ranklist</b>
 	                  </div><!-- /.tab-pane -->
+	                  <div class="clearfix"></div>
 	                </div><!-- /.tab-content -->
 	              </div><!-- nav-tabs-custom -->
 	            </div>
