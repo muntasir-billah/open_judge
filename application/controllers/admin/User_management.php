@@ -26,7 +26,7 @@ class User_management extends OJ_Controller {
     //====================================//
 
     public function index() {
-    	$url = site_url().$this->module.'/User_management/contestant';
+    	$url = base_url().$this->module.'/User_management/contestant';
         redirect($url);
     }
 
@@ -61,7 +61,7 @@ class User_management extends OJ_Controller {
 	}
 
     public function store_judge() {
-        $url = site_url().$this->module.'/user_management/create_judge';
+        $url = base_url().$this->module.'/user_management/create_judge';
 
         if($_POST['judge_pass1'] != $_POST['judge_pass2']) { // checking for password match
             redirect($url);
@@ -82,7 +82,7 @@ class User_management extends OJ_Controller {
         $insert_id = $this->m_admin->add_judge($judge);
 
         if($insert_id) {
-            redirect(site_url().$this->module.'/user_management/view_judge?judge_id='.$insert_id);
+            redirect(base_url().$this->module.'/user_management/view_judge?judge_id='.$insert_id);
         }
         else {
             redirect($url);
@@ -92,7 +92,7 @@ class User_management extends OJ_Controller {
     public function delete_judge($judge_id=0) {
         if($judge_id) {
             $aff = $this->m_admin->delete_judge($judge_id);
-            $url = site_url().$this->module.'/user_management/judge';
+            $url = base_url().$this->module.'/user_management/judge';
             if($aff) {
                 redirect($url);
             }
@@ -100,13 +100,13 @@ class User_management extends OJ_Controller {
                 redirect($url);
             }
         }
-        redirect(site_url().'four');
+        redirect(base_url().'four');
     }
 
     public function update_judge() {
         $judge_id = $_POST['judge_id'];
 
-        $url = site_url().$this->module.'/user_management/view_judge?judge_id='.$judge_id;
+        $url = base_url().$this->module.'/user_management/view_judge?judge_id='.$judge_id;
 
         if($_POST['judge_pass1'] != $_POST['judge_pass2']) {
             redirect($url);
@@ -123,7 +123,7 @@ class User_management extends OJ_Controller {
         $aff = $this->m_admin->update_judge($judge_id, $judge);
 
         if($aff) {
-            redirect(site_url().$this->module.'/user_management/view_judge?judge_id='.$judge_id);
+            redirect(base_url().$this->module.'/user_management/view_judge?judge_id='.$judge_id);
         }
         else {
             redirect($url);
@@ -144,7 +144,7 @@ class User_management extends OJ_Controller {
         $data['page_scripts'] = array('js_table_tools.php', 'js_view_contest.php', 'js_form_elements.php');
 
         if(!$data['judge'] = $this->m_admin->get_single_judge($judge_id)) {
-            redirect(site_url().'four');
+            redirect(base_url().'four');
         }
 
         $data['content'] = $this->subview.'/v_view_judge.php';
@@ -182,7 +182,7 @@ class User_management extends OJ_Controller {
 	}
 
     public function store_contestant() {
-        $url = site_url().$this->module.'/user_management/create_contestant';
+        $url = base_url().$this->module.'/user_management/create_contestant';
 
         if($_POST['user_pass1'] != $_POST['user_pass2']) { // checking for password match
             redirect($url);
@@ -203,7 +203,7 @@ class User_management extends OJ_Controller {
         $insert_id = $this->m_admin->add_contestant($user);
 
         if($insert_id) {
-            redirect(site_url().$this->module.'/user_management/view_contestant?user_id='.$insert_id);
+            redirect(base_url().$this->module.'/user_management/view_contestant?user_id='.$insert_id);
         }
         else {
             redirect($url);
@@ -213,7 +213,7 @@ class User_management extends OJ_Controller {
     public function delete_contestant($user_id=0) {
         if($user_id) {
             $aff = $this->m_admin->delete_contestant($user_id);
-            $url = site_url().$this->module.'/user_management/contestant';
+            $url = base_url().$this->module.'/user_management/contestant';
             if($aff) {
                 redirect($url);
             }
@@ -221,13 +221,13 @@ class User_management extends OJ_Controller {
                 redirect($url);
             }
         }
-        redirect(site_url().'four');
+        redirect(base_url().'four');
     }
 
     public function update_contestant() {
         $user_id = $_POST['user_id'];
 
-        $url = site_url().$this->module.'/user_management/view_contestant?user_id='.$user_id;
+        $url = base_url().$this->module.'/user_management/view_contestant?user_id='.$user_id;
 
         if($_POST['user_pass1'] != $_POST['user_pass2']) {
             redirect($url);
@@ -244,7 +244,7 @@ class User_management extends OJ_Controller {
         $aff = $this->m_admin->update_contestant($user_id, $user);
 
         if($aff) {
-            redirect(site_url().$this->module.'/user_management/view_contestant?user_id='.$user_id);
+            redirect(base_url().$this->module.'/user_management/view_contestant?user_id='.$user_id);
         }
         else {
             redirect($url);
@@ -265,7 +265,7 @@ class User_management extends OJ_Controller {
         $data['page_scripts'] = array('js_table_tools.php', 'js_view_contest.php', 'js_form_elements.php');
 
         if(!$data['user'] = $this->m_admin->get_single_user($user_id)) {
-            redirect(site_url().'four');
+            redirect(base_url().'four');
         }
 
         $data['content'] = $this->subview.'/v_view_user.php';

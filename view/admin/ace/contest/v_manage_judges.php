@@ -42,10 +42,10 @@
 						</a>
 					</li>
 					<li class="active">
-						<a href="<?php echo site_url().$this->module.'/contest/view_contest?contest_id='.$contest->contest_id; ?>">Manage Problems</a>
+						<a href="<?php echo base_url().$this->module.'/contest/view_contest?contest_id='.$contest->contest_id; ?>">Manage Problems</a>
 					</li>
 					<li class="active">
-						<a href="<?php echo site_url().$this->module.'/contest/manage_contestants?contest_id='.$contest->contest_id; ?>">Manage Contestants</a>
+						<a href="<?php echo base_url().$this->module.'/contest/manage_contestants?contest_id='.$contest->contest_id; ?>">Manage Contestants</a>
 					</li>
 					<div class="clearfix"></div>
 				</ul>

@@ -1,7 +1,7 @@
 <div class="page-content">
 	<div class="page-header">
 		<div class="page_actions pull-right">
-			<a href="<?php echo site_url().$module.'/contest/create'; ?>">
+			<a href="<?php echo base_url().$module.'/contest/create'; ?>">
 			<button class="btn btn-sm btn-info active">Add New</button>
 			</a>
 		</div>

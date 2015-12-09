@@ -25,6 +25,8 @@
 
     <script>
 
+        var id = '';
+
           $(function () {
             $(".oj_datatable").DataTable();
             $('.oj_datatable_basic').DataTable({
@@ -36,5 +38,22 @@
               "autoWidth": false
             });
           });
+
+          $('.submit_button').click(function() {
+            var problem = $(this).attr('for');
+            //alert(problem);
+            id = "option" + problem;
+            $('#'+id).attr('selected', 'selected');
+            $('.submit_form').show();
+          });
+
+          $('.submit_form_close').click(function() {
+            $('#'+id).removeAttr('selected');
+            $('.submit_form').hide();
+          });
+
+          // $('.submit_form').submit(function() {
+          //   alert("hello");
+          // });
         
     </script>

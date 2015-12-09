@@ -34,7 +34,7 @@
       </div><!-- /.login-logo -->
       <div class="login-box-body">
         <p class="login-box-msg">Log in to access contest arena</p>
-        <form action="<?php echo site_url().$module.'/login/login_process'; ?>" method="post">
+        <form action="<?php echo base_url().$module.'/login/login_process'; ?>" method="post">
           <div class="form-group has-feedback">
             <input type="text" class="form-control" name="username" placeholder="User Handle">
             <span class="glyphicon glyphicon-user form-control-feedback"></span>

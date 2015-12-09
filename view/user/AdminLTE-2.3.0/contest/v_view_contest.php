@@ -1,3 +1,54 @@
+<div class="submit_form" style="display:none;">
+    <button class="submit_form_close btn btn-md btn-danger"><i class="fa fa-times"></i></button>
+    <form role="form" method="post" action="<?php echo base_url($module.'/contest/submit'); ?>">
+      <!-- select -->
+      <div class="form-group">
+        <label>Problem</label>
+        <select name="problem_id" class="form-control">
+        <?php
+          $serial = 64;
+        ?>
+        <?php foreach($problems as $key => $problem) {?>
+          <option value="<?php echo $problem->problem_id; ?>" id="option<?php printf("%c", ++$serial); ?>">
+          <?php printf("%c", $serial); ?>
+          </option>
+        <?php } ?>
+        </select>
+      </div>
+      <!-- textarea -->
+      <div class="form-group">
+        <label>Submit Solution</label>
+        <input type="hidden" name="contest_id" value="<?php echo $contest->contest_id; ?>" />
+        <code>
+        <textarea name="submission_source" placeholder="Paste Solution Here ..." class="form-control"></textarea>
+        </code>
+      </div>
+
+      <!-- radio -->
+      <div class="form-group">
+        <label>Language</label>
+        <div class="radio">
+          <label>
+            <input type="radio" checked="" value="1" name="language_id">
+            GNU C11
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" value="2" name="language_id">
+            GNU C++14
+          </label>
+        </div>
+      </div><!-- form-group ends -->
+
+      <!-- textarea -->
+      <div class="form-group">
+        <button class="btn btn-md btn-primary pull-right" type="submit">Submit</button>
+        <div class="clearfix"></div>
+      </div>
+    </form>
+  </div><!-- submit_form ends -->
+
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -107,10 +158,10 @@
                               	<div class="tab-pane <?php if($first) echo 'active'; ?>" id="<?php echo ++$serial; ?>">
                               		<div class="row">
                               			<div class="col-xs-12">
-                              				<button class="submit_button btn btn-lg btn-primary">
+                              				<button for="<?php printf("%c", $serial); ?>" class="submit_button btn btn-lg btn-primary">
                               					Submit Solution for Problem <?php printf("%c", $serial); ?>
                               				</button>
-                              				<h1><?php echo $problem->problem_name; ?></h1>
+                              				<h1><?php printf("%c", $serial); ?> - <?php echo $problem->problem_name; ?></h1>
                               				<hr>
                               			</div>
                               			<div class="col-xs-12 oj_problem_specification">
@@ -207,3 +258,4 @@
       </div><!-- /.row -->
     </section><!-- /.content -->
   </div><!-- /.content-wrapper -->
+

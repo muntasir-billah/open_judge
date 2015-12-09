@@ -38,7 +38,7 @@
 						<td>
 							<div class="action-buttons">
 								<?php
-									$delete = site_url().$module.'/user_management/delete_judge/'.$judge->judge_id;
+									$delete = base_url().$module.'/user_management/delete_judge/'.$judge->judge_id;
 								?>
 								<a class="red col-xs-2 delete_button" href="<?php echo $delete; ?>" judgeid="<?php echo $judge->judge_id; ?>" title="Delete this judge">
 									<i class="ace-icon fa fa-trash-o bigger-130"></i>
