@@ -154,6 +154,8 @@ class M_admin extends Ci_model {
         return $this->db->affected_rows();
     }
 
+    //login check functions //
+
     public function login_check_admin($username, $password) {
     	$this->db->where('admin_user', $username);
     	$this->db->where('admin_pass', $password);
@@ -165,6 +167,8 @@ class M_admin extends Ci_model {
     	$this->db->where('judge_pass', $password);
     	return $this->db->get('judge')->result();
     }
+
+    //=============================//
 
     public function get_all_categories() {
         return $this->db->get('category')->result();
@@ -204,6 +208,7 @@ class M_admin extends Ci_model {
     }
 
     public function all_contests() {
+        $this->db->order_by('contest_start', 'desc');
         return $this->db->get('contest')->result();
     }
 

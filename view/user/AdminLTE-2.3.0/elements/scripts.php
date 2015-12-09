@@ -15,7 +15,26 @@
     <script src="<?php echo $fullpath; ?>plugins/slimScroll/jquery.slimscroll.min.js"></script>
     <!-- ChartJS 1.0.1 -->
     <script src="<?php echo $fullpath; ?>plugins/chartjs/Chart.min.js"></script>
+    <!-- DataTables -->
+    <script src="<?php echo $fullpath; ?>plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="<?php echo $fullpath; ?>plugins/datatables/dataTables.bootstrap.min.js"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="<?php echo $fullpath; ?>dist/js/pages/dashboard2.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="<?php echo $fullpath; ?>dist/js/demo.js"></script>
+
+    <script>
+
+          $(function () {
+            $(".oj_datatable").DataTable();
+            $('.oj_datatable_basic').DataTable({
+              "paging": true,
+              "lengthChange": false,
+              "searching": false,
+              "ordering": true,
+              "info": true,
+              "autoWidth": false
+            });
+          });
+        
+    </script>

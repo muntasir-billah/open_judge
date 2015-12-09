@@ -1,0 +1,23 @@
+.oj_white {
+	color:#fff;
+}
+
+.user-menu.open .dropdown-menu {
+	border-bottom: solid 1px #ccc;
+	border-left: solid 1px #ccc;
+	border-right: solid 1px #ccc;
+	border-top: solid 1px #3c8dbc;
+}
+
+.submit_button {
+	position: fixed;
+    right: 1%;
+    top: 7%;
+    z-index: 100;
+}
+
+.oj_problem_view p {
+	font-size:1.7rem;
+	font-weight: light;
+	text-align: justify;
+}

@@ -13,11 +13,14 @@
     <link rel="stylesheet" href="<?php echo $fullpath; ?>dist/ionicons/css/ionicons.min.css">
     <!-- jvectormap -->
     <link rel="stylesheet" href="<?php echo $fullpath; ?>plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+    <!-- Datatables CSS -->
+    <link href="<?php echo $fullpath; ?>plugins/datatables/dataTables.bootstrap.css" rel="stylesheet">
     <!-- Theme style -->
     <link rel="stylesheet" href="<?php echo $fullpath; ?>dist/css/AdminLTE.min.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="<?php echo $fullpath; ?>dist/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="<?php echo $fullpath; ?>dist/css/oj.css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

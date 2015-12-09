@@ -20,6 +20,6 @@ class Four extends CI_Controller {
 	 */
 	public function index()
 	{
-		echo '<br /><center><h1>Ha Ha Ha! This is a 404 Not Found Error :D</h1></center>';
+		echo '<br /><center><h1>This is a 404 Not Found Error</h1></center>';
 	}
 }

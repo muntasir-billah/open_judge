@@ -88,6 +88,11 @@ class OJ_Controller extends CI_Controller
     	return $text; 
     }
 
+    public function __check_access($contest_id, $user_id) {
+    	if($this->m_user->check_user_access($contest_id, $user_id) === 1) return true;
+    	else return false;
+    }
+
 }
 
 ?>

@@ -1,6 +1,6 @@
 <div class="page-content">
 	<div class="page-header">
-		<h1>Judges for <?php echo $contest->contest_name; ?></h1>
+		<h1>Contestants for <?php echo $contest->contest_name; ?></h1>
 	</div><!-- /.page-header -->
 	<?php
 	$type = array('Selective Contest', 'Private Contest', 'Public Contest');

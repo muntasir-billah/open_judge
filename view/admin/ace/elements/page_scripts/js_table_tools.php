@@ -10,7 +10,6 @@
 				//initiate dataTables plugin
 				var oTable1 = 
 				$('.oj_datatable').dataTable();
-				//oTable1.fnAdjustColumnSizing();
 				
 				
 				//TableTools settings

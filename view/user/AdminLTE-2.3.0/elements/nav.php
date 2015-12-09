@@ -1,3 +1,8 @@
+<?php
+  $u_type = array('Regular Contestant', 'Bulk Contestant');
+  $c_type = array('Selective', 'Private', 'Public');
+  $c_status = array(-1 => 'Waiting to Start', 0 => 'Running', 1 => 'Running', 2 => 'Ended');
+?>
 <nav class="navbar navbar-static-top" role="navigation">
           <!-- Sidebar toggle button-->
           <a href="<?php echo $fullpath; ?>#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
@@ -196,37 +201,30 @@
               <!-- User Account: style can be found in dropdown.less -->
               <li class="dropdown user user-menu">
                 <a href="<?php echo $fullpath; ?>#" class="dropdown-toggle" data-toggle="dropdown">
-                  <img src="<?php echo $fullpath; ?>dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-                  <span class="hidden-xs">Alexander Pierce</span>
+                  <i class="fa fa-user img-circle"></i>
+                  <span class="hidden-xs"><?php echo $this->session->user_name; ?></span>
                 </a>
                 <ul class="dropdown-menu">
                   <!-- User image -->
                   <li class="user-header">
-                    <img src="<?php echo $fullpath; ?>dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                    <i class="fa fa-user oj_white" style="font-size:3em;"></i>
                     <p>
-                      Alexander Pierce - Web Developer
-                      <small>Member since Nov. 2012</small>
+                      <?php echo $this->session->user_name; ?>
+                      <small>
+                        Handle: <?php echo $this->session->user_handle; ?><br />
+                        Type: <?php echo $u_type[$this->session->user_type]; ?><br />
+                        Phone: <?php echo $this->session->user_phone; ?><br />
+                        Email: <?php echo $this->session->user_email; ?><br />
+                      </small>
                     </p>
-                  </li>
-                  <!-- Menu Body -->
-                  <li class="user-body">
-                    <div class="col-xs-4 text-center">
-                      <a href="<?php echo $fullpath; ?>#">Followers</a>
-                    </div>
-                    <div class="col-xs-4 text-center">
-                      <a href="<?php echo $fullpath; ?>#">Sales</a>
-                    </div>
-                    <div class="col-xs-4 text-center">
-                      <a href="<?php echo $fullpath; ?>#">Friends</a>
-                    </div>
                   </li>
                   <!-- Menu Footer-->
                   <li class="user-footer">
                     <div class="pull-left">
-                      <a href="<?php echo $fullpath; ?>#" class="btn btn-default btn-flat">Profile</a>
+                      <a href="<?php echo site_url().$module.'/dashboard/user_profile'; ?>" class="btn btn-default btn-flat">Profile</a>
                     </div>
                     <div class="pull-right">
-                      <a href="<?php echo $fullpath; ?>#" class="btn btn-default btn-flat">Sign out</a>
+                      <a href="<?php echo site_url().$module.'/login/logout'; ?>" class="btn btn-default btn-flat">Sign out</a>
                     </div>
                   </li>
                 </ul>

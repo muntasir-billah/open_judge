@@ -89,10 +89,10 @@ Judge View Map:
 
 User View Map:
 
-1. Dashboard
-	a) Running Contests With Access
-	b) Upcoming Contests With Access
-	c) Running Contest Details (Overview) if Participated
+1. Dashboard ======================================================================
+	a) Running Contests With Access ===========================================
+	b) Upcoming Contests With Access ==========================================
+	c) Running Contest Details (Overview) if Participated 
 2. Contests
 	a) Overview
 	b) Problem Set
