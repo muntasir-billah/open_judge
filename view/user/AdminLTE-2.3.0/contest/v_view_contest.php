@@ -108,7 +108,7 @@
                               		<div class="row">
                               			<div class="col-xs-12">
                               				<button class="submit_button btn btn-lg btn-primary">
-                              					Submit Problem <?php printf("%c", $serial); ?>
+                              					Submit Solution for Problem <?php printf("%c", $serial); ?>
                               				</button>
                               				<h1><?php echo $problem->problem_name; ?></h1>
                               				<hr>
