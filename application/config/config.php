@@ -26,6 +26,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $config['base_url'] = '';
 $config['title'] = "Open Judge | ";
 $config['contact'] = "info@openjudge.com";
+$config['root'] = '/home/munna/localhost/OJ/';
 
 /*
 |--------------------------------------------------------------------------

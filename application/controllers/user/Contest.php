@@ -22,6 +22,7 @@ class Contest extends OJ_Controller {
         $this->data['fullpath'] = base_url().'view/'.$this->viewpath;;
         $this->data['title'] = $this->config->item('title');
         $this->data['module'] = $this->module;
+        $this->data['verdict'] = $this->verdict;
     }
     //====================================//
 
@@ -62,6 +63,15 @@ class Contest extends OJ_Controller {
             echo 'You have not access to this contest';
             exit();
         }
+        $data['users'] = array();
+        $data['submissions'] = $this->m_user->get_sub_for_contest($contest_id);
+
+        foreach($data['submissions'] as $key => $sub) {
+            if(!isset($data['users'][$sub->user_id])) {
+                $temp_user = $this->m_user->get_user($sub->user_id);
+                $data['users'][$sub->user_id] = $temp_user->user_name;
+            }
+        }
 
         $data['title'] .= $data['contest']->contest_name;
 
@@ -86,11 +96,69 @@ class Contest extends OJ_Controller {
     }
 
     public function submit() {
-        // echo '<pre>';
-        // print_r($_POST);
-        // echo '</pre>';
 
-        extract($_POST);
+        $user_id = $this->session->user_id;
+        $contest_id = $_POST['contest_id'];
+
+
+        if(!$contest = $this->m_user->get_single_contest($contest_id)) {
+            redirect(base_url('four'));
+        }
+
+        if(!$this->__check_access($contest_id, $user_id)) {
+            echo 'You have not access to this contest';
+            exit();
+        }
+
+        if(!$this->__is_running($contest_id)) {
+            $url = base_url($this->module.'/contest/view_contest?contest_id='.$contest_id);
+            redirect($url);
+        }
+
+        $submission = array();
+
+        $submission['problem_id'] = $_POST['problem_id'];
+        $submission['contest_id'] = $_POST['contest_id'];
+        $submission['submission_source'] = $_POST['submission_source'];
+        $submission['language_id'] = $_POST['language_id'];
+        $submission['user_id'] = $user_id;
+        $submission['language_id'] = $_POST['language_id'];
+        $submission['submission_type'] = 0; // Private for now
+        $submission['submission_time'] = date('Y-m-d H:i:s');
+        $submission['submission_status'] = 1;
+        $submission['submission_result'] = 0;
+
+
+
+        // echo '<pre>';
+        // print_r($submission);
+        // echo '</pre>';
+        // echo '<br /><br />';
+
+        /*
+        Verdicts============
+
+        0 -> In Queue
+        1 -> AC
+        2 -> WA
+        3 -> TLE
+        4 -> RE
+        5 -> CE
+        6 -> MLE
+
+        */
+
+        $insert_id = $this->m_user->submit_solution($submission);
+
+        if($insert_id) {
+            $temp = array('contest_status' => 1);
+            $aff = $this->m_user->update_contest_status($contest_id, $temp);
+            echo 'Submitted';
+        }
+        else {
+            echo 'Failed';
+        }
+
     }
 
 }

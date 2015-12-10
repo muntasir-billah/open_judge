@@ -10,7 +10,7 @@
         ?>
         <?php foreach($problems as $key => $problem) {?>
           <option value="<?php echo $problem->problem_id; ?>" id="option<?php printf("%c", ++$serial); ?>">
-          <?php printf("%c", $serial); ?>
+          Problem <?php printf("%c", $serial); ?>
           </option>
         <?php } ?>
         </select>
@@ -233,10 +233,56 @@
                           ?>
 	                  </div><!-- /.tab-pane -->
 	                  <div id="submission_my" class="tab-pane">
-	                    <b>Submissions My</b>
+                      <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <th>Contestant</th>
+                            <th>Problem</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                          <?php 
+                            foreach($submissions as $key => $submission) {
+                              if($submission->user_id == $this->session->user_id) {
+                          ?>
+                          <tr>
+                            <td><?php echo $users[$submission->user_id]; ?></td>
+                            <td><?php echo $submission->problem_id; ?></td>
+                            <td><?php echo $submission->submission_time; ?></td>
+                            <td><?php echo $verdict[$submission->submission_result]; ?></td>
+                          </tr>
+                          <?php
+                              }
+                            }
+                          ?>
+                        </tbody>
+                      </table><!-- table ends -->
 	                  </div><!-- /.tab-pane -->
 	                  <div id="submission_all" class="tab-pane">
-	                    <b>Submissions All</b>
+	                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <th>Contestant</th>
+                            <th>Problem</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                          <?php foreach($submissions as $key => $submission) {?>
+                          <tr>
+                            <td><?php echo $users[$submission->user_id]; ?></td>
+                            <td><?php echo $submission->problem_id; ?></td>
+                            <td><?php echo $submission->submission_time; ?></td>
+                            <td><?php echo $verdict[$submission->submission_result]; ?></td>
+                          </tr>
+                          <?php } ?>
+                        </tbody>
+                      </table><!-- table ends -->
 	                  </div><!-- /.tab-pane -->
 	                  <div id="clar_my" class="tab-pane">
 	                    <b>Clar My</b>

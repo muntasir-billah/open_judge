@@ -22,6 +22,7 @@ class Contest extends OJ_Controller {
         $this->data['fullpath'] = base_url().'view/'.$this->viewpath;;
         $this->data['title'] = $this->config->item('title');
         $this->data['module'] = $this->module;
+        $this->data['verdict'] = $this->verdict;
     }
     //====================================//
 
@@ -98,6 +99,16 @@ class Contest extends OJ_Controller {
 
         if(!$data['contest'] = $this->m_admin->get_single_contest($contest_id)) {
             redirect(base_url('four'));
+        }
+
+        $data['users'] = array();
+        $data['submissions'] = $this->m_admin->get_sub_for_contest($contest_id);
+
+        foreach($data['submissions'] as $key => $sub) {
+            if(!isset($data['users'][$sub->user_id])) {
+                $temp_user = $this->m_admin->get_user($sub->user_id);
+                $data['users'][$sub->user_id] = $temp_user->user_name;
+            }
         }
 
         $data['title'] .= $data['contest']->contest_name;
@@ -206,9 +217,11 @@ class Contest extends OJ_Controller {
             $res = $this->m_admin->get_prob_cont_rel($problem_id, $contest_id);
 
             if($res == NULL) {
+                $count = $this->m_admin->get_prob_cont_count($contest_id);
                 $data = array();
                 $data['problem_id'] = $problem_id;
                 $data['contest_id'] = $contest_id;
+                $data['prob_cont_rel_order'] = ++$count;
 
                 $insert_id = $this->m_admin->add_prob_cont_rel($data);
                 if($insert_id) ++$count;
@@ -301,6 +314,120 @@ class Contest extends OJ_Controller {
         $aff = $this->m_admin->delete_contest($contest_id);
         if($aff) echo 'yes';
         else echo 'no';
+    }
+
+    public function compile($submission_id) {
+        $submission = $this->m_admin->get_single_submission($submission_id);
+        $contest = $this->m_admin->get_single_contest($submission->contest_id);
+
+        $user_id = $submission->user_id;
+        $contest_id = $submission->contest_id;
+        $problem_id = $submission->problem_id;
+        $prob_count = $this->m_admin->get_prob_cont_count($contest_id);
+        $order = $this->m_admin->get_prob_cont_order($contest_id, $problem_id);
+        --$order;
+        echo '<br />';
+
+        $prev_submissions = $this->m_admin->get_prev_submissions_by_user($user_id, $contest_id, $problem_id);
+        --$prev_submissions;
+        echo 'Prev: '.$prev_submissions.'<br /><br />';
+        if($prev_submissions) {
+            //checking if this problem is already solved by this user;
+            if($this->m_admin->check_existing_solution($user_id, $contest_id, $problem_id)){
+                echo 'Already Solved';
+                $sub = array();
+                $sub['submission_status'] = 0;
+                $sub['submission_result'] = 7;
+
+                $aff = $this->m_admin->update_submission($submission_id, $sub);
+                exit();
+            }
+        }
+
+        $result = $this->__process($submission_id);
+        echo '<br />';
+        $sub = array();
+        $sub['submission_status'] = 0;
+        $sub['submission_result'] = $result;
+
+        $aff = $this->m_admin->update_submission($submission_id, $sub);
+
+        if($this->m_admin->if_first_submission($user_id, $contest_id)) {
+            $rank = array();
+            $rank['user_id'] = $user_id;
+            $rank['contest_id'] = $contest_id;
+            $minute_diff = 0;
+            if($result == 1) {
+                $rank['rank_solved'] = 1;
+                // Calculating Penalty
+                $second_diff = strtotime($submission->submission_time) - strtotime($contest->contest_start);
+                $minute_diff = (int)($second_diff / 60);
+            }
+            else $rank['rank_solved'] = 0;
+            $rank['rank_penalty'] = $minute_diff;
+
+            $rank['rank_details'] = '';
+            for($i = 0; $i < $prob_count; ++$i) {
+                if($i > 0) $rank['rank_details'] .= ',';
+                if($i != $order)
+                    $rank['rank_details'] .= '0,NA,0';
+                else {
+                    $rank['rank_details'] .= '1,';
+                    if($result == 1) $rank['rank_details'] .= $minute_diff.','.$minute_diff;
+                    else $rank['rank_details'] .= $minute_diff.',0';
+                }
+            }
+            $insert_id = $this->m_admin->insert_rank($rank);
+            if($insert_id) echo 'OK';
+            else echo 'NOT Inserted';
+        }
+        else {
+            $current_rank = $this->m_admin->get_rank($user_id, $contest_id);
+            $c_rank = explode(',', $current_rank->rank_details);
+            $rank = array();
+
+            $minute_diff = 0;
+            if($result == 1) {
+                $rank['rank_solved'] = $current_rank->rank_solved + 1;
+                // Calculating Penalty
+                $second_diff = strtotime($submission->submission_time) - strtotime($contest->contest_start);
+                $minute_diff = (int)($second_diff / 60);
+                $penalty = ($prev_submissions * 20) + $minute_diff;
+                $rank['rank_penalty'] = $current_rank->rank_penalty + $penalty;
+            }
+
+            $rank['rank_details'] = '';
+            for($i = 0, $k=0; $k < $prob_count; $i += 3, ++$k) {
+                if($i > 0) $rank['rank_details'] .= ',';
+                if($k != $order)
+                    $rank['rank_details'] .= $c_rank[$i].','.$c_rank[$i+1].','.$c_rank[$i+2];
+                else {
+                    $rank['rank_details'] .=  ($c_rank[$i]+1).',';
+                    if($result == 1) $rank['rank_details'] .= $minute_diff.','.$penalty;
+                    else $rank['rank_details'] .= $minute_diff.',0';
+                }
+            }
+
+            $aff = $this->m_admin->update_rank($user_id, $contest_id, $rank);
+            if($aff) echo 'OK';
+            else echo 'NOT Updated';
+        }
+        echo '<pre>';
+        print_r($rank);
+        echo '</pre>';
+
+        $new = $this->m_admin->new_submission_for_contest($contest_id);
+        if(count($new) > 0) {
+            $temp_data['contest_status'] = 0;
+            $aff = $this->m_admin->update_contest_status($contest_id, $temp_data);
+        }
+    }
+
+    public function process_submissions() {
+        $new = $this->m_admin->new_sub();
+        if($new != '') {
+            $this->compile($new->submission_id);
+        }
     }
 
 }

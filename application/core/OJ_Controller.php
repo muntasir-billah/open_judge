@@ -6,6 +6,7 @@ class OJ_Controller extends CI_Controller
 	public $problem_image_path = 'problem_images/';	// Directory to upload problem images
 	public $judge_io_path = 'judge_io/';				// Directory to upload Judge I/O
 	public $sandbox_path = 'sandbox/';					// Directory to the sandbox
+	public $verdict = array('In Queue', 'AC', 'WA', 'TLE', 'RE', 'CE', 'MLE', 'Ignored');
 
 	/*
 	
@@ -91,6 +92,177 @@ class OJ_Controller extends CI_Controller
     public function __check_access($contest_id, $user_id) {
     	if($this->m_user->check_user_access($contest_id, $user_id) === 1) return true;
     	else return false;
+    }
+
+    public function __is_running($contest_id) {
+    	$status = $this->m_admin->if_contest_running($contest_id);
+    	$status = $status->contest_status;
+
+    	if($status == 0 || $status ==1) return true;
+    	else return false;
+    }
+
+    public function __remove_dir($dir) { 
+		if (is_dir($dir)) { 
+			$objects = scandir($dir); 
+			foreach ($objects as $object) { 
+				if ($object != "." && $object != "..") { 
+					if (is_dir($dir."/".$object)) rrmdir($dir."/".$object);
+					else unlink($dir."/".$object); 
+				} 
+			}
+			rmdir($dir); 
+		} 
+	}
+
+	public function __process($submission_id) {
+        $submission = $this->m_admin->get_single_submission($submission_id);
+        $problem = $this->m_admin->get_single_problem_full($submission->problem_id);
+        $contest = $this->m_admin->get_single_contest($submission->contest_id);
+
+        $result = 0;
+
+        $arr = array($submission, $problem, $contest);
+
+        $sandbox = $this->config->item('root').$this->sandbox_path.$submission->submission_id;
+        mkdir($sandbox);
+
+        echo $sandbox.'<br /><br />';
+        //exit();
+
+        $ext = array(1=>'.c', 2=>'.cpp');
+        $compiler = array(1=>'gcc', 2=>'g++');
+
+
+        $file_name = 'program';
+
+        $output = $file_name.'.out';
+        $input = 'judge.in';
+
+        $error = 'error.txt';
+        $fault = 'fault.txt';
+
+        $filename = $file_name.$ext[$submission->language_id];
+        
+        $program = fopen($sandbox.'/'.$filename, "w");
+        fwrite($program, $submission->submission_source);
+
+        $judge_in = fopen($sandbox.'/'.'judge.in', "w");
+        fwrite($judge_in, $problem->problem_judge_input);
+
+        $judge_out = fopen($sandbox.'/'.'judge.out', "w");
+        fwrite($judge_out, $problem->problem_judge_output);
+
+        $ret = $this->__compile($problem->problem_time_limit, $compiler[$submission->language_id], $sandbox, $ext[$submission->language_id], $filename, $file_name, $output, $input, $error, $fault);
+
+         /*
+        Verdicts============
+
+        0 -> In Queue
+        1 -> AC
+        2 -> WA
+        3 -> TLE
+        4 -> RE
+        5 -> CE
+        6 -> MLE
+
+        $verdict = array('In Queue', 'AC', WA', 'TLE', 'RE', 'CE', 'MLE');
+
+        */
+        
+        fclose($program);
+        fclose($judge_in);
+        fclose($judge_out);
+        $judge_out = 'judge.out';
+
+        // $point = fopen($sandbox.'/'.$error, "r"); // Checking for compilation error
+        // $content = fread($point,filesize($sandbox.'/'.$error));
+        // fclose($point);
+        if(filesize($sandbox.'/'.$error) > 0) {
+            echo 'Compilation Error';
+            $result = 5;
+        }
+        else {
+            // echo $ret['time'].'<br />';
+            // echo $ret['return_val'].'<br />';
+            // $point = fopen($sandbox.'/'.$fault, "r"); // Runtime Error
+            // $content = fread($point,filesize($sandbox.'/'.$fault));
+            // fclose($point);
+            if($ret['time'] >= ($problem->problem_time_limit/1000)) { // Time Limit Exceeded
+                echo 'Time Limit Exceeded';
+                $result = 3;
+            }
+            else {
+                if(filesize($sandbox.'/'.$fault) > 0 || $ret['return_val'] != 0) {
+                    echo 'Runtime Error';
+                    $result = 4;
+                }
+                else {
+                    if(filesize($sandbox.'/'.$output) == filesize($sandbox.'/'.$judge_out)) {
+                        // Wrong Answer
+
+                        $point = fopen($sandbox.'/'.$output, "r"); 
+                        $content = fread($point,filesize($sandbox.'/'.$output));
+                        fclose($point);
+
+                        $point2 = fopen($sandbox.'/'.$judge_out, "r");
+                        $content2 = fread($point2,filesize($sandbox.'/'.$judge_out));
+                        fclose($point2);
+
+                        if($content != $content2) {
+                            echo '1st Wrong Answer';
+                            $result = 2;
+                        }
+                        else {
+                            echo 'Accepted';
+                            $result = 1;
+                        }
+                    }
+                    else {
+                        echo '2nd Wrong Answer';
+                        $result = 2;
+                    }
+                }
+            }
+        } // Processing Ends 
+        $this->__remove_dir($sandbox);
+        return $result;
+
+    }
+
+    public function __compile($time, $compiler, $path, $ext, $file, $file_name, $output, $input, $error, $fault) {
+        echo '<pre>';
+        $time /= 1000; // Converting to Seconds;
+        $tle = 'timeout '.$time.'s ';
+
+
+        
+
+        $return_val = '';
+
+        $gener = '';
+
+        $command = "$compiler $path/$file -o $path/$file_name 2> $path/$error";
+
+        //echo $command.'<br />';
+
+        exec($command); // compiling
+
+        $command = "$path/$file_name < $path/$input > $path/$output 2> $path/$fault";
+
+        $command = $tle.$command; // Adding Time Limit to the Command
+        //echo $command.'<br />';
+
+        $time_start = microtime(true);
+        exec($command, $gener, $return_val); //running;
+        $time_end = microtime(true);
+
+        $total_time = $time_end - $time_start;
+
+        $ret = array('time' => $total_time, 'return_val' => $return_val);
+
+        return $ret;
+
     }
 
 }

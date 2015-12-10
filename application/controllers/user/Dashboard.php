@@ -48,7 +48,4 @@ class Dashboard extends OJ_Controller {
 		$this->load->view($this->viewpath.'v_main', $data);
 	}
 
-	public function test() {
-		echo $this->viewpath;
-	}
 }

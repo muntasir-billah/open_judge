@@ -102,8 +102,6 @@ class Dashboard extends OJ_Controller {
             }
             else {
                 // Contest Running
-                //$data['contest_status'] = 1;
-                // Code for checking submission and compilation will be here
             }
 
         }

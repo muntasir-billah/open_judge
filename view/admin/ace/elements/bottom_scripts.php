@@ -16,6 +16,9 @@
 
 		var url = "<?php echo base_url($module.'/Dashboard/check_contest_status'); ?>/";
 		$.post( url );
+
+		var url = "<?php echo base_url($module.'/contest/process_submissions'); ?>/";
+		$.post( url );
 	};
 
 	var X = 5;

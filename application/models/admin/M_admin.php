@@ -190,6 +190,11 @@ class M_admin extends Ci_model {
         return $this->db->get('prob_for_display')->row();
     }
 
+    public function get_single_problem_full($problem_id) {
+        $this->db->where('problem_id', $problem_id);
+        return $this->db->get('problem')->row();
+    }
+
     public function tags_for_problem($problem_id) {
         $this->db->select('category.category_id, category_name');
         $this->db->join('prob_cat_rel', 'category.category_id = prob_cat_rel.category_id');
@@ -226,6 +231,7 @@ class M_admin extends Ci_model {
         $this->db->select('*');
         $this->db->join('prob_cont_rel', 'prob_cont_rel.problem_id = prob_for_display.problem_id');
         $this->db->where('contest_id', $contest_id);
+        $this->db->order_by('prob_cont_rel_order');
 
         return $this->db->get('prob_for_display')->result();
     }
@@ -272,6 +278,105 @@ class M_admin extends Ci_model {
         $this->db->where('problem_id', $problem_id);
         $this->db->delete('problem');
         return $this->db->affected_rows();
+    }
+
+    public function if_contest_running($contest_id) {
+        $this->db->select('contest_status');
+        $this->db->where('contest_id', $contest_id);
+        return $this->db->get('contest')->row();
+    }
+
+    public function get_single_submission($submission_id) {
+        $this->db->where('submission_id', $submission_id);
+        return $this->db->get('submission')->row();
+    }
+
+    public function get_sub_for_contest($contest_id) {
+        $this->db->where('contest_id', $contest_id);
+        $this->db->order_by('submission_time', 'desc');
+        return $this->db->get('submission')->result();
+    }
+
+    public function get_user($user_id) {
+        $this->db->where('user_id', $user_id);
+        return $this->db->get('user')->row();
+    }
+
+    public function get_prob_cont_count($contest_id) {
+        $this->db->where('contest_id', $contest_id);
+        $result = $this->db->get('prob_cont_rel');
+        return $result->num_rows();
+    }
+
+    public function update_submission($submission_id, $submission) {
+        $this->db->where('submission_id', $submission_id);
+        $this->db->update('submission', $submission);
+        return $this->db->affected_rows();
+    }
+
+    public function get_prev_submissions_by_user($user_id, $contest_id, $problem_id) {
+        $this->db->where('user_id', $user_id);
+        $this->db->where('contest_id', $contest_id);
+        $this->db->where('problem_id', $problem_id);
+        $result = $this->db->get('submission');
+        return $result->num_rows();
+    }
+
+    public function check_existing_solution($user_id, $contest_id, $problem_id) {
+        $this->db->where('user_id', $user_id);
+        $this->db->where('contest_id', $contest_id);
+        $this->db->where('problem_id', $problem_id);
+        $this->db->where('submission_result', 1);
+        $result = $this->db->get('submission');
+        if($result->num_rows() > 0) return true;
+        else return false;
+    }
+
+    public function if_first_submission($user_id, $contest_id) {
+        $this->db->where('user_id', $user_id);
+        $this->db->where('contest_id', $contest_id);
+        $result = $this->db->get('rank');
+        if($result->num_rows() == 0) return true;
+        else return false;
+    }
+
+    public function get_rank($user_id, $contest_id) {
+        $this->db->where('user_id', $user_id);
+        $this->db->where('contest_id', $contest_id);
+        return $this->db->get('rank')->row();
+    }
+
+    public function get_prob_cont_order($contest_id, $problem_id) {
+        $this->db->select('prob_cont_rel_order');
+        $this->db->where('contest_id', $contest_id);
+        $this->db->where('problem_id', $problem_id);
+        $result = $this->db->get('prob_cont_rel')->row();
+        return $result->prob_cont_rel_order;
+    }
+
+    public function update_rank($user_id, $contest_id, $rank) {
+        $this->db->where('user_id', $user_id);
+        $this->db->where('contest_id', $contest_id);
+        $this->db->update('rank', $rank);
+        return $this->db->affected_rows();
+    }
+
+    public function insert_rank($rank) {
+        $this->db->insert('rank', $rank);
+        return $this->db->insert_id();
+    }
+
+    public function new_submission_for_contest($contest_id) {
+        $this->db->where('submission_status', 1);
+        $this->db->where('contest_id', $contest_id);
+        return $this->db->get('submission')->result();
+    }
+
+    public function new_sub() {
+        $this->db->where('submission_status', 1);
+        $this->db->order_by('submission_time');
+        $this->db->limit(1);
+        return $this->db->get('submission')->row();
     }
 }
 ?>

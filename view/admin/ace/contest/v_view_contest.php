@@ -1,3 +1,7 @@
+<?php
+	$language = array(1=>'GNU C11', 2=>'GNU C++14');
+?>
+
 <div class="page-content">
 	<div class="page-header">
 		<div class="page_actions pull-right">
@@ -247,7 +251,38 @@
 						</div><!-- problem_tab tabable ends -->
 					</div>
 					<div class="tab-pane fade" id="submissions">
-						Submissions
+	                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <th>Contestant</th>
+                            <th>Problem</th>
+                            <th>Language</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                          <?php foreach($submissions as $key => $submission) {?>
+                          <tr>
+                            <td><?php echo $users[$submission->user_id]; ?></td>
+                            <td><?php echo $submission->problem_id; ?></td>
+                            <td><?php echo $language[$submission->language_id]; ?></td>
+                            <td><?php echo $submission->submission_time; ?></td>
+                            <td><?php echo $verdict[$submission->submission_result]; ?></td>
+                            <td>
+                            	<div class="action-buttons">
+
+									<a title="Judge" href="<?php echo base_url($module.'/contest/compile/'.$submission->submission_id); ?>" class="blue col-xs-2">
+										<i class="ace-icon fa fa-cog bigger-130"></i>
+									</a>
+								</div>
+                            </td>
+                          </tr>
+                          <?php } ?>
+                        </tbody>
+                      </table><!-- table ends -->
 					</div>
 					<div class="tab-pane fade" id="clar">
 						<div class="row">

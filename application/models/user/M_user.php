@@ -49,5 +49,37 @@ class M_user extends Ci_model {
         return $this->db->get('contest')->row();
     }
 
+    // Others
+
+    public function get_contest_status($status) {
+        $this->db->select('contest_id, contest_start, contest_end');
+        $this->db->where('contest_status', $status);
+        return $this->db->get('contest')->result();
+    }
+
+    public function update_contest_status($contest_id, $data) {
+        $this->db->where('contest_id', $contest_id);
+        $this->db->update('contest', $data);
+        //echo $this->db->last_query();
+        return $this->db->affected_rows();
+    }
+
+    public function submit_solution($submission) {
+        $this->db->insert('submission', $submission);
+        return $this->db->insert_id();
+    }
+
+    public function get_sub_for_contest($contest_id) {
+        $this->db->where('contest_id', $contest_id);
+        $this->db->order_by('submission_time', 'desc');
+        return $this->db->get('submission')->result();
+    }
+
+    public function get_user($user_id) {
+        $this->db->where('user_id', $user_id);
+        return $this->db->get('user')->row();
+
+    }
+
 }
 ?>
