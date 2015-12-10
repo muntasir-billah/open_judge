@@ -58,3 +58,7 @@
 	margin-top:7em;
 	right:10px;
 }
+
+.rank_box {
+	min-width: 50px;
+}

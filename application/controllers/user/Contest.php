@@ -72,6 +72,9 @@ class Contest extends OJ_Controller {
                 $data['users'][$sub->user_id] = $temp_user->user_name;
             }
         }
+        $data['count'] = $this->m_user->get_prob_cont_count($contest_id);
+
+        $data['ranklist'] = $this->m_user->get_ranklist($contest_id);
 
         $data['title'] .= $data['contest']->contest_name;
 

@@ -378,5 +378,13 @@ class M_admin extends Ci_model {
         $this->db->limit(1);
         return $this->db->get('submission')->row();
     }
+
+    public function get_ranklist($contest_id) {
+        $this->db->where('contest_id', $contest_id);
+        $this->db->order_by('rank_solved', 'desc');
+        $this->db->order_by('rank_penalty');
+        return $this->db->get('rank')->result();
+
+    }
 }
 ?>

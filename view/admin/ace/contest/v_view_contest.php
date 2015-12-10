@@ -146,7 +146,7 @@
 						<table class="table table-striped table-bordered table-hover">
 							<thead>
 								<tr>
-									<th>Solved / Tried</th>
+									<!-- <th>Solved / Tried</th> -->
 									<th> # </th>
 									<th>Title</th>
 								</tr>
@@ -156,7 +156,7 @@
 								<?php $serial = 64; ?>
 								<?php foreach($problems as $key => $problem) {?>
 								<tr>
-									<td>10/87</td>
+									<!-- <td>10/87</td> -->
 									<td><?php printf("Problem %c", ++$serial); ?></td>
 									<td>
 										<a href="<?php echo base_url($this->module.'/problem/view_problem?problem_id='.$problem->problem_id); ?>">
@@ -377,23 +377,50 @@
 						<table class="oj_datatable table table-striped table-bordered table-hover">
 							<thead>
 								<tr>
-									<th>Problem Title</th>
-									<th>Problem Dash</th>
+									<th>#</th>
+									<th>Contestant/Team</th>
+									<?php
+										$serial = 64;
+										for($i = 0; $i< $count; ++$i) {
+									?>
+									<th><?php printf("%c", ++$serial); ?></th>
+									<?php
+										}
+									?>
+									<th>Total</th>
 								</tr>
 							</thead>
 
 							<tbody>
-								<?php foreach($problems as $key => $problem) {?>
-								<tr id="problem<?php echo $problem->problem_id; ?>">
+								<?php foreach($ranklist as $key => $rank) {?>
+								<tr>
+									<td><?php echo $key+1; ?></td>
 									<td>
-										<a href="<?php echo base_url($this->module.'/problem/view_problem?problem_id='.$problem->problem_id); ?>">
-											<?php echo $problem->problem_name; ?>
-										</a>
+										<?php echo $users[$rank->user_id]; ?>
 									</td>
-									<td>
-										<a href="<?php echo base_url($this->module.'/problem/view_problem?problem_id='.$problem->problem_id); ?>">
-											<?php echo $problem->problem_name; ?>
-										</a>
+									<?php
+										$c_rank = explode(',', $rank->rank_details);
+										for($i=0, $k=0; $k < $count; ++$k, $i += 3) {
+											$try = $c_rank[$i];
+											$time = $c_rank[$i+1];
+											$penalty = $c_rank[$i+2];
+									?>
+										<td>
+											<button class="rank_box btn btn-sm btn-<?php if($penalty) echo 'success'; else echo 'danger'; ?>">
+												<?php echo $try.'<br />'.$time.'<br />'.$penalty; ?>
+											</button>
+										</td>
+									<?php
+										}
+									?>
+									<td><button class="rank_box btn btn-sm btn-primary">
+										<?php
+											echo $rank->rank_solved.'<br />';
+											echo '==========<br />';
+											echo $rank->rank_penalty.'<br />';
+
+										?>
+										</button>
 									</td>
 								</tr>
 								<?php } ?>

@@ -111,6 +111,10 @@ class Contest extends OJ_Controller {
             }
         }
 
+        $data['count'] = $this->m_admin->get_prob_cont_count($contest_id);
+
+        $data['ranklist'] = $this->m_admin->get_ranklist($contest_id);
+
         $data['title'] .= $data['contest']->contest_name;
 
         //$data['all_problems'] = $this->m_admin->probs_except_contest($contest_id);

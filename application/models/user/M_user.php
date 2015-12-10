@@ -81,5 +81,20 @@ class M_user extends Ci_model {
 
     }
 
+    public function get_prob_cont_count($contest_id) {
+        $this->db->where('contest_id', $contest_id);
+        $result = $this->db->get('prob_cont_rel');
+        return $result->num_rows();
+    }
+
+    
+    public function get_ranklist($contest_id) {
+        $this->db->where('contest_id', $contest_id);
+        $this->db->order_by('rank_solved', 'desc');
+        $this->db->order_by('rank_penalty');
+        return $this->db->get('rank')->result();
+
+    }
+
 }
 ?>

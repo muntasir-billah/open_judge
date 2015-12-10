@@ -291,7 +291,58 @@
 	                    <b>Clar All</b>
 	                  </div><!-- /.tab-pane -->
 	                  <div id="ranklist" class="tab-pane">
-	                    <b>Ranklist</b>
+                      <table class="oj_datatable table table-striped table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Contestant/Team</th>
+                            <?php
+                              $serial = 64;
+                              for($i = 0; $i< $count; ++$i) {
+                            ?>
+                            <th><?php printf("%c", ++$serial); ?></th>
+                            <?php
+                              }
+                            ?>
+                            <th>Total</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                          <?php foreach($ranklist as $key => $rank) {?>
+                          <tr>
+                            <td><?php echo $key+1; ?></td>
+                            <td>
+                              <?php echo $users[$rank->user_id]; ?>
+                            </td>
+                            <?php
+                              $c_rank = explode(',', $rank->rank_details);
+                              for($i=0, $k=0; $k < $count; ++$k, $i += 3) {
+                                $try = $c_rank[$i];
+                                $time = $c_rank[$i+1];
+                                $penalty = $c_rank[$i+2];
+                            ?>
+                              <td>
+                                <button class="rank_box btn btn-sm btn-<?php if($penalty) echo 'success'; else echo 'danger'; ?>">
+                                  <?php echo $try.'<br />'.$time.'<br />'.$penalty; ?>
+                                </button>
+                              </td>
+                            <?php
+                              }
+                            ?>
+                            <td><button class="rank_box btn btn-sm btn-primary">
+                              <?php
+                                echo $rank->rank_solved.'<br />';
+                                echo '==========<br />';
+                                echo $rank->rank_penalty.'<br />';
+
+                              ?>
+                              </button>
+                            </td>
+                          </tr>
+                          <?php } ?>
+                        </tbody>
+                      </table>
 	                  </div><!-- /.tab-pane -->
 	                  <div class="clearfix"></div>
 	                </div><!-- /.tab-content -->
