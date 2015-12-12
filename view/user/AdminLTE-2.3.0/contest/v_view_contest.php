@@ -106,7 +106,7 @@
 	                    <table class="table table-striped table-bordered table-hover">
 	                    	<thead>
 	                    		<tr>
-	                    			<th>Solved / Tried</th>
+	                    			<!-- <th>Solved / Tried</th> -->
 	                    			<th> # </th>
 	                    			<th>Title</th>
 	                    		</tr>
@@ -116,7 +116,7 @@
 	                    		<?php $serial = 64; ?>
 	                    		<?php foreach($problems as $key => $problem) {?>
 	                    		<tr>
-	                    			<td>10/87</td>
+	                    			<!-- <td>10/87</td> -->
 	                    			<td><?php printf("Problem %c", ++$serial); ?></td>
 	                    			<td>
 	                    				<a href="<?php echo base_url($this->module.'/problem/view_problem?problem_id='.$problem->problem_id); ?>">

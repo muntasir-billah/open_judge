@@ -147,7 +147,7 @@
 				</li>
 			</ul>
 		</li>
-
+		<!--
 		<li>
 			<a>
 			<span class="menu-text">======================</span>
@@ -613,7 +613,7 @@
 					<b class="arrow"></b>
 				</li>
 			</ul>
-		</li>
+		</li> -->
 	</ul><!-- /.nav-list -->
 
 	<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">

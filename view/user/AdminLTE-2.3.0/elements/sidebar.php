@@ -17,11 +17,12 @@
                 <li>
                   <a href="<?php echo base_url().$module.'/contest'; ?>">All Contests</a>
                 </li>
+                <!--
                 <li>
                   <a href="<?php echo base_url().$module.'/contest/my_contests'; ?>">My Contests</a>
-                </li>
+                </li> -->
               </ul>
-            </li><!-- Nav Item ends -->
+            </li><!-- Nav Item ends --
             <li>======================</li>
             <li class="treeview">
               <a href="<?php echo $fullpath; ?>#">
@@ -141,7 +142,7 @@
                 <li><a href="<?php echo $fullpath; ?>#"><i class="fa fa-circle-o"></i> Level One</a></li>
               </ul>
             </li>
-            <li><a href="<?php echo $fullpath; ?>documentation/index.html"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
+            <li><a href="<?php echo $fullpath; ?>documentation/index.html"><i class="fa fa-book"></i> <span>Documentation</span></a></li>-->
           </ul>
         </section>
         <!-- /.sidebar -->

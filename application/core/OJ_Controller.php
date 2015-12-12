@@ -122,8 +122,6 @@ class OJ_Controller extends CI_Controller
 
         $result = 0;
 
-        $arr = array($submission, $problem, $contest);
-
         $sandbox = $this->config->item('root').$this->sandbox_path.$submission->submission_id;
         mkdir($sandbox);
 
