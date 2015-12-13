@@ -45,6 +45,16 @@ class Dashboard extends OJ_Controller {
     	$this->load->view($this->viewpath.'v_main', $data);
     }
 
+    public function reorder_prob_for_cont($contest_id) {
+        $prob_cont_rel = $this->m_admin->get_prob_cont_rel_for_cont($contest_id);
+
+        foreach ($prob_cont_rel as $key => $pcr) {
+            $data = array();
+            $data['prob_cont_rel_order'] = $key+1;
+            $aff = $this->m_admin->update_prob_cont_rel($pcr->prob_cont_rel_id, $data);
+        }
+    }
+
     public function check_contest_status() {
         // Checking waiting contests
         $result = $this->m_admin->get_contest_status(-1);
@@ -65,6 +75,7 @@ class Dashboard extends OJ_Controller {
                     $data['contest_status'] = 1;
                 }
                 $aff = $this->m_admin->update_contest_status($contest->contest_id, $data);
+                $this->reorder_prob_for_cont($contest->contest_id);
             }
         }
 

@@ -52,8 +52,32 @@
             $('.submit_form').hide();
           });
 
-          // $('.submit_form').submit(function() {
-          //   alert("hello");
-          // });
+          $('.submit_clar').submit(function() {
+            if(!confirm("Are you sure to submit this clarification?")) {
+              return false;
+            }
+            var url = "<?php echo base_url($module.'/contest/submit_clar'); ?>";
+            var clarification_question = $('#clarification_question').val();
+            var clarification_problem_id = $('#clarification_problem_id').val();
+            var contest_id = <?php echo $contest->contest_id; ?>;
+
+            postData = {"clarification_question":clarification_question, "problem_id":clarification_problem_id, "contest_id": contest_id}
+
+            $.post(url,postData,
+              function(data){
+                //alert(data);
+                if(data == 'yes'){
+                  $("#clar_success").fadeIn(300);
+                  $("#clar_success").fadeOut(3000);
+                }
+                else{
+                  $("#clar_error").fadeIn(300);
+                  $("#clar_error").fadeOut(3000);
+                }
+              }
+            );
+
+            return false;
+          });
         
     </script>

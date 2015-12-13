@@ -119,7 +119,7 @@
 	                    			<!-- <td>10/87</td> -->
 	                    			<td><?php printf("Problem %c", ++$serial); ?></td>
 	                    			<td>
-	                    				<a href="<?php echo base_url($this->module.'/problem/view_problem?problem_id='.$problem->problem_id); ?>">
+	                    				<a href="<?php echo base_url($this->module.'/contest/view_problem?contest_id='.$contest->contest_id.'&problem='.$nos[$problem->problem_id]); ?>">
 	                    					<?php echo $problem->problem_name; ?>
 	                    				</a>
 	                    			</td>
@@ -236,6 +236,7 @@
                       <table class="table table-striped table-bordered table-hover">
                         <thead>
                           <tr>
+                            <th>Submission ID</th>
                             <th>Contestant</th>
                             <th>Problem</th>
                             <th>Time</th>
@@ -249,9 +250,14 @@
                               if($submission->user_id == $this->session->user_id) {
                           ?>
                           <tr>
+                            <td><?php echo $submission->submission_id; ?></td>
                             <td><?php echo $users[$submission->user_id]; ?></td>
-                            <td><?php echo $submission->problem_id; ?></td>
-                            <td><?php echo $submission->submission_time; ?></td>
+                            <td>
+                              <a href="<?php echo base_url($this->module.'/contest/view_problem?contest_id='.$contest->contest_id.'&problem='.$nos[$submission->problem_id]); ?>">
+                              <?php echo $nos[$submission->problem_id]; ?>
+                              </a>
+                            </td>
+                            <td><?php echo date('h:i A, M d, Y', strtotime($submission->submission_time)); ?></td>
                             <td><?php echo $verdict[$submission->submission_result]; ?></td>
                           </tr>
                           <?php
@@ -265,6 +271,7 @@
 	                    <table class="table table-striped table-bordered table-hover">
                         <thead>
                           <tr>
+                            <th>Submission ID</th>
                             <th>Contestant</th>
                             <th>Problem</th>
                             <th>Time</th>
@@ -275,9 +282,14 @@
                         <tbody>
                           <?php foreach($submissions as $key => $submission) {?>
                           <tr>
+                            <td><?php echo $submission->submission_id; ?></td>
                             <td><?php echo $users[$submission->user_id]; ?></td>
-                            <td><?php echo $submission->problem_id; ?></td>
-                            <td><?php echo $submission->submission_time; ?></td>
+                            <td>
+                              <a href="<?php echo base_url($this->module.'/contest/view_problem?contest_id='.$contest->contest_id.'&problem='.$nos[$submission->problem_id]); ?>">
+                              <?php echo $nos[$submission->problem_id]; ?>
+                              </a>
+                            </td>
+                            <td><?php echo date('h:i A, M d, Y', strtotime($submission->submission_time)); ?></td>
                             <td><?php echo $verdict[$submission->submission_result]; ?></td>
                           </tr>
                           <?php } ?>
@@ -285,60 +297,223 @@
                       </table><!-- table ends -->
 	                  </div><!-- /.tab-pane -->
 	                  <div id="clar_my" class="tab-pane">
-	                    <b>Clar My</b>
+                      <div class="col-md-12">
+                        <div class="box box-success">
+                          <div class="box-header ui-sortable-handle" style="cursor: move;">
+                            <i class="fa fa-comments-o"></i>
+                            <h3 class="box-title">My Clarifications</h3>
+                          </div>
+                          <div class="slimScrollDiv" style="position: relative;">
+
+                            <div id="clar_success" class="clar_alert alert alert-success alert-dismissable">
+                              <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                              <h4><i class="icon fa fa-check"></i> Success!</h4>
+                            </div>
+                            <div id="clar_error" class="clar_alert alert alert-danger alert-dismissable">
+                              <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                              <h4><i class="icon fa fa-ban"></i> Failed to Submit Clarification!</h4>
+                              Please try again a while later.
+                            </div>
+
+                            <div class="box-body chat" style="">
+                            <?php
+                              $clar_count = count($clarifications);
+                              --$clar_count;
+                              while($clar_count >= 0) {
+                                $clar = $clarifications[$clar_count--];
+                                if($clar->user_id == $this->session->user_id) {
+                            ?>
+                              <hr />
+                              <!-- chat item -->
+                              <div class="item">
+                                <i class="online fa fa-user"></i>
+                                <p class="message">
+                                  <a class="name" href="#">
+                                    <small class="text-muted pull-right">
+                                      <i class="fa fa-clock-o"></i>
+                                      <?php
+                                        echo date('h:i A, M d, Y', strtotime($clar->clarification_time)); 
+                                      ?>
+                                    </small>
+                                    <?php echo $users[$clar->user_id];
+                                      if($clar->problem_id != NULL) echo " | [Problem ".$nos[$clar->problem_id]." ]";
+                                      else echo ' | [General]';
+                                      if($clar->clarification_status == 2)
+                                        echo ' | [Ignored]';
+                                    ?>
+                                  </a>
+                                  <?php echo $clar->clarification_question; ?>
+                                </p>
+                              </div><!-- /.item -->
+                              <?php if($clar->clarification_status != 0 && $clar->clarification_status != 2) { ?>
+                              <!-- chat item -->
+                              <div class="item item_judge">
+                                <i class="online fa fa-user-secret"></i>
+                                <p class="message">
+                                  <a class="name" href="#">Judge</a>
+                                  <?php echo $clar->clarification_reply; ?>
+                                </p>
+                              </div><!-- /.item -->
+                              <?php } ?>
+                              <?php } ?>
+                            <?php } ?>
+                            </div>
+                          </div><!-- /.chat -->
+                          <div class="box-footer">
+                            <form class="submit_clar" action="" method="post">
+                              <div class="col-sm-3 col-md-2">
+                                <div class="form-group">
+                                  <select id="clarification_problem_id" class="form-control">
+                                    <option value="">General</option>
+                                  <?php
+                                    $serial = 64;
+                                  ?>
+                                  <?php foreach($problems as $key => $problem) {?>
+                                    <option value="<?php echo $problem->problem_id; ?>">
+                                    Problem <?php printf("%c", ++$serial); ?>
+                                    </option>
+                                  <?php } ?>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="col-sm-9 col-md-10">
+                                <div class="input-group">
+                                  <input id="clarification_question" placeholder="Type your question..." class="form-control">
+                                  <div class="input-group-btn">
+                                    <button type="submit" class="btn btn-success"><i class="fa fa-plus"></i></button>
+                                  </div>
+                                </div>
+                              </div>
+                            </form>
+                          </div><!-- box-footer ends -->
+                        </div> <!-- chat box end -->
+                      </div><!-- col-md-12 -->
 	                  </div><!-- /.tab-pane -->
 	                  <div id="clar_all" class="tab-pane">
-	                    <b>Clar All</b>
+                      <div class="col-md-12">
+                        <div class="box box-success">
+                          <div class="box-header ui-sortable-handle" style="cursor: move;">
+                            <i class="fa fa-comments-o"></i>
+                            <h3 class="box-title">All Clarifications</h3>
+                          </div>
+                          <div class="slimScrollDiv" style="position: relative;">
+                            <div class="box-body chat" style="">
+                            <?php
+                              foreach($clarifications as $key => $clar) {
+                            ?>
+                              <hr />
+                              <!-- chat item -->
+                              <div class="item">
+                                <i class="online fa fa-user<?php if($clar->user_id == NULL) echo '-secret'; ?>"></i>
+                                <p class="message">
+                                  <a class="name" href="#">
+                                    <small class="text-muted pull-right">
+                                      <i class="fa fa-clock-o"></i>
+                                      <?php
+                                        echo date('h:i A, M d, Y', strtotime($clar->clarification_time)); 
+                                      ?>
+                                    </small>
+                                    <?php 
+                                      if($clar->user_id != NULL) {
+                                        echo $users[$clar->user_id];
+                                        if($clar->problem_id != NULL) echo " | [Problem ".$nos[$clar->problem_id]." ]";
+                                        else echo ' | [General]';
+                                        if($clar->clarification_status == 2)
+                                          echo ' | [Ignored]';
+                                      }
+                                      else echo 'Judge Clarification';
+                                    ?>
+                                  </a>
+                                  <?php echo $clar->clarification_question; ?>
+                                </p>
+                              </div><!-- /.item -->
+                              <?php if($clar->clarification_status != 0 && $clar->clarification_status != 2) { ?>
+                              <!-- chat item -->
+                              <div class="item item_judge">
+                                <i class="online fa fa-user-secret"></i>
+                                <p class="message">
+                                  <a class="name" href="#">Judge</a>
+                                  <?php echo $clar->clarification_reply; ?>
+                                </p>
+                              </div><!-- /.item -->
+                              <?php } ?>
+                            <?php } ?>
+                            </div><!-- box-body chat ends -->
+                          </div><!-- /.chat -->
+                        </div> <!-- chat box end -->
+                      </div><!-- col-md-12 -->
 	                  </div><!-- /.tab-pane -->
 	                  <div id="ranklist" class="tab-pane">
                       <table class="oj_datatable table table-striped table-bordered table-hover">
                         <thead>
                           <tr>
-                            <th>#</th>
+                            <th class="problem_no">#</th>
                             <th>Contestant/Team</th>
+                            <th class="problem_no">Total</th>
+                            <td>&nbsp;</td>
                             <?php
                               $serial = 64;
                               for($i = 0; $i< $count; ++$i) {
                             ?>
-                            <th><?php printf("%c", ++$serial); ?></th>
+                            <th class="problem_no"><?php printf("%c", ++$serial); ?></th>
                             <?php
                               }
                             ?>
-                            <th>Total</th>
                           </tr>
                         </thead>
 
                         <tbody>
-                          <?php foreach($ranklist as $key => $rank) {?>
-                          <tr>
-                            <td><?php echo $key+1; ?></td>
-                            <td>
+                            <?php
+                              $order = 0;
+                              foreach($ranklist as $key => $rank) {
+                            ?>
+                            <tr>
+                              <td class="rank_user problem_no">
+                              <?php
+                                if($key > 0) {
+                                  if($rank->rank_solved != $ranklist[$key-1]->rank_solved ||
+                                    $rank->rank_penalty != $ranklist[$key-1]->rank_penalty) {
+                                    ++$order;
+                                  }
+                                }
+                              else ++$order;
+                                echo $order;
+                              ?>
+                              </td>
+                            <td class="rank_user">
                               <?php echo $users[$rank->user_id]; ?>
                             </td>
-                            <?php
-                              $c_rank = explode(',', $rank->rank_details);
-                              for($i=0, $k=0; $k < $count; ++$k, $i += 3) {
-                                $try = $c_rank[$i];
-                                $time = $c_rank[$i+1];
-                                $penalty = $c_rank[$i+2];
-                            ?>
-                              <td>
-                                <button class="rank_box btn btn-sm btn-<?php if($penalty) echo 'success'; else echo 'danger'; ?>">
-                                  <?php echo $try.'<br />'.$time.'<br />'.$penalty; ?>
-                                </button>
-                              </td>
-                            <?php
-                              }
-                            ?>
-                            <td><button class="rank_box btn btn-sm btn-primary">
+                            <td class="problem_no"><button class="total_box rank_box btn btn-sm btn-primary">
                               <?php
-                                echo $rank->rank_solved.'<br />';
-                                echo '==========<br />';
+                                echo $rank->rank_solved;
+                                echo ' / ';
                                 echo $rank->rank_penalty.'<br />';
 
                               ?>
                               </button>
                             </td>
+                            <td>&nbsp;</td>
+                            <?php
+                              $c_rank = explode(',', $rank->rank_details);
+                              for($i=0, $k=0; $k < $count; ++$k, $i += 3) {
+                                $try = $c_rank[$i];
+                                $time = $c_rank[$i+1];
+                                if($time > 0) {
+                                    $minutes = $time%60;
+                                    if($minutes < 10) $minutes = '0'.$minutes;
+                                    $time = (int)($time/60).':'.$minutes;
+                                }
+                                else $time = '- : - -';
+                                $penalty = $c_rank[$i+2];
+                            ?>
+                              <td class="problem_no">
+                                <button class="rank_box btn btn-sm btn-<?php if($penalty && $try) echo 'success'; else if(!$penalty && $try) echo 'danger'; else echo 'defautl'; ?>">
+                                  <?php echo $try.' ('.$time.')<br />'.$penalty; ?>
+                                </button>
+                              </td>
+                            <?php
+                              }
+                            ?>
                           </tr>
                           <?php } ?>
                         </tbody>

@@ -48,6 +48,9 @@
 					<li class="active">
 						<a href="<?php echo base_url().$this->module.'/contest/manage_judges?contest_id='.$contest->contest_id; ?>">Manage Judges</a>
 					</li>
+					<li class="active">
+						<a href="<?php echo base_url().$this->module.'/contest/edit_contest/'.$contest->contest_id; ?>">Edit Contest Info</a>
+					</li>
 					<div class="clearfix"></div>
 				</ul>
 			</div>

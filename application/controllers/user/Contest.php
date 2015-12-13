@@ -63,6 +63,8 @@ class Contest extends OJ_Controller {
             echo 'You have not access to this contest';
             exit();
         }
+
+        // Fetching Submissions
         $data['users'] = array();
         $data['submissions'] = $this->m_user->get_sub_for_contest($contest_id);
 
@@ -72,15 +74,32 @@ class Contest extends OJ_Controller {
                 $data['users'][$sub->user_id] = $temp_user->user_name;
             }
         }
+
+        // Fetching Clarifications
+        $data['clarifications'] = $this->m_user->get_clar_for_contest($contest_id);
+
+        foreach($data['clarifications'] as $key => $clar) {
+            if($clar->user_id != NULL && !isset($data['users'][$clar->user_id])) {
+                $temp_user = $this->m_user->get_user($clar->user_id);
+                $data['users'][$clar->user_id] = $temp_user->user_name;
+            }
+        }
+
+        // Others
         $data['count'] = $this->m_user->get_prob_cont_count($contest_id);
 
         $data['ranklist'] = $this->m_user->get_ranklist($contest_id);
 
         $data['title'] .= $data['contest']->contest_name;
 
+        $data['nos'] = array();
+        $no = 'A';
+
         $data['problems'] = $this->m_user->probs_for_contest($data['contest']->contest_id);
 
         foreach($data['problems'] as $key => $problem) {
+            $data['nos'][$problem->problem_id] = $no++;
+
             if($data['problems'][$key]->problem_time_limit >= 1000) {
                 $data['problems'][$key]->problem_time_limit /= 1000;
                 $data['problems'][$key]->problem_time_limit .= 's';
@@ -162,6 +181,23 @@ class Contest extends OJ_Controller {
             echo 'Failed';
         }
 
-    }
+    } // Submit Problem ends
+
+    public function submit_clar() {
+        $clar = $_POST;
+        $clar['user_id'] = $this->session->user_id;
+        $clar['clarification_time'] = date('Y-m-d H:i:s');
+        $clar['clarification_status'] = 0;
+        if($clar['problem_id'] == '') $clar['problem_id'] = NULL;
+
+        $insert_id = $this->m_user->insert_clarification($clar);
+
+        if($insert_id) {
+            echo 'yes';
+        }
+        else {
+            echo 'no';
+        }
+    } // Submit Clarification ends
 
 }

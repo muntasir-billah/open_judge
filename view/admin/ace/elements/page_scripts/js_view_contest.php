@@ -72,6 +72,58 @@
 		else return false;
 	});
 
+	$('.judge_reply_button').click(function() {
+		var question = $(this).parent('.tools').siblings('.text').html();
+		var clar_id = $(this).attr("id");
+
+		$('.clar_question').html(question);
+		$('#clar_id').val(clar_id);
+		$('.clar_reply').val('');
+		$('.my_modal').fadeIn(300);
+
+		return false;
+
+	});
+
+	$('.my_modal_close').click(function() {
+		$('.my_modal').fadeOut(300);
+	});
+
+
+	$('.judge_reply_form').submit(function() {
+		var url = "<?php echo base_url($module.'/contest/reply_clar'); ?>";
+		var clar_id = $('#clar_id').val();
+		var reply = $('.clar_reply').val();
+
+		// alert(url);
+		// alert(clar_id);
+		// alert(reply);
+		// return false;
+
+		postData = {"clarification_id":clar_id, "clarification_reply":reply}
+
+		$.post(url,postData, function(data){
+			//alert(data);
+			if(data == 'yes'){
+			  $("#clar_success").fadeIn(300);
+			  $("#clar_success").fadeOut(3000);
+			}
+			else{
+			  $("#clar_error").fadeIn(300);
+			  $("#clar_error").fadeOut(3000);
+			}
+		});
+
+		$('.my_modal').fadeOut(300);
+		return false;
+  	});
+
+  	$('#ignore_button').click(function() {
+		var reply = "ignored"
+		$('.clar_reply').val(reply);
+		$('.judge_reply_form').submit();
+  	});
+
 	$('#edit_row').click(function() {
 		$('.view_row').hide();
 		$('#view_row').removeClass('active');

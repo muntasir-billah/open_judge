@@ -40,6 +40,7 @@ class M_user extends Ci_model {
         $this->db->select('*');
         $this->db->join('prob_cont_rel', 'prob_cont_rel.problem_id = prob_for_display.problem_id');
         $this->db->where('contest_id', $contest_id);
+        $this->db->order_by('prob_cont_rel_order');
 
         return $this->db->get('prob_for_display')->result();
     }
@@ -94,6 +95,17 @@ class M_user extends Ci_model {
         $this->db->order_by('rank_penalty');
         return $this->db->get('rank')->result();
 
+    }
+
+    public function get_clar_for_contest($contest_id) {
+        $this->db->where('contest_id', $contest_id);
+        $this->db->order_by('clarification_time', 'desc');
+        return $this->db->get('clarification')->result();
+    }
+
+    public function insert_clarification($clarification) {
+        $this->db->insert('clarification', $clarification);
+        return $this->db->insert_id();
     }
 
 }

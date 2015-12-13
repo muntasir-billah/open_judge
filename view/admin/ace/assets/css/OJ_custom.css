@@ -104,5 +104,84 @@
 }
 
 .rank_box {
-	font-size:1em;
+	padding-left: 0;
+	padding-right: 0;
+	min-width: 50px;
+	width:100%;
+	margin: 0 auto;
+	font-family: 'sans';
+}
+
+.problem_no {
+	text-align: center;
+	max-width: 30px;
+}
+
+.rank_user {
+	padding: 24px 8px !important;
+}
+
+.clar_user {
+	border: solid 2px #aaa;
+	border-radius: 50px;
+	padding:7px 10px 9px 10px;
+	font-size: 20px;
+	background-color:#eee;
+	color:#333;
+}
+
+.clar_user.new {
+	background-color:#f89406;
+	color:#fff;
+}
+
+.reply_div {
+	padding-left: 50px;
+}
+
+#clar i.fa-user-secret {
+	background-color:#333;
+	color:#eee;
+}
+
+.my_modal {
+	display: none;
+	z-index: 150;
+	position: fixed;
+	width:100%;
+	height:100%;
+	background-color:rgba(33, 33, 33, 0.8);
+}
+
+.my_modal_body {
+	background-color:#fff;
+	width:100%;
+	max-width: 500px;
+	height:auto;
+	min-height:300px;
+	margin:0 auto;
+	margin-top:100px;
+	padding:20px;
+}
+
+.my_modal_body textarea {
+	width: 100%;
+	max-width: 100%;
+	min-width: 100%;
+}
+
+.my_modal_close {
+	position: fixed;
+	right:50px;
+	top:100px;
+}
+
+.clar_alert {
+	display: none;
+	position: fixed;
+	z-index: 200;
+	right:50px;
+	top:80px;
+	width:400px;
+
 }

@@ -5,21 +5,21 @@ Admin View Map:
 
 2. Contests
 	a) Contests Summary List (Ordered according to start time, descending)
-		i. Overview 
+		i. Overview ===============================================================
 		ii. Problem Set	===========================================================
-		iii. Submission
+		iii. Submission ===========================================================
 		iv. Clarification
-		v. Standings
+		v. Standings  =============================================================
 			Global Rejudge
 			Disqualify/Requalify a contestant.
 			Generate Resultant HTML file for the final Ranklist
 	b) Create Contest =================================================================
 		i. Choose Problems ========================================================
 		ii. Set Time ==============================================================
-		iii. Set contestants and judges.
+		iii. Set contestants and judges. ==========================================
 	c) Edit Contest
 		i. Edit Problems ==========================================================
-		ii. Edit Time Range
+		ii. Edit Time Range =======================================================
 		iii. Edit contestants and judges. =========================================
 	d) Delete Contest =================================================================
 

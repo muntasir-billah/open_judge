@@ -6,7 +6,7 @@ class OJ_Controller extends CI_Controller
 	public $problem_image_path = 'problem_images/';	// Directory to upload problem images
 	public $judge_io_path = 'judge_io/';				// Directory to upload Judge I/O
 	public $sandbox_path = 'sandbox/';					// Directory to the sandbox
-	public $verdict = array('In Queue', 'AC', 'WA', 'TLE', 'RE', 'CE', 'MLE', 'Ignored');
+	public $verdict = array('In Queue', 'Accepted', 'Wrong Answer', 'Time Limit Exceeded', 'Runtime Error', 'Compilation Error', 'Memory Limit Exceeded', 'Ignored');
 
 	/*
 	

@@ -2,6 +2,47 @@
 	$language = array(1=>'GNU C11', 2=>'GNU C++14');
 ?>
 
+<div class="my_modal">
+	<span class="my_modal_close btn btn-md btn-danger"><i class="ace-icon fa fa-times bigger-110"></i></span>
+	<div class="my_modal_body">
+		<form class="judge_reply_form">
+			<div class="form-group">
+			  <label class="col-xs-12 no-padding-right" for="problem_name">
+			    <h4 class="clar_question">What is the memory limit of this problem?</h4>
+			    <hr />
+			  </label>
+			  <div class="col-xs-12">
+			  	<p>Judge Reply:</p>
+			    <textarea class="clar_reply form-control" class="col-xs-12"></textarea>
+			    <input id="clar_id" type="hidden" value="" />
+			  </div>
+			</div>
+			<div class="clearfix form-actions">
+				<br />
+			    <button type="submit" class="btn btn-info pull-right">
+			      <i class="ace-icon fa fa-reply bigger-110"></i>
+			      Reply
+			    </button>
+			    <span class="btn btn-danger" id="ignore_button">
+			      <i class="ace-icon fa fa-ban bigger-110"></i>
+			      Ignore
+			    </span>
+			</div>
+		</form>
+	</div>
+</div><!-- my_modal ends -->
+
+<div id="clar_success" class="clar_alert alert alert-success alert-dismissable">
+  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+  <h4><i class="icon fa fa-check"></i> Success!</h4>
+</div>
+<div id="clar_error" class="clar_alert alert alert-danger alert-dismissable">
+  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+  <h4><i class="icon fa fa-ban"></i> Failed to Submit Clarification!</h4>
+  Please try again a while later.
+</div>
+
+
 <div class="page-content">
 	<div class="page-header">
 		<div class="page_actions pull-right">
@@ -44,16 +85,21 @@
 			<div class="clearfix">
 				<div class="pull-left tableTools-container"></div>
 				<ul class="pull-right nav nav-pills">
+					<?php if($contest->contest_status == -1) { ?>
 					<li class="active">
 						<a data-toggle="modal" role="button" href="#add_problems">
 							Add Problem(s)
 						</a>
 					</li>
+					<?php } ?>
 					<li class="active">
 						<a href="<?php echo base_url().$this->module.'/contest/manage_judges?contest_id='.$contest->contest_id; ?>">Manage Judges</a>
 					</li>
 					<li class="active">
 						<a href="<?php echo base_url().$this->module.'/contest/manage_contestants?contest_id='.$contest->contest_id; ?>">Manage Contestants</a>
+					</li>
+					<li class="active">
+						<a href="<?php echo base_url().$this->module.'/contest/edit_contest/'.$contest->contest_id; ?>">Edit Contest Info</a>
 					</li>
 					<div class="clearfix"></div>
 				</ul>
@@ -105,10 +151,11 @@
 									<a class="blue col-xs-2" href="#" title="View Judge I/O">
 										<i class="ace-icon fa fa-eye bigger-130"></i>
 									</a>
-
+									<?php if($contest->contest_status == -1) { ?>
 									<a class="red col-xs-2 remove_problem" href="#" problemid="<?php echo $problem->problem_id; ?>" contestid="<?php echo $contest->contest_id; ?>" title="Remove from this Contest">
 										<i class="ace-icon fa fa-trash-o bigger-130"></i>
 									</a>
+									<?php } ?>
 								</div>
 							</td>
 						</tr>
@@ -251,9 +298,10 @@
 						</div><!-- problem_tab tabable ends -->
 					</div>
 					<div class="tab-pane fade" id="submissions">
-	                    <table class="table table-striped table-bordered table-hover">
+	                    <table class="oj_datatable table table-striped table-bordered table-hover">
                         <thead>
                           <tr>
+                          	<th>Submission ID</th>
                             <th>Contestant</th>
                             <th>Problem</th>
                             <th>Language</th>
@@ -266,10 +314,15 @@
                         <tbody>
                           <?php foreach($submissions as $key => $submission) {?>
                           <tr>
+                            <td><?php echo $submission->submission_id; ?></td>
                             <td><?php echo $users[$submission->user_id]; ?></td>
-                            <td><?php echo $submission->problem_id; ?></td>
+                            <td>
+                              <a href="<?php echo base_url($this->module.'/problem/view_problem?problem_id='.$submission->problem_id); ?>">
+                              <?php echo $nos[$submission->problem_id]; ?>
+                              </a>
+                            </td>
                             <td><?php echo $language[$submission->language_id]; ?></td>
-                            <td><?php echo $submission->submission_time; ?></td>
+                            <td><?php echo date('h:i A, M d, Y', strtotime($submission->submission_time)); ?></td>
                             <td><?php echo $verdict[$submission->submission_result]; ?></td>
                             <td>
                             	<div class="action-buttons">
@@ -285,151 +338,153 @@
                       </table><!-- table ends -->
 					</div>
 					<div class="tab-pane fade" id="clar">
-						<div class="row">
-							<div class="col-xs-12 col-sm-10 col-sm-offset-1">
-								<div class="timeline-container">
-									<div class="timeline-label">
-										<span class="label label-primary arrowed-in-right label-lg">
-											<b>AJAX Contest</b>
-										</span>
-									</div>
+						<div class="">
+				        <form>
+				          <div class="form-actions">
+				            <div class="input-group">
+				              <input type="text" name="message" class="form-control" placeholder="Declare Judge Clarification here ...">
+				              <span class="input-group-btn">
+				                <button type="button" class="btn btn-sm btn-info no-radius">
+				                  <i class="ace-icon fa fa-share"></i>
+				                  Send
+				                </button>
+				              </span>
+				            </div>
+				          </div>
+				        </form>
+						<?php
+							foreach($clarifications as $key => $clar) {
+						?>
+				          <div class="itemdiv dialogdiv">
+				            <div class="user">
+				                <i class="<?php if($clar->clarification_status == 0 && $clar->user_id != NULL) echo 'new ' ?>clar_user ace-icon fa fa-user<?php if($clar->user_id == NULL) echo '-secret'; ?>"></i>
+				            </div>
+				            <div class="body">
+				              <div class="time">
+				                <i class="ace-icon fa fa-clock-o"></i>
+				                <span class="green"><?php echo date('h:i A, M d, Y', strtotime($clar->clarification_time)); ?></span>
+				              </div>
 
-									<div class="timeline-items">
-										<div class="timeline-item clearfix">
-											<div class="timeline-info">
-												<img src="<?php echo $fullpath; ?>assets/avatars/avatar2.png" alt="Susan't Avatar">
-												<span class="label label-info label-sm">16:22</span>
-											</div>
-
-											<div class="widget-box transparent">
-												<div class="widget-header">
-													<h5 class="widget-title smaller">
-														<span class="blue">IST_CodePanda</span>
-													</h5>
-													<span class="widget-toolbar">
-														<i class="ace-icon fa fa-clock-o bigger-110"></i>
-														4:22 PM
-													</span>
-													<span class="widget-toolbar">
-														<a href="#" title="Reply"><i class="ace-icon fa fa-reply green"></i></a>
-														<a href="#" title="Ignore"><i class="ace-icon fa fa-ban orange"></i></a>
-														<a href="#" title="Delete"><i class="ace-icon fa fa-times red bigger-110"></i></a>
-													</span>
-												</div>
-
-												<div class="widget-body" style="display: block;">
-													<div class="widget-main">
-														Where can I get the STL Library content?
-														<div class="space-6"></div>
-													</div>
-												</div>
-											</div>
-										</div><!-- timeline-item ends -->
-
-										<div class="timeline-item clearfix">
-											<div class="timeline-info">
-												<img src="<?php echo $fullpath; ?>assets/avatars/avatar5.png" alt="Susan't Avatar">
-												<span class="label label-info label-sm">16:22</span>
-											</div>
-
-											<div class="widget-box transparent">
-												<div class="widget-body">
-													<div class="widget-main">You can download it at www.example.com</div>
-												</div>
-											</div>
-										</div><!-- timeline-item ends -->
-										<div class="timeline-item clearfix" style="box-shadow: 0 0 4px #005dff;">
-											<div class="timeline-info">
-												<img src="<?php echo $fullpath; ?>assets/avatars/avatar2.png" alt="Susan't Avatar">
-												<span class="label label-info label-sm">16:22</span>
-											</div>
-
-											<div class="widget-box transparent">
-												<div class="widget-header">
-													<h5 class="widget-title smaller">
-														<span class="blue">IST_CodePanda</span>
-													</h5>
-													<span class="widget-toolbar">
-														<i class="ace-icon fa fa-clock-o bigger-110"></i>
-														4:22 PM
-													</span>
-													<span class="widget-toolbar">
-														<a href="#" title="Reply"><i class="ace-icon fa fa-reply green"></i></a>
-														<a href="#" title="Ignore"><i class="ace-icon fa fa-ban orange"></i></a>
-														<a href="#" title="Delete"><i class="ace-icon fa fa-times red bigger-110"></i></a>
-													</span>
-												</div>
-
-												<div class="widget-body" style="display: block;">
-													<div class="widget-main">
-														Where can I get the STL Library content?
-														<div class="space-6"></div>
-													</div>
-												</div>
-											</div>
-										</div><!-- timeline-item ends -->
-									</div><!-- /.timeline-items -->
-								</div><!-- /.timeline-container -->
-							</div><!-- col-xs-12 ends -->
-						</div><!-- row ends -->
+				              <div class="name">
+				                <a href="#">
+                                    <?php 
+                                      if($clar->user_id != NULL) {
+                                        echo $users[$clar->user_id];
+                                        if($clar->problem_id != NULL) echo " | [Problem ".$nos[$clar->problem_id]." ]";
+                                        else echo ' | [General]';
+                                        if($clar->clarification_status == 2)
+                                          echo ' | [Ignored]';
+                                      }
+                                      else echo 'Judge Clarification';
+                                    ?>
+                                </a>
+				              </div>
+				              <div class="text"><?php echo $clar->clarification_question; ?></div>
+				              <?php if($clar->clarification_status == 0 && $clar->user_id != NULL) { ?>
+				              <div class="tools">
+				                <a id="<?php echo $clar->clarification_id; ?>" class="judge_reply_button btn btn-minier btn-info" href="#">
+				                  <i class="icon-only ace-icon fa fa-share"></i>
+				                </a>
+				              </div>
+				              <?php } ?>
+				            </div><!-- body ends -->
+				          </div><!-- itemdiv ends -->
+					          <?php if($clar->clarification_status != 0 && $clar->clarification_status != 2) { ?>
+					          <div class="itemdiv dialogdiv reply_div">
+					            <div class="user">
+					                <i class="clar_user ace-icon fa fa-user-secret"></i>
+					            </div>
+					            <div class="body">
+					              <div class="name">
+					                <a href="#">Judge Reply</a>
+					              </div>
+					              <div class="text"><?php echo $clar->clarification_reply; ?></div>
+					            </div><!-- body ends -->
+					          </div><!-- itemdiv ends -->
+					          <?php } ?>
+				          <?php } ?>
+						</div><!-- chatbox ends -->
 					</div><!-- clarifications ends -->
 					<div class="tab-pane fade" id="ranklist">
 						<table class="oj_datatable table table-striped table-bordered table-hover">
-							<thead>
-								<tr>
-									<th>#</th>
-									<th>Contestant/Team</th>
-									<?php
-										$serial = 64;
-										for($i = 0; $i< $count; ++$i) {
-									?>
-									<th><?php printf("%c", ++$serial); ?></th>
-									<?php
-										}
-									?>
-									<th>Total</th>
-								</tr>
-							</thead>
+	                        <thead>
+	                          <tr>
+	                            <th class="problem_no">#</th>
+	                            <th>Contestant/Team</th>
+	                            <th class="problem_no">Total</th>
+	                            <td>&nbsp;</td>
+	                            <?php
+	                              $serial = 64;
+	                              for($i = 0; $i< $count; ++$i) {
+	                            ?>
+	                            <th class="problem_no"><?php printf("%c", ++$serial); ?></th>
+	                            <?php
+	                              }
+	                            ?>
+	                          </tr>
+	                        </thead>
 
-							<tbody>
-								<?php foreach($ranklist as $key => $rank) {?>
-								<tr>
-									<td><?php echo $key+1; ?></td>
-									<td>
-										<?php echo $users[$rank->user_id]; ?>
-									</td>
-									<?php
-										$c_rank = explode(',', $rank->rank_details);
-										for($i=0, $k=0; $k < $count; ++$k, $i += 3) {
-											$try = $c_rank[$i];
-											$time = $c_rank[$i+1];
-											$penalty = $c_rank[$i+2];
-									?>
-										<td>
-											<button class="rank_box btn btn-sm btn-<?php if($penalty) echo 'success'; else echo 'danger'; ?>">
-												<?php echo $try.'<br />'.$time.'<br />'.$penalty; ?>
-											</button>
-										</td>
-									<?php
-										}
-									?>
-									<td><button class="rank_box btn btn-sm btn-primary">
-										<?php
-											echo $rank->rank_solved.'<br />';
-											echo '==========<br />';
-											echo $rank->rank_penalty.'<br />';
+	                        <tbody>
+	                          <?php
+	                          	$order = 0;
+	                          	foreach($ranklist as $key => $rank) {
+	                          ?>
+	                          <tr>
+	                            <td class="rank_user problem_no">
+	                            <?php
+	                            	if($key > 0) {
+		                            	if($rank->rank_solved != $ranklist[$key-1]->rank_solved ||
+		                            		$rank->rank_penalty != $ranklist[$key-1]->rank_penalty) {
+		                            		++$order;
+		                            	}
+		                            }
+		                        	else ++$order;
+	                            	echo $order;
+	                            ?>
+	                            </td>
+	                            <td class="rank_user">
+	                              <?php echo $users[$rank->user_id]; ?>
+	                            </td>
+	                            <td class="problem_no"><button class="rank_box btn btn-sm btn-primary">
+	                              <?php
+	                                echo $rank->rank_solved;
+	                                echo '<br />';
+	                                echo $rank->rank_penalty.'<br />';
 
-										?>
-										</button>
-									</td>
-								</tr>
-								<?php } ?>
-							</tbody>
-						</table>
+	                              ?>
+	                              </button>
+	                            </td>
+	                            <td>&nbsp;</td>
+	                            <?php
+	                              $c_rank = explode(',', $rank->rank_details);
+	                              for($i=0, $k=0; $k < $count; ++$k, $i += 3) {
+	                                $try = $c_rank[$i];
+	                                $time = $c_rank[$i+1];
+	                                if($time > 0) {
+	                                    $minutes = $time%60;
+	                                    if($minutes < 10) $minutes = '0'.$minutes;
+	                                    $time = (int)($time/60).':'.$minutes;
+	                                }
+	                                else $time = '- : - -';
+	                                $penalty = $c_rank[$i+2];
+	                            ?>
+	                              <td class="problem_no">
+	                                <button class="rank_box btn btn-sm btn-<?php if($penalty && $try) echo 'success'; else if(!$penalty && $try) echo 'danger'; else echo 'defautl'; ?>">
+	                                  <?php echo $try.' ('.$time.')<br />'.$penalty; ?>
+	                                </button>
+	                              </td>
+	                            <?php
+	                              }
+	                            ?>
+	                          </tr>
+	                          <?php } ?>
+	                        </tbody>
+	                      </table>
 					</div>
 				</div><!-- tab-content ends -->
 			</div><!-- Tabable Ends -->
 		</div><!-- col-xs-12, contestant view -->
+		<?php if($contest->contest_status == -1) { ?>
 		<div tabindex="-1" class="modal fade" id="add_problems" style="display: none;" aria-hidden="true">
 			<form action="<?php echo base_url($module.'/contest/add_problems') ?>" method="post">
 				<input type="hidden" name="contest_id" value="<?php echo $contest->contest_id; ?>" />
@@ -507,6 +562,6 @@
 				</div><!-- /.modal-dialog -->
 			</form>
 		</div><!-- Modal End -->
+		<?php } ?>
 	</div>	<!-- row ends -->
 </div> <!-- page content ends -->
-

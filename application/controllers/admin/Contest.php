@@ -53,8 +53,6 @@ class Contest extends OJ_Controller {
         // Page JS Scripts
         $data['page_scripts'] = array('js_form_elements.php', 'js_create_contest.php');
 
-        $data['tags'] = $this->m_admin->get_all_categories();
-
         $data['content'] = $this->subview.'/v_create_contest.php';
         $this->load->view($this->viewpath.'v_main', $data);
     }
@@ -65,7 +63,7 @@ class Contest extends OJ_Controller {
         $contest['contest_name'] = $_POST['contest_name'];
         $contest['contest_type'] = $_POST['contest_type'];
         if($contest['contest_type'] == 1) 
-            $contest['contest_pass'] = $_POST['contest_pass'];
+            $contest['contest_pass'] = md5($_POST['contest_pass']);
         $contest['contest_start'] = $_POST['contest_start'];
         $contest['contest_end'] = $_POST['contest_end'];
 
@@ -111,37 +109,53 @@ class Contest extends OJ_Controller {
             }
         }
 
+        // Fetching Clarifications
+        $data['clarifications'] = $this->m_admin->get_clar_for_contest($contest_id);
+
+        foreach($data['clarifications'] as $key => $clar) {
+            if($clar->user_id != NULL && !isset($data['users'][$clar->user_id])) {
+                $temp_user = $this->m_user->get_user($clar->user_id);
+                $data['users'][$clar->user_id] = $temp_user->user_name;
+            }
+        }
+
         $data['count'] = $this->m_admin->get_prob_cont_count($contest_id);
 
         $data['ranklist'] = $this->m_admin->get_ranklist($contest_id);
 
         $data['title'] .= $data['contest']->contest_name;
 
-        //$data['all_problems'] = $this->m_admin->probs_except_contest($contest_id);
-        $data['all_problems'] = $this->m_admin->probs_except_contest($contest_id);
-        $data['all_tags'] = array();
+        if($data['contest']->contest_status == -1) {
+            //$data['all_problems'] = $this->m_admin->probs_except_contest($contest_id);
+            $data['all_problems'] = $this->m_admin->probs_except_contest($contest_id);
+            $data['all_tags'] = array();
 
-        foreach($data['all_problems'] as $key => $problem) {
-            array_push($data['all_tags'], $this->m_admin->tags_for_problem($problem->problem_id));
-            $data['all_problems'][$key]->problem_description = $this->__excerpt($problem->problem_description);
+            foreach($data['all_problems'] as $key => $problem) {
+                array_push($data['all_tags'], $this->m_admin->tags_for_problem($problem->problem_id));
+                $data['all_problems'][$key]->problem_description = $this->__excerpt($problem->problem_description);
 
-            if($data['all_problems'][$key]->problem_time_limit >= 1000) {
-                $data['all_problems'][$key]->problem_time_limit /= 1000;
-                $data['all_problems'][$key]->problem_time_limit .= 's';
+                if($data['all_problems'][$key]->problem_time_limit >= 1000) {
+                    $data['all_problems'][$key]->problem_time_limit /= 1000;
+                    $data['all_problems'][$key]->problem_time_limit .= 's';
+                }
+                else $data['all_problems'][$key]->problem_time_limit .= 'ms';
+
+                if($data['all_problems'][$key]->problem_memory_limit >= 1024) {
+                    $data['all_problems'][$key]->problem_memory_limit /= 1024;
+                    $data['all_problems'][$key]->problem_memory_limit .= ' MB';
+                }
+                else $data['all_problems'][$key]->problem_memory_limit .= ' KB';
             }
-            else $data['all_problems'][$key]->problem_time_limit .= 'ms';
-
-            if($data['all_problems'][$key]->problem_memory_limit >= 1024) {
-                $data['all_problems'][$key]->problem_memory_limit /= 1024;
-                $data['all_problems'][$key]->problem_memory_limit .= ' MB';
-            }
-            else $data['all_problems'][$key]->problem_memory_limit .= ' KB';
         }
 
         $data['problems'] = $this->m_admin->probs_for_contest($data['contest']->contest_id);
         $data['individual_tags'] = array();
 
+        $data['nos'] = array();
+        $no = 'A';
+
         foreach($data['problems'] as $key => $problem) {
+            $data['nos'][$problem->problem_id] = $no++;
             array_push($data['individual_tags'], $this->m_admin->tags_for_problem($problem->problem_id));
             $data['problems'][$key]->problem_excerpt = $this->__excerpt($problem->problem_description);
 
@@ -160,6 +174,57 @@ class Contest extends OJ_Controller {
 
         $data['content'] = $this->subview.'/v_view_contest.php';
         $this->load->view($this->viewpath.'v_main', $data);
+    }
+
+    public function edit_contest($contest_id = 0) {
+        if($contest_id == 0) redirect(base_url($this->module));
+
+
+        $data = $this->data;
+
+        if(!$data['contest'] = $this->m_admin->get_single_contest($contest_id)) {
+            redirect(base_url('four'));
+        }
+
+        $data['title'] .= 'Edit Contest';
+
+        // Page CSS Files
+        $data['page_css'] = array('css_form_elements.php');
+
+        // Page JS Scripts
+        $data['page_scripts'] = array('js_form_elements.php', 'js_create_contest.php');
+
+        $data['content'] = $this->subview.'/v_edit_contest.php';
+        $this->load->view($this->viewpath.'v_main', $data);
+    }
+
+    public function update_contest($contest_id = 0) {
+        if($contest_id == 0) redirect(base_url($this->module));
+
+        $contest = $_POST;
+
+        if($contest['contest_type'] == 1) 
+            $contest['contest_pass'] = md5($contest['contest_pass']);
+
+        $now = new DateTime(date('Y-m-d H:i:s'));
+        $start = new DateTime(date($contest['contest_start']));
+        $end = new DateTime (date($contest['contest_end']));
+
+        if($start >= $end) redirect(base_url($this->module.'/contest/create'));
+
+        if($now < $start) $contest['contest_status'] = -1; // Waiting to Start
+        else if($now > $start && $now < $end) $contest['contest_status'] = 1; // Contest Running
+        else if($now > $end) $contest['contest_status'] = 2; // Contest Ended
+
+        $aff = $this->m_admin->update_contest($contest_id, $contest);
+        if($aff) {
+            $url = base_url($this->module."/contest/view_contest?contest_id=".$contest_id);
+            redirect($url);
+        }
+        else {
+            $url = base_url($this->module."/contest/view_contest?contest_id=".$contest_id);
+            redirect($url);
+        }
     }
 
     public function manage_judges() {
@@ -216,6 +281,9 @@ class Contest extends OJ_Controller {
 
     public function add_problems() {
         $contest_id = $_POST['contest_id'];
+        if($this->__is_running($contest_id)) {
+            redirect(base_url($this->module.'/contest'));
+        }
         $count = 0;
         foreach ($_POST['problem_id'] as $problem_id) {
             $res = $this->m_admin->get_prob_cont_rel($problem_id, $contest_id);
@@ -309,12 +377,18 @@ class Contest extends OJ_Controller {
     }
 
     public function remove_problem($problem_id, $contest_id) {
+        if($this->__is_running($contest_id)) {
+            redirect(base_url($this->module.'/contest'));
+        }
         $aff = $this->m_admin->remove_prob_cont_rel($problem_id, $contest_id);
         if($aff) echo 'yes';
         else echo 'no';
     }
 
     public function delete_contest($contest_id) {
+        if($this->__is_running($contest_id)) {
+            redirect(base_url($this->module.'/contest'));
+        }
         $aff = $this->m_admin->delete_contest($contest_id);
         if($aff) echo 'yes';
         else echo 'no';
@@ -431,6 +505,33 @@ class Contest extends OJ_Controller {
         $new = $this->m_admin->new_sub();
         if($new != '') {
             $this->compile($new->submission_id);
+        }
+    }
+
+    public function reply_clar() {
+        $clar_id = $_POST['clarification_id'];
+
+        $clar = array();
+
+
+        if($_POST['clarification_reply'] != 'ignored') {
+            $clar = $_POST;
+            $clar['clarification_status'] = 1;
+        }
+        else {
+            $clar['clarification_status'] = 2;
+        }
+        
+        if($this->session->admin_type == 'admin') $clar['admin_id'] = $this->session->admin_id;
+        else $clar['judge_id'] = $this->session->judge_id;
+        
+        $aff = $this->m_admin->update_clarification($clar, $clar_id);
+
+        if($aff) {
+            echo 'yes';
+        }
+        else {
+            echo 'no';
         }
     }
 

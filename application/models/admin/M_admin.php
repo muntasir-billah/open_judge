@@ -170,6 +170,12 @@ class M_admin extends Ci_model {
 
     //=============================//
 
+    public function update_contest($contest_id, $contest) {
+        $this->db->where('contest_id', $contest_id);
+        $this->db->update('contest', $contest);
+        return $this->db->affected_rows();
+    }
+
     public function get_all_categories() {
         return $this->db->get('category')->result();
     }
@@ -256,9 +262,20 @@ class M_admin extends Ci_model {
         return $this->db->get('prob_cont_rel')->row();
     }
 
+    public function get_prob_cont_rel_for_cont($contest_id) {
+        $this->db->where('contest_id', $contest_id);
+        return $this->db->get('prob_cont_rel')->result();
+    }
+
     public function add_prob_cont_rel($data) {
         $this->db->insert('prob_cont_rel', $data);
         return $this->db->insert_id();
+    }
+
+    public function update_prob_cont_rel($prob_cont_rel_id, $data) {
+        $this->db->where('prob_cont_rel_id', $prob_cont_rel_id);
+        $this->db->update('prob_cont_rel', $data);
+        return $this->db->affected_rows();
     }
 
     public function get_judge_io($problem_id) {
@@ -385,6 +402,18 @@ class M_admin extends Ci_model {
         $this->db->order_by('rank_penalty');
         return $this->db->get('rank')->result();
 
+    }
+
+    public function get_clar_for_contest($contest_id) {
+        $this->db->where('contest_id', $contest_id);
+        $this->db->order_by('clarification_time', 'desc');
+        return $this->db->get('clarification')->result();
+    }
+
+    public function update_clarification($clarification, $clarification_id) {
+        $this->db->where('clarification_id', $clarification_id);
+        $this->db->update('clarification', $clarification);
+        return $this->db->affected_rows();
     }
 }
 ?>
