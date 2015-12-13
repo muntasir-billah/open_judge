@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50625
 File Encoding         : 65001
 
-Date: 2015-12-13 21:24:56
+Date: 2015-12-14 05:36:51
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -102,26 +102,35 @@ CREATE TABLE `clarification` (
   `clarification_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `clarification_question` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `clarification_reply` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `clarification_status` tinyint(2) NOT NULL DEFAULT '1',
+  `clarification_status` tinyint(2) NOT NULL DEFAULT '0',
   `clarification_time` datetime NOT NULL,
   `contest_id` int(10) unsigned NOT NULL,
-  `user_id` int(10) unsigned NOT NULL,
-  `judge_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `judge_id` int(10) unsigned DEFAULT NULL,
   `problem_id` int(10) unsigned DEFAULT NULL,
+  `admin_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`clarification_id`),
   KEY `clar_user_FK1` (`user_id`),
   KEY `clar_judge_FK2` (`judge_id`),
   KEY `clar_prob_FK3` (`problem_id`),
   KEY `clar_cont_FK4` (`contest_id`),
+  KEY `clar_admin_FK1` (`admin_id`),
+  CONSTRAINT `clar_admin_FK1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `clar_cont_FK4` FOREIGN KEY (`contest_id`) REFERENCES `contest` (`contest_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `clar_judge_FK2` FOREIGN KEY (`judge_id`) REFERENCES `judge` (`judge_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `clar_prob_FK3` FOREIGN KEY (`problem_id`) REFERENCES `problem` (`problem_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `clar_user_FK1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of clarification
 -- ----------------------------
+INSERT INTO `clarification` VALUES ('1', 'What if I have a clarification for problem M?', 'Please don\'t, the problem setter has gone dating :(', '1', '2015-12-13 21:37:00', '5', '2', '2', '9', null);
+INSERT INTO `clarification` VALUES ('5', 'Can I use bits/stdc++.h?', 'Yes of course, why not?', '1', '2015-12-13 21:40:00', '5', '11', '2', '8', null);
+INSERT INTO `clarification` VALUES ('6', 'Fuck You, judges. I don\'t give a shit.', null, '2', '2015-12-13 22:12:00', '5', '8', null, null, '1');
+INSERT INTO `clarification` VALUES ('28', 'Hello World', 'Hi World :)', '1', '2015-12-14 01:18:11', '5', '11', null, null, '1');
+INSERT INTO `clarification` VALUES ('29', 'Another one', null, '0', '2015-12-14 01:18:15', '5', null, null, null, null);
+INSERT INTO `clarification` VALUES ('30', 'What is the memory limit for this problem?', 'If your solution runs on your pc, then it will run on the judge pc, too :)', '1', '2015-12-14 03:49:11', '5', '11', null, '7', '1');
 
 -- ----------------------------
 -- Table structure for `contest`
