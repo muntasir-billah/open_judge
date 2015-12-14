@@ -158,10 +158,12 @@
 						</label>
 
 						<div class="col-xs-12" id="judge_input">
-							<textarea <?php if($problem->problem_io_type) echo ' style="display:none;" '; ?> name="problem_judge_text_input" class="col-xs-12 autosize-transition form-control"><?php echo $problem->problem_judge_input; ?></textarea>
+							<textarea <?php if($problem->problem_io_type) echo ' style="display:none;" '; ?> name="problem_judge_text_input" class="col-xs-12 autosize-transition form-control"><?php if(!$problem->problem_io_type) echo $problem->problem_judge_input; ?></textarea>
 							<div <?php if(!$problem->problem_io_type) echo ' style="display:none;" '; ?> class="col-xs-12">
+								<?php if($problem->problem_io_type) 
+									echo '<a href="'.base_url().$this->judge_io_path.$problem->problem_judge_input.'" target="_blank">Judge Input File</a>'; 
+								?>
 								<br />
-								<?php if($problem->problem_io_type) echo $problem->problem_judge_input; ?>
 								<input type="file" name="problem_judge_file_input" class="single_file_uploader" />
 								<br />
 							</div>
@@ -173,10 +175,12 @@
 						</label>
 
 						<div class="col-xs-12" id="judge_output">
-							<textarea <?php if($problem->problem_io_type) echo ' style="display:none;" '; ?> name="problem_judge_text_output" class="col-xs-12 autosize-transition form-control"><?php echo $problem->problem_judge_output; ?></textarea>
+							<textarea <?php if($problem->problem_io_type) echo ' style="display:none;" '; ?> name="problem_judge_text_output" class="col-xs-12 autosize-transition form-control"><?php if(!$problem->problem_io_type) echo $problem->problem_judge_output; ?></textarea>
 							<div <?php if(!$problem->problem_io_type) echo ' style="display:none;" '; ?> class="col-xs-12">
+								<?php if($problem->problem_io_type) 
+									echo '<a href="'.base_url().$this->judge_io_path.$problem->problem_judge_output.'" target="_blank">Judge Output File</a>'; 
+								?>
 								<br />
-								<?php if($problem->problem_io_type) echo $problem->problem_judge_output; ?>
 								<input type="file" name="problem_judge_file_output" class="single_file_uploader" />
 								<br />
 							</div>
@@ -210,11 +214,12 @@
 					</div>
 				</div><!-- form group end -->
 				<?php if($problem->problem_image != '') { ?>
-				<div class="form-group">
+				<div class="form-group problem_image_div">
 					<label class="col-xs-12 no-padding-right" for="problem_sample_output">
 						<h3>Problem Image</h3>
 					</label>
 					<div class="col-xs-12 col-sm-3">
+						<span class="btn btn-sm btn-danger" title="Remove Image"><i class="menu-icon fa fa-times"></i></span>
 						<img src="<?php echo base_url($this->problem_image_path.$problem->problem_image); ?>" alt="<?php echo $problem->problem_name; ?>" />
 					</div>
 				</div><!-- form group end -->

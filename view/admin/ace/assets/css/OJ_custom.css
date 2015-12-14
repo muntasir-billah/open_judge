@@ -198,3 +198,20 @@
 .itemdiv:hover .delete_clar {
 	display: block;
 }
+
+.problem_image_div > div {
+	width:350px;
+}
+
+.problem_image_div span.btn {
+	position: absolute;
+	right:0;
+	top:0;
+	opacity: 0.8;
+	z-index: 200;
+}
+
+.problem_image_div img {
+	width:100%;
+	z-index: 100;
+}

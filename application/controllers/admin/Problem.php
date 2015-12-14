@@ -204,7 +204,7 @@ class Problem extends OJ_Controller {
         $data = $this->data;
 
         // Page CSS Files
-        $data['page_css'] = array();
+        $data['page_css'] = array('css_form_elements.php');
 
         // Page JS Scripts
         $data['page_scripts'] = array('js_create_problem.php', 'js_form_elements.php');
