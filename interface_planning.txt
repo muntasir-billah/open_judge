@@ -8,7 +8,7 @@ Admin View Map:
 		i. Overview ===============================================================
 		ii. Problem Set	===========================================================
 		iii. Submission ===========================================================
-		iv. Clarification
+		iv. Clarification =========================================================
 		v. Standings  =============================================================
 			Global Rejudge
 			Disqualify/Requalify a contestant.
@@ -29,7 +29,7 @@ Admin View Map:
 	c) Input a new problem ============================================================
 		i. Input all data =========================================================
 		ii. Upload Image (Optional) ===============================================
-	d) Edit a problem
+	d) Edit a problem 
 	e) Delete a problem ===============================================================
 4. User Management
 	a) Judge Management

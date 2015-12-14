@@ -95,11 +95,6 @@
 		var clar_id = $('#clar_id').val();
 		var reply = $('.clar_reply').val();
 
-		// alert(url);
-		// alert(clar_id);
-		// alert(reply);
-		// return false;
-
 		postData = {"clarification_id":clar_id, "clarification_reply":reply}
 
 		$.post(url,postData, function(data){
@@ -118,10 +113,54 @@
 		return false;
   	});
 
+	$('#judge_clarification').submit(function() {
+		var url = "<?php echo base_url($module.'/contest/judge_clar'); ?>";
+		var clar = $('#judge_clar_text').val();
+		var contestid = <?php echo $contest->contest_id; ?>;
+
+		postData = {"clarification_question":clar, "contest_id":contestid}
+
+		$.post(url,postData, function(data){
+			//alert(data);
+			if(data == 'yes'){
+			  $("#clar_success").fadeIn(300);
+			  $("#clar_success").fadeOut(3000);
+			  $('#judge_clar_text').val('');
+			}
+			else{
+			  $("#clar_error").fadeIn(300);
+			  $("#clar_error").fadeOut(3000);
+			}
+		});
+		return false;
+  	});
+
   	$('#ignore_button').click(function() {
 		var reply = "ignored"
 		$('.clar_reply').val(reply);
 		$('.judge_reply_form').submit();
+  	});
+
+  	$('.delete_clar').click(function() {
+		var url = "<?php echo base_url($module.'/contest/delete_clar'); ?>";
+  		var id = $(this).attr('clarid');
+
+		postData = {"clar_id":id}
+
+		$.post(url,postData, function(data){
+			//alert(data);
+			if(data == 'yes'){
+			  $("#clar_success").fadeIn(300);
+			  $("#clar_success").fadeOut(3000);
+			  id = 'clar'+id;
+	  		  $('.'+id).fadeOut(1000);
+			}
+			else{
+			  $("#clar_error").fadeIn(300);
+			  $("#clar_error").fadeOut(3000);
+			}
+		});
+  		return false;
   	});
 
 	$('#edit_row').click(function() {

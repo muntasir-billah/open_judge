@@ -207,13 +207,20 @@ class Problem extends OJ_Controller {
         $data['page_css'] = array();
 
         // Page JS Scripts
-        $data['page_scripts'] = array();
+        $data['page_scripts'] = array('js_create_problem.php', 'js_form_elements.php');
 
-        if(!$data['problem'] = $this->m_admin->get_single_problem($problem_id)) {
+        if(!$data['problem'] = $this->m_admin->get_single_problem_full($problem_id)) {
             redirect(base_url('four'));
         }
         $data['tags'] = $this->m_admin->tags_for_problem($problem_id);
+        $data['all_tags'] = $this->m_admin->get_all_categories();
 
+        $data['problem_tags'] = array();
+        foreach ($data['tags'] as $key => $tag) {
+            $data['problem_tags'][$tag->category_id] = true;
+        }
+
+        $data['problem']->problem_time_limit_ms = $data['problem']->problem_time_limit;
         if($data['problem']->problem_time_limit >= 1000) {
             $data['problem']->problem_time_limit /= 1000;
             if((int)$data['problem']->problem_time_limit > 1)
@@ -222,6 +229,7 @@ class Problem extends OJ_Controller {
         }
         else $data['problem']->problem_time_limit .= ' Milliseconds';
 
+        $data['problem']->problem_memory_limit_kb = $data['problem']->problem_memory_limit;
         if($data['problem']->problem_memory_limit >= 1024) {
             $data['problem']->problem_memory_limit /= 1024;
             $data['problem']->problem_memory_limit .= ' MB';

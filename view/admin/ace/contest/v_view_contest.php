@@ -8,7 +8,7 @@
 		<form class="judge_reply_form">
 			<div class="form-group">
 			  <label class="col-xs-12 no-padding-right" for="problem_name">
-			    <h4 class="clar_question">What is the memory limit of this problem?</h4>
+			    <h4 class="clar_question"></h4>
 			    <hr />
 			  </label>
 			  <div class="col-xs-12">
@@ -339,12 +339,12 @@
 					</div>
 					<div class="tab-pane fade" id="clar">
 						<div class="">
-				        <form>
+				        <form id="judge_clarification">
 				          <div class="form-actions">
 				            <div class="input-group">
-				              <input type="text" name="message" class="form-control" placeholder="Declare Judge Clarification here ...">
+				              <input id="judge_clar_text" type="text" class="form-control" placeholder="Declare Judge Clarification here ...">
 				              <span class="input-group-btn">
-				                <button type="button" class="btn btn-sm btn-info no-radius">
+				                <button type="submit" class="btn btn-sm btn-info no-radius">
 				                  <i class="ace-icon fa fa-share"></i>
 				                  Send
 				                </button>
@@ -355,7 +355,7 @@
 						<?php
 							foreach($clarifications as $key => $clar) {
 						?>
-				          <div class="itemdiv dialogdiv">
+				          <div class="itemdiv dialogdiv <?php echo 'clar'.$clar->clarification_id; ?>">
 				            <div class="user">
 				                <i class="<?php if($clar->clarification_status == 0 && $clar->user_id != NULL) echo 'new ' ?>clar_user ace-icon fa fa-user<?php if($clar->user_id == NULL) echo '-secret'; ?>"></i>
 				            </div>
@@ -363,6 +363,9 @@
 				              <div class="time">
 				                <i class="ace-icon fa fa-clock-o"></i>
 				                <span class="green"><?php echo date('h:i A, M d, Y', strtotime($clar->clarification_time)); ?></span>
+				                <a href="" class="delete_clar" clarid="<?php echo $clar->clarification_id; ?>">
+				                	<i class="ace-icon fa fa-trash-o red bigger130"></i>
+				                </a>
 				              </div>
 
 				              <div class="name">
@@ -390,7 +393,7 @@
 				            </div><!-- body ends -->
 				          </div><!-- itemdiv ends -->
 					          <?php if($clar->clarification_status != 0 && $clar->clarification_status != 2) { ?>
-					          <div class="itemdiv dialogdiv reply_div">
+					          <div class="itemdiv dialogdiv reply_div <?php echo 'clar'.$clar->clarification_id; ?>">
 					            <div class="user">
 					                <i class="clar_user ace-icon fa fa-user-secret"></i>
 					            </div>

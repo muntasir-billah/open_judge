@@ -2,6 +2,9 @@
 	cursor: pointer;
 }
 
+.edit_row {
+	display: none;
+}
 
 .oj_problem_specification {
 	border-top: solid 1px #eee;
@@ -183,5 +186,15 @@
 	right:50px;
 	top:80px;
 	width:400px;
+}
 
+.delete_clar {
+	display: none;
+	position: absolute;
+	right:5px;
+	top:30px;
+}
+
+.itemdiv:hover .delete_clar {
+	display: block;
 }

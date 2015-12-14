@@ -524,7 +524,7 @@ class Contest extends OJ_Controller {
         
         if($this->session->admin_type == 'admin') $clar['admin_id'] = $this->session->admin_id;
         else $clar['judge_id'] = $this->session->judge_id;
-        
+
         $aff = $this->m_admin->update_clarification($clar, $clar_id);
 
         if($aff) {
@@ -533,6 +533,35 @@ class Contest extends OJ_Controller {
         else {
             echo 'no';
         }
+    }
+
+
+    public function judge_clar() {
+        $clar = $_POST;
+        $clar['clarification_time'] = date('Y-m-d H:i:s');
+        $clar['clarification_status'] = 0;
+
+        if($this->session->admin_type == 'admin') $clar['admin_id'] = $this->session->admin_id;
+        else $clar['judge_id'] = $this->session->judge_id;
+
+
+        $insert_id = $this->m_admin->insert_clarification($clar);
+
+        if($insert_id) {
+            echo 'yes';
+        }
+        else {
+            echo 'no';
+        }
+    } // Judge Clarification ends
+
+    public function delete_clar() {
+        $clar_id = $_POST['clar_id'];
+
+        $aff = $this->m_admin->delete_clarification($clar_id);
+
+        if($aff) echo 'yes';
+        else echo 'no';
     }
 
 }

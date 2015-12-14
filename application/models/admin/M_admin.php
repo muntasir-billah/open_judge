@@ -410,9 +410,20 @@ class M_admin extends Ci_model {
         return $this->db->get('clarification')->result();
     }
 
+    public function insert_clarification($clarification) {
+        $this->db->insert('clarification', $clarification);
+        return $this->db->insert_id();
+    }
+
     public function update_clarification($clarification, $clarification_id) {
         $this->db->where('clarification_id', $clarification_id);
         $this->db->update('clarification', $clarification);
+        return $this->db->affected_rows();
+    }
+
+    public function delete_clarification($clarification_id) {
+        $this->db->where('clarification_id', $clarification_id);
+        $this->db->delete('clarification');
         return $this->db->affected_rows();
     }
 }
