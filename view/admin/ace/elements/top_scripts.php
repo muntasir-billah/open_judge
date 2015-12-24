@@ -27,7 +27,7 @@
 	if('ontouchstart' in document.documentElement) document.write("<script src='<?php echo $fullpath; ?>assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
 </script>
 <script src="<?php echo $fullpath; ?>assets/js/bootstrap.min.js"></script>
-
+<script src="<?php echo $fullpath; ?>assets/js/jquery.stickytabs.js"></script>
 
 
 <!-- page specific plugin scripts -->

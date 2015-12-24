@@ -219,13 +219,13 @@
 						<div class="tabbable">
 							<ul class="nav nav-tabs padding-12 tab-color-blue background-blue">
 								<?php
-									$serial = 64;
+									$serial = 'A';
 									$first = true;
 								?>
 								<?php foreach($problems as $key => $problem) {?>
 								<li class="<?php if($first) echo 'active'; ?>">
-									<a href="#<?php echo ++$serial; ?>" data-toggle="tab" aria-expanded="<?php if($first) echo 'true'; else echo 'false'; ?>">
-										<?php printf("%c", $serial); ?>
+									<a href="#<?php echo $serial; ?>" data-toggle="tab" aria-expanded="<?php if($first) echo 'true'; else echo 'false'; ?>">
+										<?php echo $serial++; ?>
 									</a>
 								</li>
 								<?php $first = false; ?>
@@ -234,11 +234,11 @@
 
 							<div class="tab-content">
 								<?php
-									$serial = 64;
+									$serial = 'A';
 									$first = true;
 									foreach($problems as $key => $problem) {
 								?>
-								<div class="tab-pane fade <?php if($first) echo 'active in'; ?>" id="<?php echo ++$serial; ?>">
+								<div class="tab-pane fade <?php if($first) echo 'active in'; ?>" id="<?php echo $serial++; ?>">
 									<div class="row">
 										<div class="col-xs-12">
 											<h1><?php echo $problem->problem_name; ?></h1>
