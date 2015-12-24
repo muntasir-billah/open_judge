@@ -167,7 +167,7 @@
 							<?php } ?>
 							</select>
 						</div>
-					</div>
+					</div><!-- Tags ends here -->
 				</div><!-- form group end -->
 				<div class="form-group">
 					<label class="col-xs-12 no-padding-right" for="problem_special_judge">

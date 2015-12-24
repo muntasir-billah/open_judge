@@ -75,7 +75,7 @@
 		<div class="col-xs-12">
 			<!-- PAGE CONTENT BEGINS -->
 			<?php
-				$action = base_url($module.'/problem/update_problem');
+				$action = base_url($module.'/problem/update_problem?problem_id='.$problem->problem_name);
 			?>
 			<form enctype="multipart/form-data" class="form-horizontal" role="form" action="<?php echo $action; ?>" method="post">
 				<div class="form-group">
@@ -226,7 +226,7 @@
 				<?php } ?>
 				<div class="form-group">
 					<label class="col-xs-12 no-padding-right" for="problem_sample_output">
-						<h3>Upload Image</h3>
+						<h3>Upload/Change Image</h3>
 					</label>
 					<div class="col-xs-12 col-sm-3">
 						<input name="problem_image" type="file" class="multi_image_uploader" />
