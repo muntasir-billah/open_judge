@@ -112,3 +112,16 @@
 .item_judge {
 	padding-left: 50px;
 }
+
+tr.contestant {
+	/* background-color: #999 !important; *
+	box-shadow: 0px 0px 5px #000 !important; */
+	background-color: rgba(0, 128, 255, 0.3) !important;
+}
+
+/*
+tr.contestant > td {
+	background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+*/

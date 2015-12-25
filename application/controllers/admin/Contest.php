@@ -23,6 +23,7 @@ class Contest extends OJ_Controller {
         $this->data['title'] = $this->config->item('title');
         $this->data['module'] = $this->module;
         $this->data['verdict'] = $this->verdict;
+        $this->data['verdict_class'] = $this->verdict_class;
     }
     //====================================//
 

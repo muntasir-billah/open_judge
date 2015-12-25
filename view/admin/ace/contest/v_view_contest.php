@@ -323,7 +323,7 @@
                             </td>
                             <td><?php echo $language[$submission->language_id]; ?></td>
                             <td><?php echo date('h:i A, M d, Y', strtotime($submission->submission_time)); ?></td>
-                            <td><?php echo $verdict[$submission->submission_result]; ?></td>
+                            <td><button class="btn btn-sm btn-<?php echo $verdict_class[$submission->submission_result]; ?>"><?php echo $verdict[$submission->submission_result]; ?></button></td>
                             <td>
                             	<div class="action-buttons">
 

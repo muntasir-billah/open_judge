@@ -233,7 +233,7 @@
                           ?>
 	                  </div><!-- /.tab-pane -->
 	                  <div id="submission_my" class="tab-pane">
-                      <table class="table table-striped table-bordered table-hover">
+                      <table class="oj_datatable table table-striped table-bordered table-hover">
                         <thead>
                           <tr>
                             <th>Submission ID</th>
@@ -258,7 +258,7 @@
                               </a>
                             </td>
                             <td><?php echo date('h:i A, M d, Y', strtotime($submission->submission_time)); ?></td>
-                            <td><?php echo $verdict[$submission->submission_result]; ?></td>
+                            <td><button class="btn btn-sm btn-<?php echo $verdict_class[$submission->submission_result]; ?>"><?php echo $verdict[$submission->submission_result]; ?></button></td>
                           </tr>
                           <?php
                               }
@@ -268,7 +268,7 @@
                       </table><!-- table ends -->
 	                  </div><!-- /.tab-pane -->
 	                  <div id="submission_all" class="tab-pane">
-	                    <table class="table table-striped table-bordered table-hover">
+	                    <table class="oj_datatable table table-striped table-bordered table-hover">
                         <thead>
                           <tr>
                             <th>Submission ID</th>
@@ -281,7 +281,7 @@
 
                         <tbody>
                           <?php foreach($submissions as $key => $submission) {?>
-                          <tr>
+                          <tr class="<?php if($submission->user_id == $this->session->user_id) echo 'contestant'; ?>">
                             <td><?php echo $submission->submission_id; ?></td>
                             <td><?php echo $users[$submission->user_id]; ?></td>
                             <td>
@@ -290,7 +290,7 @@
                               </a>
                             </td>
                             <td><?php echo date('h:i A, M d, Y', strtotime($submission->submission_time)); ?></td>
-                            <td><?php echo $verdict[$submission->submission_result]; ?></td>
+                            <td><button class="btn btn-sm btn-<?php echo $verdict_class[$submission->submission_result]; ?>"><?php echo $verdict[$submission->submission_result]; ?></button></td>
                           </tr>
                           <?php } ?>
                         </tbody>
@@ -467,7 +467,7 @@
                               $order = 0;
                               foreach($ranklist as $key => $rank) {
                             ?>
-                            <tr>
+                            <tr class="<?php if($rank->user_id == $this->session->user_id) echo 'contestant'; ?>">
                               <td class="rank_user problem_no">
                               <?php
                                 if($key > 0) {

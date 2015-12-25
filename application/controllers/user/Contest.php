@@ -23,6 +23,7 @@ class Contest extends OJ_Controller {
         $this->data['title'] = $this->config->item('title');
         $this->data['module'] = $this->module;
         $this->data['verdict'] = $this->verdict;
+        $this->data['verdict_class'] = $this->verdict_class;
     }
     //====================================//
 
@@ -60,8 +61,7 @@ class Contest extends OJ_Controller {
         }
 
         if(!$this->__check_access($contest_id, $this->session->user_id)) {
-            echo 'You have not access to this contest';
-            exit();
+            redirect(base_url($this->module.'/'.$this->subview));
         }
 
         // Fetching Submissions
@@ -175,10 +175,10 @@ class Contest extends OJ_Controller {
         if($insert_id) {
             $temp = array('contest_status' => 1);
             $aff = $this->m_user->update_contest_status($contest_id, $temp);
-            echo 'Submitted';
+            redirect(base_url($this->module.'/'.$this->subview."/view_contest?contest_id=".$submission['contest_id']."#submission_my"));
         }
         else {
-            echo 'Failed';
+            redirect(base_url($this->module.'/'.$this->subview."/view_contest?contest_id=".$submission['contest_id']."#submission_my"));
         }
 
     } // Submit Problem ends
