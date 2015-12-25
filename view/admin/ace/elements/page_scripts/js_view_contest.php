@@ -177,4 +177,41 @@
 		$('#view_row').addClass('active');
 	});
 
+
+	// Tab Url change
+	$(function(){
+		// jquery plugin call
+		$('.nav-tabs').stickyTabs();
+
+		var hash = window.location.hash;
+		if(hash.indexOf('/')!== -1){
+			var temp = hash.split('/')[0];
+			var sub_hash = hash.split('/')[1];
+			var sub_hash = '#'+sub_hash;
+			temp && $('ul.nav a[href="' + temp + '"]').tab('show')
+			sub_hash && $('ul.nav a[href="' + sub_hash + '"]').tab('show');
+		}else{
+			hash && $('ul.nav a[href="' + hash + '"]').tab('show');
+		}
+		
+
+		$('.nav-tabs a').click(function (e) {
+			if(this.hash.length < 3){
+				$(this).tab('show');
+				var scrollmem = $('body').scrollTop();
+				var num_hash = this.hash.split('#')[1];
+				window.location.hash = '#problems/'+num_hash;
+				$('html,body').scrollTop(scrollmem);
+			}
+			else{
+				$(this).tab('show');
+				var scrollmem = $('body').scrollTop();
+				window.location.hash = this.hash;
+				$('html,body').scrollTop(scrollmem);
+			}
+		});
+
+
+	});
+
 </script>
