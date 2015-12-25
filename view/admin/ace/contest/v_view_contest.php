@@ -200,13 +200,13 @@
 							</thead>
 
 							<tbody>
-								<?php $serial = 64; ?>
+								<?php $serial = 'A'; ?>
 								<?php foreach($problems as $key => $problem) {?>
 								<tr>
 									<!-- <td>10/87</td> -->
-									<td><?php printf("Problem %c", ++$serial); ?></td>
+									<td><?php echo $serial; ?></td>
 									<td>
-										<a href="<?php echo base_url($this->module.'/problem/view_problem?problem_id='.$problem->problem_id); ?>">
+										<a target="_blank" href="<?php echo base_url($this->module.'/contest/view_contest?contest_id='.$contest->contest_id.'#problems/'.$serial++); ?>">
 											<?php echo $problem->problem_name; ?>
 										</a>
 									</td>
@@ -317,7 +317,7 @@
                             <td><?php echo $submission->submission_id; ?></td>
                             <td><?php echo $users[$submission->user_id]; ?></td>
                             <td>
-                              <a href="<?php echo base_url($this->module.'/problem/view_problem?problem_id='.$submission->problem_id); ?>">
+                              <a target="_blank" href="<?php echo base_url($this->module.'/contest/view_contest?contest_id='.$contest->contest_id.'#problems/'.$nos[$submission->problem_id]); ?>">
                               <?php echo $nos[$submission->problem_id]; ?>
                               </a>
                             </td>

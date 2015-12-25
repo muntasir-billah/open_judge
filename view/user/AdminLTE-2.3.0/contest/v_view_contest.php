@@ -113,13 +113,13 @@
 	                    	</thead>
 
 	                    	<tbody>
-	                    		<?php $serial = 64; ?>
+	                    		<?php $serial = 'A'; ?>
 	                    		<?php foreach($problems as $key => $problem) {?>
 	                    		<tr>
 	                    			<!-- <td>10/87</td> -->
-	                    			<td><?php printf("Problem %c", ++$serial); ?></td>
+	                    			<td><?php echo $serial; ?></td>
 	                    			<td>
-	                    				<a href="<?php echo base_url($this->module.'/contest/view_problem?contest_id='.$contest->contest_id.'&problem='.$nos[$problem->problem_id]); ?>">
+	                    				<a target="_blank" href="<?php echo base_url($this->module.'/contest/view_contest?contest_id='.$contest->contest_id.'#problems/'.$serial++); ?>">
 	                    					<?php echo $problem->problem_name; ?>
 	                    				</a>
 	                    			</td>
@@ -137,31 +137,31 @@
                             <div class="nav-tabs-custom">
                               <ul class="nav nav-tabs">
                               	<?php
-                              		$serial = 64;
-                              		$first = true;
-                              	?>
-                              	<?php foreach($problems as $key => $problem) {?>
-                              	<li class="<?php if($first) echo 'active'; ?>">
-                              		<a href="#<?php echo ++$serial; ?>" data-toggle="tab" aria-expanded="<?php if($first) echo 'true'; else echo 'false'; ?>">
-                              			<?php printf("%c", $serial); ?>
-                              		</a>
-                              	</li>
-                              	<?php $first = false; ?>
-                              	<?php } ?>
+                                  $serial = 'A';
+                                  $first = true;
+                                ?>
+                                <?php foreach($problems as $key => $problem) {?>
+                                <li class="<?php if($first) echo 'active'; ?>">
+                                  <a href="#<?php echo $serial; ?>" data-toggle="tab" aria-expanded="<?php if($first) echo 'true'; else echo 'false'; ?>">
+                                    <?php echo $serial++; ?>
+                                  </a>
+                                </li>
+                                <?php $first = false; ?>
+                                <?php } ?>
                               </ul>
                               <div class="tab-content">
                               	<?php
-                              		$serial = 64;
+                              		$serial = 'A';
                               		$first = true;
                               		foreach($problems as $key => $problem) {
                               	?>
-                              	<div class="tab-pane <?php if($first) echo 'active'; ?>" id="<?php echo ++$serial; ?>">
+                              	<div class="tab-pane <?php if($first) echo 'active'; ?>" id="<?php echo $serial; ?>">
                               		<div class="row">
                               			<div class="col-xs-12">
-                              				<button for="<?php printf("%c", $serial); ?>" class="submit_button btn btn-lg btn-primary">
-                              					Submit Solution for Problem <?php printf("%c", $serial); ?>
+                              				<button for="<?php echo $serial; ?>" class="submit_button btn btn-lg btn-primary">
+                              					Submit Solution for Problem <?php echo $serial; ?>
                               				</button>
-                              				<h1><?php printf("%c", $serial); ?> - <?php echo $problem->problem_name; ?></h1>
+                              				<h1><?php echo $serial++; ?> - <?php echo $problem->problem_name; ?></h1>
                               				<hr>
                               			</div>
                               			<div class="col-xs-12 oj_problem_specification">
@@ -253,7 +253,7 @@
                             <td><?php echo $submission->submission_id; ?></td>
                             <td><?php echo $users[$submission->user_id]; ?></td>
                             <td>
-                              <a href="<?php echo base_url($this->module.'/contest/view_problem?contest_id='.$contest->contest_id.'&problem='.$nos[$submission->problem_id]); ?>">
+                              <a target="_blank" href="<?php echo base_url($this->module.'/contest/view_contest?contest_id='.$contest->contest_id.'#problems/'.$nos[$submission->problem_id]); ?>">
                               <?php echo $nos[$submission->problem_id]; ?>
                               </a>
                             </td>
