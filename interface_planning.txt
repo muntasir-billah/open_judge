@@ -37,7 +37,7 @@ Admin View Map:
 		ii. Create a new judge.====================================================
 		iii. Edit a judge =========================================================
 		iv. Delete a judge ========================================================
-		v. Bulk Judge Management (not now) !!!!!!!!!!!!!!!!!!!!!
+		v. Bulk Judge Management (not now) !!!!!!!!! 
 			List all bulk judges
 			Auto generate specific numbers of judges (names are optional) and their username, passwords and add them to a specific contest. Generate a printable page containing tabular formatted usernames and passwords of these judges.
 			Increase/Decrease number of judges in bulk judge package

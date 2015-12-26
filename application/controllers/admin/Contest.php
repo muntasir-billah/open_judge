@@ -121,6 +121,16 @@ class Contest extends OJ_Controller {
         }
 
         $data['count'] = $this->m_admin->get_prob_cont_count($contest_id);
+        $prob_cont_rel = $this->m_admin->get_prob_cont_rel_for_cont($contest_id);
+        $prob_tried_solved = array();
+        foreach($prob_cont_rel as $key => $rel) {
+            $prob_tried_solved[$rel->problem_id] = array();
+            $prob_tried_solved[$rel->problem_id]['tried'] = $rel->prob_cont_tried;
+            $prob_tried_solved[$rel->problem_id]['solved'] = $rel->prob_cont_solved;
+        }
+
+        $data['prob_tried_solved'] = $prob_tried_solved;
+
 
         $data['ranklist'] = $this->m_admin->get_ranklist($contest_id);
 
@@ -410,6 +420,11 @@ class Contest extends OJ_Controller {
         $prev_submissions = $this->m_admin->get_prev_submissions_by_user($user_id, $contest_id, $problem_id);
         --$prev_submissions;
         echo 'Prev: '.$prev_submissions.'<br /><br />';
+
+        // Updating Total Solved for this problem
+        $prob_cont_rel = $this->m_admin->get_prob_cont_rel($problem_id, $contest_id);
+        $prob_cont_update = array();
+
         if($prev_submissions) {
             //checking if this problem is already solved by this user;
             if($this->m_admin->check_existing_solution($user_id, $contest_id, $problem_id)){
@@ -422,6 +437,9 @@ class Contest extends OJ_Controller {
                 exit();
             }
         }
+        else {
+            $prob_cont_update['prob_cont_tried'] = $prob_cont_rel->prob_cont_tried + 1;
+        }
 
         $result = $this->__process($submission_id);
         echo '<br />';
@@ -431,12 +449,16 @@ class Contest extends OJ_Controller {
 
         $aff = $this->m_admin->update_submission($submission_id, $sub);
 
+
         if($this->m_admin->if_first_submission($user_id, $contest_id)) {
             $rank = array();
             $rank['user_id'] = $user_id;
             $rank['contest_id'] = $contest_id;
             $minute_diff = 0;
             if($result == 1) {
+                // Updating Total Solved for this problem
+                $prob_cont_update['prob_cont_solved'] = $prob_cont_rel->prob_cont_solved + 1;
+
                 $rank['rank_solved'] = 1;
                 // Calculating Penalty
                 $second_diff = strtotime($submission->submission_time) - strtotime($contest->contest_start);
@@ -460,13 +482,16 @@ class Contest extends OJ_Controller {
             if($insert_id) echo 'OK';
             else echo 'NOT Inserted';
         }
-        else {
+        else { // This is not the first submission from this user.
             $current_rank = $this->m_admin->get_rank($user_id, $contest_id);
             $c_rank = explode(',', $current_rank->rank_details);
             $rank = array();
 
             $minute_diff = 0;
             if($result == 1) {
+                // Updating Total Solved for this problem
+                $prob_cont_update['prob_cont_solved'] = $prob_cont_rel->prob_cont_solved + 1;
+
                 $rank['rank_solved'] = $current_rank->rank_solved + 1;
                 // Calculating Penalty
                 $second_diff = strtotime($submission->submission_time) - strtotime($contest->contest_start);
@@ -492,14 +517,21 @@ class Contest extends OJ_Controller {
             else echo 'NOT Updated';
         }
         echo '<pre>';
+        echo 'Rank<br />';
         print_r($rank);
         echo '</pre>';
+        echo '<pre>';
+        echo 'Rank<br />';
+        print_r($prob_cont_update);
+        echo '</pre>';
 
-        $new = $this->m_admin->new_submission_for_contest($contest_id);
-        if(count($new) > 0) {
-            $temp_data['contest_status'] = 0;
-            $aff = $this->m_admin->update_contest_status($contest_id, $temp_data);
-        }
+        $aff = $this->m_admin->update_prob_cont_rel($prob_cont_rel->prob_cont_rel_id, $prob_cont_update);
+
+        // $new = $this->m_admin->new_submission_for_contest($contest_id);
+        // if(count($new) > 0) {
+        //     $temp_data['contest_status'] = 0;
+        //     $aff = $this->m_admin->update_contest_status($contest_id, $temp_data);
+        // }
     }
 
     public function process_submissions() {

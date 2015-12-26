@@ -88,6 +88,18 @@ class Contest extends OJ_Controller {
         // Others
         $data['count'] = $this->m_user->get_prob_cont_count($contest_id);
 
+         
+        $prob_cont_rel = $this->m_admin->get_prob_cont_rel_for_cont($contest_id);
+        $prob_tried_solved = array();
+        foreach($prob_cont_rel as $key => $rel) {
+            $prob_tried_solved[$rel->problem_id] = array();
+            $prob_tried_solved[$rel->problem_id]['tried'] = $rel->prob_cont_tried;
+            $prob_tried_solved[$rel->problem_id]['solved'] = $rel->prob_cont_solved;
+        }
+
+        $data['prob_tried_solved'] = $prob_tried_solved;
+
+
         $data['ranklist'] = $this->m_user->get_ranklist($contest_id);
 
         $data['title'] .= $data['contest']->contest_name;

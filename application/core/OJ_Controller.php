@@ -127,6 +127,9 @@ class OJ_Controller extends CI_Controller
         mkdir($sandbox);
 
         echo $sandbox.'<br /><br />';
+        // echo '<pre>';
+        // echo $submission->submission_source;
+        // echo '</pre>';
         //exit();
 
         $ext = array(1=>'.c', 2=>'.cpp');
@@ -209,7 +212,7 @@ class OJ_Controller extends CI_Controller
                         fclose($point2);
 
                         if($content != $content2) {
-                            echo '1st Wrong Answer';
+                            echo '1st Wrong Answer: Output doesn\'t Match exactly ';
                             $result = 2;
                         }
                         else {
@@ -218,7 +221,7 @@ class OJ_Controller extends CI_Controller
                         }
                     }
                     else {
-                        echo '2nd Wrong Answer';
+                        echo '2nd Wrong Answer: Output file size doesn\'t match';
                         $result = 2;
                     }
                 }
@@ -233,9 +236,6 @@ class OJ_Controller extends CI_Controller
         echo '<pre>';
         $time /= 1000; // Converting to Seconds;
         $tle = 'timeout '.$time.'s ';
-
-
-        
 
         $return_val = '';
 

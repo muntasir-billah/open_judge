@@ -170,6 +170,8 @@ class M_admin extends Ci_model {
 
     //=============================//
 
+
+
     public function update_contest($contest_id, $contest) {
         $this->db->where('contest_id', $contest_id);
         $this->db->update('contest', $contest);
@@ -383,11 +385,11 @@ class M_admin extends Ci_model {
         return $this->db->insert_id();
     }
 
-    public function new_submission_for_contest($contest_id) {
-        $this->db->where('submission_status', 1);
-        $this->db->where('contest_id', $contest_id);
-        return $this->db->get('submission')->result();
-    }
+    // public function new_submission_for_contest($contest_id) {
+    //     $this->db->where('submission_status', 1);
+    //     $this->db->where('contest_id', $contest_id);
+    //     return $this->db->get('submission')->result();
+    // }
 
     public function new_sub() {
         $this->db->where('submission_status', 1);
@@ -426,5 +428,6 @@ class M_admin extends Ci_model {
         $this->db->delete('clarification');
         return $this->db->affected_rows();
     }
+
 }
 ?>

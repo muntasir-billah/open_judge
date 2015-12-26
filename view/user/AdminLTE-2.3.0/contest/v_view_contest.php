@@ -450,12 +450,15 @@
                             <th class="problem_no">#</th>
                             <th>Contestant/Team</th>
                             <th class="problem_no">Total</th>
-                            <td>&nbsp;</td>
-                            <?php
-                              $serial = 64;
-                              for($i = 0; $i< $count; ++$i) {
-                            ?>
-                            <th class="problem_no"><?php printf("%c", ++$serial); ?></th>
+                            <th>&nbsp;</th>
+                              <?php
+                                $serial = 64;
+                                foreach($problems as $key => $problem) {
+                              ?>
+                              <th class="problem_no">
+                                <?php printf("%c", ++$serial); ?><br />
+                                <?php echo $prob_tried_solved[$problem->problem_id]['solved'].'/'.$prob_tried_solved[$problem->problem_id]['tried']; ?>
+                              </th>
                             <?php
                               }
                             ?>
