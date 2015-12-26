@@ -22,7 +22,6 @@
 	};
 
 	var X = 5;
-	var y = 'something';
 	//var interval = 1000 * 60 * X; // where X is your every X minutes
 
 	var interval = 1000;
