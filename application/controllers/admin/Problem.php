@@ -250,9 +250,7 @@ class Problem extends OJ_Controller {
         echo '</pre>';
         exit();
 
-
-        if(isset($_GET['problem_id'])) $problem_id = $_GET['problem_id'];
-        else redirect(base_url($this->module.'/'.$this->subview));
+        $problem_id = $_POST['problem_id'];
 
         if(!$problem_old = $this->m_admin->get_single_problem_full($problem_id)) {
             redirect(base_url('four'));

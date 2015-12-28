@@ -108,5 +108,13 @@ class M_user extends Ci_model {
         return $this->db->insert_id();
     }
 
+    public function get_users_for_contest($contest_id) {
+        $this->db->select('*');
+        $this->db->join('user_cont_rel', 'user_cont_rel.user_id = user.user_id');
+        $this->db->where('contest_id', $contest_id);
+        $this->db->where('user_type', 0);
+        return $this->db->get('user')->result();
+    }
+
 }
 ?>

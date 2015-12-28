@@ -14,6 +14,12 @@
 		}
 	});
 
+	$('#remove_image').click(function() {
+		if(!confirm("Are you sure to remove this image from this problem?")) return false;
+		$('#problem_image_removed').val('1');
+		$('.problem_image_div').fadeOut(1000);
+	});
+
 	
 	$('#edit_row').click(function() {
 		$('.view_row').hide();

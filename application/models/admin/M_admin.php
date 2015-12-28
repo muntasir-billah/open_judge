@@ -385,6 +385,11 @@ class M_admin extends Ci_model {
         return $this->db->insert_id();
     }
 
+    public function insert_batch_rank($rank) {
+        $this->db->insert_batch('rank', $rank);
+        return $this->db->affected_rows();
+    }
+
     // public function new_submission_for_contest($contest_id) {
     //     $this->db->where('submission_status', 1);
     //     $this->db->where('contest_id', $contest_id);

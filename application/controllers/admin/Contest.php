@@ -101,6 +101,10 @@ class Contest extends OJ_Controller {
         }
 
         $data['users'] = array();
+        $contest_users = $this->m_admin->get_users_for_contest($contest_id);
+        foreach($contest_users as $c_key => $cont_user) {
+            $data['users'][$cont_user->user_id] = $cont_user->user_name;
+        }
         $data['submissions'] = $this->m_admin->get_sub_for_contest($contest_id);
 
         foreach($data['submissions'] as $key => $sub) {
@@ -121,6 +125,7 @@ class Contest extends OJ_Controller {
         }
 
         $data['count'] = $this->m_admin->get_prob_cont_count($contest_id);
+        
         $prob_cont_rel = $this->m_admin->get_prob_cont_rel_for_cont($contest_id);
         $prob_tried_solved = array();
         foreach($prob_cont_rel as $key => $rel) {

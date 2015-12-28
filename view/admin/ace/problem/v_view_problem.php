@@ -219,7 +219,7 @@
 						<h3>Problem Image</h3>
 					</label>
 					<div class="col-xs-12 col-sm-3">
-						<span class="btn btn-sm btn-danger" title="Remove Image"><i class="menu-icon fa fa-times"></i></span>
+						<span id="remove_image" class="btn btn-sm btn-danger" title="Remove Image"><i class="menu-icon fa fa-times"></i></span>
 						<img src="<?php echo base_url($this->problem_image_path.$problem->problem_image); ?>" alt="<?php echo $problem->problem_name; ?>" />
 					</div>
 				</div><!-- form group end -->
@@ -229,6 +229,7 @@
 						<h3>Upload/Change Image</h3>
 					</label>
 					<div class="col-xs-12 col-sm-3">
+						<input id="problem_image_removed" type="hidden" name="problem_image_removed" value="0" />
 						<input name="problem_image" type="file" class="multi_image_uploader" />
 					</div>
 				</div><!-- form group end -->

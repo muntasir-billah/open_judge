@@ -66,6 +66,10 @@ class Contest extends OJ_Controller {
 
         // Fetching Submissions
         $data['users'] = array();
+        $contest_users = $this->m_admin->get_users_for_contest($contest_id);
+        foreach($contest_users as $c_key => $cont_user) {
+            $data['users'][$cont_user->user_id] = $cont_user->user_name;
+        }
         $data['submissions'] = $this->m_user->get_sub_for_contest($contest_id);
 
         foreach($data['submissions'] as $key => $sub) {

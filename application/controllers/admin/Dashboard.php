@@ -73,6 +73,32 @@ class Dashboard extends OJ_Controller {
                 else {
                     // Contest Running
                     $data['contest_status'] = 1;
+
+                    // Creating blank ranks for the contestants of that contest
+                    $users = $this->m_admin->get_users_for_contest($contest->contest_id);
+                    $rank = array();
+                    foreach($users as $u_key => $user) {
+                        $temp_rank = array();
+                        $temp_rank['contest_id'] = $contest->contest_id;
+                        $temp_rank['user_id'] = $user->user_id;
+                        $temp_rank['rank_solved'] = 0;
+                        $temp_rank['rank_penalty'] = 0;
+
+                        $count = $this->m_admin->get_prob_cont_count($contest->contest_id);
+                        $temp_rank['rank_details'] = '';
+                        $first_flag = true;
+                        while($count--) {
+                            if($first_flag) {
+                                $first_flag = false;
+                            }
+                            else {
+                                $temp_rank['rank_details'] .= ',';
+                            }
+                            $temp_rank['rank_details'] .= '0,NA,0';
+                        }
+                        $rank[$u_key] = $temp_rank;
+                    }
+                    $aff = $this->m_admin->insert_batch_rank($rank);
                 }
                 $aff = $this->m_admin->update_contest_status($contest->contest_id, $data);
                 $this->reorder_prob_for_cont($contest->contest_id);
