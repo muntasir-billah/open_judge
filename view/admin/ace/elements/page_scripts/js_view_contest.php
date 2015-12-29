@@ -188,10 +188,6 @@
 	var end_time = "<?php echo $end; ?>";
 	function getTimeRemaining(endtime) {
 	  var t = Date.parse(endtime) - current_time;
-	  // if(t == 0) { // For reloading the page when contest starts
-	  // 	var url = window.location.href;
-	  // 	window.location.href = url;
-	  // }
 	  var seconds = Math.floor((t / 1000) % 60);
 	  var minutes = Math.floor((t / 1000 / 60) % 60);
 	  var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
@@ -224,6 +220,8 @@
 
 	    if (t.total <= 0) {
 	      clearInterval(timeinterval);
+		  	var url = window.location.href;
+		  	window.location.href = url;
 	    }
 	  }
 
@@ -235,5 +233,19 @@
 	initializeClock('clockdiv', deadline);
 	<?php } ?>
 	// ================================================= //
+
+	$('.view_submission').click(function() {
+		var subid = $(this).html();
+
+		var url = "<?php echo base_url($module.'/'.$this->subview.'/fetch_submission'); ?>/" + subid;
+		$.post( url, function( data ) {
+			if(data != '') {
+				data = "<pre>" + data + "</pre>";
+				$('#submission_source_box').html(data);
+				$('#submission_source_modal').fadeIn(500);
+			}
+			else alert("Failed to fetch");
+		});
+	});
 
 </script>

@@ -32,6 +32,13 @@
 	</div>
 </div><!-- my_modal ends -->
 
+<div class="my_modal" id="submission_source_modal">
+	<span class="my_modal_close btn btn-md btn-danger"><i class="ace-icon fa fa-times bigger-110"></i></span>
+	<div class="my_modal_body" id="submission_source_box">
+		
+	</div>
+</div><!-- my_modal ends -->
+
 <div id="clar_success" class="clar_alert alert alert-success alert-dismissable">
   <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
   <h4><i class="icon fa fa-check"></i> Success!</h4>
@@ -347,7 +354,7 @@
                         <tbody>
                           <?php foreach($submissions as $key => $submission) {?>
                           <tr>
-                            <td><?php echo $submission->submission_id; ?></td>
+                            <td><a class="view_submission"><?php echo $submission->submission_id; ?></a></td>
                             <td><?php echo $users[$submission->user_id]; ?></td>
                             <td>
                               <a target="_blank" href="<?php echo base_url($this->module.'/contest/view_contest?contest_id='.$contest->contest_id.'#problems/'.$nos[$submission->problem_id]); ?>">

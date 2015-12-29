@@ -122,10 +122,6 @@
     var end_time = "<?php echo $end; ?>";
     function getTimeRemaining(endtime) {
       var t = Date.parse(endtime) - current_time;
-      // if(t == 0) { // For reloading the page when contest starts
-      //   var url = window.location.href;
-      //   window.location.href = url;
-      // }
       var seconds = Math.floor((t / 1000) % 60);
       var minutes = Math.floor((t / 1000 / 60) % 60);
       var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
@@ -158,6 +154,8 @@
 
         if (t.total <= 0) {
           clearInterval(timeinterval);
+          var url = window.location.href;
+          window.location.href = url;
         }
       }
 

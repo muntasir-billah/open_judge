@@ -215,3 +215,7 @@
 	width:100%;
 	z-index: 100;
 }
+
+.view_submission {
+	cursor: pointer;
+}
