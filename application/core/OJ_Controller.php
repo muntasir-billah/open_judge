@@ -228,7 +228,8 @@ class OJ_Controller extends CI_Controller
             }
         } // Processing Ends 
         $this->__remove_dir($sandbox);
-        return $result;
+        $res = array('result' => $result, 'time' => $ret['time']);
+        return $res;
 
     }
 

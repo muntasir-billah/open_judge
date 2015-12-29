@@ -55,23 +55,6 @@
 		else return false;
 	});
 
-	$('.delete_contest').click(function () {
-		if(confirm("Really? You want to delete this contest?")) {
-			var contestid = $(this).attr('contestid');
-			var id = 'contest' + contestid;
-			var url = "<?php echo base_url($module.'/'.$this->subview.'/delete_contest'); ?>/" + contestid;
-			$.post( url, function( data ) {
-				if(data == 'yes') {
-					$('#'+id).fadeOut(1000);
-				}
-				else {
-					alert("Failed to remove");
-				}
-			});
-		}
-		else return false;
-	});
-
 	$('.judge_reply_button').click(function() {
 		var question = $(this).parent('.tools').siblings('.text').html();
 		var clar_id = $(this).attr("id");
@@ -163,19 +146,6 @@
   		return false;
   	});
 
-	$('#edit_row').click(function() {
-		$('.view_row').hide();
-		$('#view_row').removeClass('active');
-		$('.edit_row').show();
-		$('#edit_row').addClass('active');
-	});
-
-	$('#view_row').click(function() {
-		$('.edit_row').hide();
-		$('#edit_row').removeClass('active');
-		$('.view_row').show();
-		$('#view_row').addClass('active');
-	});
 
 
 	// Tab Url change
@@ -210,8 +180,60 @@
 				$('html,body').scrollTop(scrollmem);
 			}
 		});
-
-
 	});
+
+	// ============== Custom Countdown Clock Timer =====================//
+	<?php if($contest->contest_status != 2) { ?>
+	var current_time = Date.parse("<?php echo $current; ?>");
+	var end_time = "<?php echo $end; ?>";
+	function getTimeRemaining(endtime) {
+	  var t = Date.parse(endtime) - current_time;
+	  // if(t == 0) { // For reloading the page when contest starts
+	  // 	var url = window.location.href;
+	  // 	window.location.href = url;
+	  // }
+	  var seconds = Math.floor((t / 1000) % 60);
+	  var minutes = Math.floor((t / 1000 / 60) % 60);
+	  var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+	  var days = Math.floor(t / (1000 * 60 * 60 * 24));
+	  return {
+	    'total': t,
+	    'days': days,
+	    'hours': hours,
+	    'minutes': minutes,
+	    'seconds': seconds
+	  };
+	}
+
+	function initializeClock(id, endtime) {
+	  var clock = document.getElementById(id);
+	  var daysSpan = clock.querySelector('.days');
+	  var hoursSpan = clock.querySelector('.hours');
+	  var minutesSpan = clock.querySelector('.minutes');
+	  var secondsSpan = clock.querySelector('.seconds');
+
+	  function updateClock() {
+
+	    current_time += 1000;
+	    var t = getTimeRemaining(endtime);
+
+	    daysSpan.innerHTML = t.days;
+	    hoursSpan.innerHTML = ('0' + t.hours).slice(-2);
+	    minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
+	    secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
+
+	    if (t.total <= 0) {
+	      clearInterval(timeinterval);
+	    }
+	  }
+
+	  updateClock();
+	  var timeinterval = setInterval(updateClock, 1000);
+	}
+
+	var deadline = new Date(Date.parse(end_time));
+	initializeClock('clockdiv', deadline);
+	<?php } ?>
+	// ================================================= //
 
 </script>

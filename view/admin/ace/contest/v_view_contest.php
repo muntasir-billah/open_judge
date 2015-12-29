@@ -57,6 +57,37 @@
 	$status_class = array(-1 => 'battery-full', 0 => 'battery-half', 1 => 'battery-half', 2 => 'battery-empty');
 	?>
 
+	<div class="row">
+		<div class="col-xs-12">
+		  <h2 class="text-center countdown_timer">
+			  <div id="clockdiv">
+			    <?php
+			      if($contest->contest_status != 2) {
+			        $current = date('Y-m-d H:i:s');
+			        if($contest->contest_status == -1) { // Contest Waiting to Start
+			          $end = $contest->contest_start;
+			          echo '<h4>Time To Start</h4>';
+			        }
+			        else { // Contest Running
+			          echo '<h4>Remaining Time</h4>';
+			          $end = $contest->contest_end;
+			        }
+			        $current = date('D M d Y H:i:s O', strtotime($current));
+			        $end = date('D M d Y H:i:s O', strtotime($end));
+			    ?>
+			      <span class="days" style="display:none"></span>
+			      <span class="hours"></span>:
+			      <span class="minutes"></span>:
+			      <span class="seconds"></span>
+			    <?php
+			      }
+			      else echo '<h4>Contest Ended</h4>';
+			    ?>
+			  </div><!-- Clockdiv ends -->
+		  </h2>
+		</div><!-- col ends -->
+	</div><!--row end -->
+
 	<div class="row">						
 		<div class="col-xs-12 oj_problem_specification oj_contest_specification">		
 			<div class="col-sm-3" title="Contest Type">
@@ -75,12 +106,13 @@
 				<i class="ace-icon fa fa-<?php echo $status_class[$contest->contest_status]; ?> orange"></i>
 				<span class="orange"> <?php echo $status[$contest->contest_status]; ?><span>
 			</div>
-		</div><!-- col-xs-12 -->
+		</div><!-- col-xs-12 --
 		<div class="col-xs-12">
 			<div class="progress progress-striped progress-small">
 				<div style="width: 60%" class="progress-bar progress-bar-success <?php if($contest->contest_status == 0 || $contest->contest_status == 1) echo 'active'; ?>"></div>
 			</div>
 		</div>
+		<!-- -->
 		<div class="col-xs-12 edit_row" style="display:none">
 			<div class="clearfix">
 				<div class="pull-left tableTools-container"></div>
@@ -305,6 +337,7 @@
                             <th>Contestant</th>
                             <th>Problem</th>
                             <th>Language</th>
+                            <th>CPU</th>
                             <th>Time</th>
                             <th>Status</th>
                             <th>Actions</th>
@@ -322,6 +355,13 @@
                               </a>
                             </td>
                             <td><?php echo $language[$submission->language_id]; ?></td>
+                            <td>
+                              <?php
+                                if($submission->submission_result != 3)
+                                  printf("%.4fs", $submission->submission_tle);
+                                else echo 'N/A';
+                              ?>
+                             </td>
                             <td><?php echo date('h:i A, M d, Y', strtotime($submission->submission_time)); ?></td>
                             <td><button class="btn btn-sm btn-<?php echo $verdict_class[$submission->submission_result]; ?>"><?php echo $verdict[$submission->submission_result]; ?></button></td>
                             <td>

@@ -36,7 +36,7 @@ class Contest extends OJ_Controller {
         $data['page_css'] = array();
 
         // Page JS Scripts
-        $data['page_scripts'] = array('js_table_tools.php', 'js_view_contest.php');
+        $data['page_scripts'] = array('js_table_tools.php');
 
         $data['contests'] = $this->m_admin->all_contests();
 
@@ -446,11 +446,14 @@ class Contest extends OJ_Controller {
             $prob_cont_update['prob_cont_tried'] = $prob_cont_rel->prob_cont_tried + 1;
         }
 
-        $result = $this->__process($submission_id);
+        $res = $this->__process($submission_id);
+        $result = $res['result'];
+        $time = $res['time'];
         echo '<br />';
         $sub = array();
         $sub['submission_status'] = 0;
         $sub['submission_result'] = $result;
+        $sub['submission_tle'] = $time;
 
         $aff = $this->m_admin->update_submission($submission_id, $sub);
 

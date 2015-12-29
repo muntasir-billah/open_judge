@@ -141,7 +141,7 @@ class User_management extends OJ_Controller {
         $data['page_css'] = array();
 
         // Page JS Scripts
-        $data['page_scripts'] = array('js_table_tools.php', 'js_view_contest.php', 'js_form_elements.php');
+        $data['page_scripts'] = array('js_table_tools.php', 'js_form_elements.php');
 
         if(!$data['judge'] = $this->m_admin->get_single_judge($judge_id)) {
             redirect(base_url().'four');
@@ -262,7 +262,7 @@ class User_management extends OJ_Controller {
         $data['page_css'] = array();
 
         // Page JS Scripts
-        $data['page_scripts'] = array('js_table_tools.php', 'js_view_contest.php', 'js_form_elements.php');
+        $data['page_scripts'] = array('js_table_tools.php', 'js_form_elements.php');
 
         if(!$data['user'] = $this->m_admin->get_single_user($user_id)) {
             redirect(base_url().'four');

@@ -119,9 +119,16 @@ tr.contestant {
 	background-color: rgba(0, 128, 255, 0.3) !important;
 }
 
-/*
-tr.contestant > td {
-	background-color: rgba(0, 0, 0, 0.5) !important;
+.navbar-nav > .notifications-menu > .dropdown-menu, .navbar-nav > .messages-menu > .dropdown-menu, .navbar-nav > .tasks-menu > .dropdown-menu {
+    border: 1px solid #09f;
+    width: 580px;
 }
 
-*/
+h2.countdown_timer {
+	font-size:4rem;
+	margin: 0 auto;
+}
+
+.contest_clock {
+	padding-top:0;
+}

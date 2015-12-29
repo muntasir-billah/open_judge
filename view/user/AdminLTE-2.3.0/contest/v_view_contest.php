@@ -1,3 +1,7 @@
+<?php
+  $language = array(1=>'GNU C11', 2=>'GNU C++14');
+?>
+
 <div class="submit_form" style="display:none;">
     <button class="submit_form_close btn btn-md btn-danger"><i class="fa fa-times"></i></button>
     <form role="form" method="post" action="<?php echo base_url($module.'/contest/submit'); ?>">
@@ -61,18 +65,46 @@
       -->
     </section>
 
+
+    <section class="content-header contest_clock">
+      <div class="row">
+        <div class="col-xs-12">
+          <h2 class="text-center countdown_timer">
+            <div id="clockdiv">
+              <?php
+                if($contest->contest_status != 2) {
+                  $current = date('Y-m-d H:i:s');
+                  if($contest->contest_status == -1) { // Contest Waiting to Start
+                    $end = $contest->contest_start;
+                    echo '<h4>Time To Start</h4>';
+                  }
+                  else { // Contest Running
+                    echo '<h4>Remaining Time</h4>';
+                    $end = $contest->contest_end;
+                  }
+                  $current = date('D M d Y H:i:s O', strtotime($current));
+                  $end = date('D M d Y H:i:s O', strtotime($end));
+              ?>
+                <span class="days" style="display:none"></span>
+                <span class="hours"></span>:
+                <span class="minutes"></span>:
+                <span class="seconds"></span>
+              <?php
+                }
+                else echo '<h4>Contest Ended</h4>';
+              ?>
+            </div><!-- Clockdiv ends -->
+          </h2>
+        </div><!-- col ends -->
+      </div><!-- row ends -->
+    </section><!-- contest clock ends -->
+
     <!-- Main content -->
     <section class="content">
       <div class="row">
         <div class="col-md-12">
           <div class="box">
-            <div class="box-header with-border">
-              <h3 class="box-title"><?php echo $this->session->user_name; ?></h3>
-              <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div><!-- /.box-header -->
+            
             <div class="box-body">
               <div class="row">
               	<div class="col-xs-12">
@@ -158,9 +190,11 @@
                               	<div class="tab-pane <?php if($first) echo 'active'; ?>" id="<?php echo $serial; ?>">
                               		<div class="row">
                               			<div class="col-xs-12">
+                                      <?php if($contest->contest_status != 2) { ?>
                               				<button for="<?php echo $serial; ?>" class="submit_button btn btn-lg btn-primary">
                               					Submit Solution for Problem <?php echo $serial; ?>
                               				</button>
+                                      <?php } ?>
                               				<h1><?php echo $serial++; ?> - <?php echo $problem->problem_name; ?></h1>
                               				<hr>
                               			</div>
@@ -239,6 +273,8 @@
                             <th>Submission ID</th>
                             <th>Contestant</th>
                             <th>Problem</th>
+                            <th>Language</th>
+                            <th>CPU</th>
                             <th>Time</th>
                             <th>Status</th>
                           </tr>
@@ -257,6 +293,14 @@
                               <?php echo $nos[$submission->problem_id]; ?>
                               </a>
                             </td>
+                            <td><?php echo $language[$submission->language_id]; ?></td>
+                            <td>
+                              <?php
+                                if($submission->submission_result != 3)
+                                  printf("%.4fs", $submission->submission_tle);
+                                else echo 'N/A';
+                              ?>
+                            </td>
                             <td><?php echo date('h:i A, M d, Y', strtotime($submission->submission_time)); ?></td>
                             <td><button class="btn btn-sm btn-<?php echo $verdict_class[$submission->submission_result]; ?>"><?php echo $verdict[$submission->submission_result]; ?></button></td>
                           </tr>
@@ -274,6 +318,7 @@
                             <th>Submission ID</th>
                             <th>Contestant</th>
                             <th>Problem</th>
+                            <th>CPU</th>
                             <th>Time</th>
                             <th>Status</th>
                           </tr>
@@ -288,6 +333,13 @@
                               <a href="<?php echo base_url($this->module.'/contest/view_problem?contest_id='.$contest->contest_id.'&problem='.$nos[$submission->problem_id]); ?>">
                               <?php echo $nos[$submission->problem_id]; ?>
                               </a>
+                            </td>
+                            <td>
+                              <?php
+                                if($submission->submission_result != 3)
+                                  printf("%.4fs", $submission->submission_tle);
+                                else echo 'N/A';
+                              ?>
                             </td>
                             <td><?php echo date('h:i A, M d, Y', strtotime($submission->submission_time)); ?></td>
                             <td><button class="btn btn-sm btn-<?php echo $verdict_class[$submission->submission_result]; ?>"><?php echo $verdict[$submission->submission_result]; ?></button></td>

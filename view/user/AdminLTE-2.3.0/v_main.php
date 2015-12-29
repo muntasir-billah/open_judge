@@ -2,7 +2,7 @@
 <html>
   <?php require_once('elements/head.php'); ?>
 
-  <body class="skin-blue-light sidebar-mini sidebar-collapse fixed">
+  <body class="skin-blue-light sidebar-mini fixed">
 
     <div class="wrapper">
 

@@ -20,6 +20,7 @@ class Home extends CI_Controller {
 	 */
 	public function index()
 	{
-		redirect(base_url('user/Dashboard'));
+		//redirect(base_url('user/Dashboard'));
+		redirect(base_url('user/Contest'));
 	}
 }

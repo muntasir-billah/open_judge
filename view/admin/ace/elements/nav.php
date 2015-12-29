@@ -25,6 +25,7 @@
 
 		<div class="navbar-buttons navbar-header pull-right" role="navigation">
 			<ul class="nav ace-nav">
+				<!-- --
 				<li class="grey">
 					<a data-toggle="dropdown" class="dropdown-toggle" href="<?php echo $fullpath; ?>#">
 						<i class="ace-icon fa fa-tasks"></i>
@@ -279,13 +280,12 @@
 						</li>
 					</ul>
 				</li>
-
+				-->
 				<li class="light-blue">
-					<a data-toggle="dropdown" href="<?php echo $fullpath; ?>#" class="dropdown-toggle">
-						<img class="nav-user-photo" src="<?php echo $fullpath; ?>assets/avatars/user.jpg" alt="Jason's Photo" />
+					<a data-toggle="dropdown" href="#" class="dropdown-toggle">
 						<span class="user-info">
 							<small>Welcome,</small>
-							Jason
+							<?php echo $this->session->admin_type; ?>
 						</span>
 
 						<i class="ace-icon fa fa-caret-down"></i>

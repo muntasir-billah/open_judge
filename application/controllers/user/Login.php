@@ -59,7 +59,8 @@ class Login extends OJ_Controller {
                 'user_phone' => $result[0]->user_phone,
                 'user_email' => $result[0]->user_email);
     		$this->session->set_userdata($temp);
-    		redirect(base_url($this->module.'/dashboard'));
+    		//redirect(base_url($this->module.'/dashboard'));
+            redirect(base_url($this->module.'/Contest'));
     	}    	
     	else {
     		$error = "Incorrect Username or Password";

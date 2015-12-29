@@ -4,10 +4,10 @@
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu">
             <li class="active">
-              <a href="<?php echo base_url().$module; ?>">
+              <a href="<?php echo base_url().$module.'/contest'; ?>">
                 <i class="fa fa-dashboard"></i> <span>Dashboard</span>
               </a>
-            </li><!-- Nav Item ends -->
+            </li><!-- Nav Item ends --
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-list"></i>
