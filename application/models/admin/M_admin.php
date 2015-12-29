@@ -187,10 +187,22 @@ class M_admin extends Ci_model {
         return $this->db->insert_id();
     }
 
+    public function update_problem($problem, $problem_id) {
+        $this->db->where('problem_id', $problem_id);
+        $this->db->update('problem', $problem);
+        return $this->db->affected_rows();
+    }
+
 
     public function tag_a_problem($data) {
         $this->db->insert_batch('prob_cat_rel', $data);
         return $this->db->affected_rows();
+    }
+
+    public function check_problem_tag($problem_id, $category_id) {
+        $this->db->where('problem_id', $problem_id);
+        $this->db->where('category_id', $category_id);
+        return $this->db->get('prob_cat_rel')->num_rows();
     }
 
     public function get_single_problem($problem_id) {

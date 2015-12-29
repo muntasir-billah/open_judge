@@ -1,5 +1,5 @@
 <?php
-  $language = array(1=>'GNU C11', 2=>'GNU C++14');
+  $language = array(1=>'GNU C', 2=>'GNU C++');
 ?>
 
 <div class="submit_form" style="display:none;">
@@ -31,18 +31,20 @@
       <!-- radio -->
       <div class="form-group">
         <label>Language</label>
+        <?php
+          $first = 'checked=""';
+          foreach($language as $key => $lang) {
+        ?>
         <div class="radio">
           <label>
-            <input type="radio" checked="" value="1" name="language_id">
-            GNU C11
+            <input type="radio" <?php echo $first; ?> value="<?php echo $key; ?>" name="language_id">
+            <?php echo $lang; ?>
           </label>
         </div>
-        <div class="radio">
-          <label>
-            <input type="radio" value="2" name="language_id">
-            GNU C++14
-          </label>
-        </div>
+        <?php
+            $first = '';
+          }
+        ?>
       </div><!-- form-group ends -->
 
       <!-- textarea -->

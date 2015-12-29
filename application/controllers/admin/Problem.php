@@ -184,14 +184,16 @@ class Problem extends OJ_Controller {
             }
             else {
                 // Calling Tagging function to add all the tags to this problem
-                $tagged = $this->tag_problem($insert_id, $_POST['problem_tags']);
-                if(!$tagged) {
-                    $flag = false;
-                    $total_error = 'Everything Went Fine, but somehow we managed to fail tagging your problem :( No worries, you can do that later, as always :)';
-                    echo "<h1>$total_error</h1>";
-                }
-                else {
-                    redirect(base_url($this->module.'/problem/view_problem?problem_id='.$insert_id));
+                if(count($_POST['problem_tags']) > 0) {
+                    $tagged = $this->tag_problem($insert_id, $_POST['problem_tags']);
+                    if(!$tagged) {
+                        $flag = false;
+                        $total_error = 'Everything Went Fine, but somehow we managed to fail tagging your problem :( No worries, you can do that later, as always :)';
+                        echo "<h1>$total_error</h1>";
+                    }
+                    else {
+                        redirect(base_url($this->module.'/problem/view_problem?problem_id='.$insert_id));
+                    }
                 }
             }
         }
@@ -244,11 +246,11 @@ class Problem extends OJ_Controller {
     } // End of view_problem
 
     public function update_problem() {
-        echo '<pre>';
-        print_r($_POST);
-        print_r($_FILES);
-        echo '</pre>';
-        exit();
+        // echo '<pre>';
+        // print_r($_POST);
+        // print_r($_FILES);
+        // echo '</pre>';
+        // exit();
 
         $problem_id = $_POST['problem_id'];
 
@@ -341,28 +343,48 @@ class Problem extends OJ_Controller {
 
         if($flag) { // If all the files were uploaded successfully
             // Inserting data into database
-            $insert_id = $this->m_admin->insert_problem($problem);
-            if(!$insert_id) {
-                // Deleting uploaded files in case of a failure of DB Query
-                $url = $this->judge_io_path.$problem['problem_judge_input'];
-                unlink($url);
-                $url = $this->judge_io_path.$problem['problem_judge_output'];
-                unlink($url);
-                $url = $this->problem_image_path.$problem['problem_image'];
-                unlink($url);
-                $flag = false;
-                $total_error = 'Something went wrong. Please try again later';
+            $aff = $this->m_admin->update_problem($problem, $problem_id);
+            if(!$aff) {
+                if(isset($_POST['problem_tags']) && count($_POST['problem_tags']) > 0) {
+                    $tagged = $this->tag_problem($problem_id, $_POST['problem_tags']);
+                    if(!$tagged) {
+                        $flag = false;
+                        $total_error = 'Everything Went Fine, but somehow we managed to fail tagging your problem :( No worries, you can do that later, as always :)';
+                        echo "<h1>$total_error</h1>";
+                    }
+                    else {
+                        redirect(base_url($this->module.'/problem/view_problem?problem_id='.$problem_id));
+                    }
+                }
+                else {
+                    if($file_as_judge_input == 'on') {
+                        // Deleting uploaded files in case of a failure of DB Query
+                        $url = $this->judge_io_path.$problem['problem_judge_input'];
+                        unlink($url);
+                        $url = $this->judge_io_path.$problem['problem_judge_output'];
+                        unlink($url);
+                    }
+                    if($problem_image['error'] == 0) {
+                        $url = $this->problem_image_path.$problem['problem_image'];
+                        unlink($url);
+                    }
+                    $flag = false;
+                    $total_error = 'Something went wrong. Please try again later';
+                    echo "<h1>$total_error</h1>";
+                }
             }
             else {
                 // Calling Tagging function to add all the tags to this problem
-                $tagged = $this->tag_problem($insert_id, $_POST['problem_tags']);
-                if(!$tagged) {
-                    $flag = false;
-                    $total_error = 'Everything Went Fine, but somehow we managed to fail tagging your problem :( No worries, you can do that later, as always :)';
-                    echo "<h1>$total_error</h1>";
-                }
-                else {
-                    redirect(base_url($this->module.'/problem/view_problem?problem_id='.$insert_id));
+                if(isset($_POST['problem_tags']) && count($_POST['problem_tags']) > 0) {
+                    $tagged = $this->tag_problem($problem_id, $_POST['problem_tags']);
+                    if(!$tagged) {
+                        $flag = false;
+                        $total_error = 'Everything Went Fine, but somehow we managed to fail tagging your problem :( No worries, you can do that later, as always :)';
+                        echo "<h1>$total_error</h1>";
+                    }
+                    else {
+                        redirect(base_url($this->module.'/problem/view_problem?problem_id='.$problem_id));
+                    }
                 }
             }
         }
@@ -372,7 +394,9 @@ class Problem extends OJ_Controller {
         $data = array();
         $i = 0;
         foreach($tags as $key => $tag) {
-            $data[$i++] = array('category_id' => $tag, 'problem_id' => $problem_id);
+            if(!$this->m_admin->check_problem_tag($problem_id, $tag)) {
+                $data[$i++] = array('category_id' => $tag, 'problem_id' => $problem_id);
+            }
         }
 
         $affected = $this->m_admin->tag_a_problem($data);

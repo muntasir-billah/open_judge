@@ -607,7 +607,7 @@ class Contest extends OJ_Controller {
 
     public function fetch_submission($submission_id) {
         $submission = $this->m_admin->get_single_submission($submission_id);
-        echo $submission->submission_source;
+        echo htmlentities($submission->submission_source);
     }
 
 }

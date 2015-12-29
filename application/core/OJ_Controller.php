@@ -150,10 +150,13 @@ class OJ_Controller extends CI_Controller
         fwrite($program, $submission->submission_source);
 
         $judge_in = fopen($sandbox.'/'.'judge.in', "w");
-        fwrite($judge_in, $problem->problem_judge_input);
+        $problem_judge_input = str_replace("\r", '', $problem->problem_judge_input); // remove carriage returns
+        fwrite($judge_in, $problem_judge_input);
 
+
+        $problem_judge_output = str_replace("\r", '', $problem->problem_judge_output); // remove carriage returns
         $judge_out = fopen($sandbox.'/'.'judge.out', "w");
-        fwrite($judge_out, $problem->problem_judge_output);
+        fwrite($judge_out, $problem_judge_output);
 
         $ret = $this->__compile($problem->problem_time_limit, $compiler[$submission->language_id], $sandbox, $ext[$submission->language_id], $filename, $file_name, $output, $input, $error, $fault);
 
@@ -200,16 +203,35 @@ class OJ_Controller extends CI_Controller
                     $result = 4;
                 }
                 else {
-                    if(filesize($sandbox.'/'.$output) == filesize($sandbox.'/'.$judge_out)) {
-                        // Wrong Answer
+                    //if(filesize($sandbox.'/'.$output) == filesize($sandbox.'/'.$judge_out)) {
 
-                        $point = fopen($sandbox.'/'.$output, "r"); 
-                        $content = fread($point,filesize($sandbox.'/'.$output));
-                        fclose($point);
+                        $content = file_get_contents($sandbox.'/'.$output);
+                        $content2 = file_get_contents($sandbox.'/'.$judge_out);
 
-                        $point2 = fopen($sandbox.'/'.$judge_out, "r");
-                        $content2 = fread($point2,filesize($sandbox.'/'.$judge_out));
-                        fclose($point2);
+                        // $point = fopen($sandbox.'/'.$output, "r"); 
+                        // $content = fread($point,filesize($sandbox.'/'.$output));
+                        // fclose($point);
+
+                        // $point2 = fopen($sandbox.'/'.$judge_out, "r");
+                        // $content2 = fread($point2,filesize($sandbox.'/'.$judge_out));
+                        // fclose($point2);
+
+                        echo 'Output: ';
+                        $len = strlen($content);
+                        echo $len."<br />";
+                        for($i=0; $i<$len; ++$i) {
+                            $char = ord($content[$i]);
+                            echo $char.' ';
+                        }
+                        echo '<br />';
+                        echo 'Judge Output: ';
+                        $len = strlen($content2);
+                        echo $len."<br />";
+                        for($i=0; $i<$len; ++$i) {
+                            $char = ord($content2[$i]);
+                            echo $char.' ';
+                        }
+                        echo '<br />';
 
                         if($content != $content2) {
                             echo '1st Wrong Answer: Output doesn\'t Match exactly ';
@@ -219,11 +241,11 @@ class OJ_Controller extends CI_Controller
                             echo 'Accepted';
                             $result = 1;
                         }
-                    }
-                    else {
-                        echo '2nd Wrong Answer: Output file size doesn\'t match';
-                        $result = 2;
-                    }
+                    // }
+                    // else {
+                    //     echo '2nd Wrong Answer: Output file size doesn\'t match';
+                    //     $result = 2;
+                    // }
                 }
             }
         } // Processing Ends 

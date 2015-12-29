@@ -374,9 +374,10 @@
                             <td>
                             	<div class="action-buttons">
 
-									<a title="Judge" href="<?php echo base_url($module.'/contest/compile/'.$submission->submission_id); ?>" class="blue col-xs-2">
+									<!--<a title="Judge" href="<?php echo base_url($module.'/contest/compile/'.$submission->submission_id); ?>" class="blue col-xs-2">
 										<i class="ace-icon fa fa-cog bigger-130"></i>
 									</a>
+									-->
 								</div>
                             </td>
                           </tr>
