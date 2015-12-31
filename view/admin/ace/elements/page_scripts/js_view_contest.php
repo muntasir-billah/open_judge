@@ -62,7 +62,7 @@
 		$('.clar_question').html(question);
 		$('#clar_id').val(clar_id);
 		$('.clar_reply').val('');
-		$('.my_modal').fadeIn(300);
+		$('#clar_reply_box_oj').fadeIn(300);
 
 		return false;
 

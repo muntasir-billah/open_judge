@@ -2,7 +2,7 @@
 	$language = array(1=>'GNU C11', 2=>'GNU C++14');
 ?>
 
-<div class="my_modal">
+<div class="my_modal" id="clar_reply_box_oj">
 	<span class="my_modal_close btn btn-md btn-danger"><i class="ace-icon fa fa-times bigger-110"></i></span>
 	<div class="my_modal_body">
 		<form class="judge_reply_form">
@@ -430,7 +430,7 @@
                                     ?>
                                 </a>
 				              </div>
-				              <div class="text"><?php echo $clar->clarification_question; ?></div>
+				              <div class="text"><?php echo htmlentities($clar->clarification_question); ?></div>
 				              <?php if($clar->clarification_status == 0 && $clar->user_id != NULL) { ?>
 				              <div class="tools">
 				                <a id="<?php echo $clar->clarification_id; ?>" class="judge_reply_button btn btn-minier btn-info" href="#">
@@ -449,7 +449,7 @@
 					              <div class="name">
 					                <a href="#">Judge Reply</a>
 					              </div>
-					              <div class="text"><?php echo $clar->clarification_reply; ?></div>
+					              <div class="text"><?php echo htmlentities($clar->clarification_reply); ?></div>
 					            </div><!-- body ends -->
 					          </div><!-- itemdiv ends -->
 					          <?php } ?>

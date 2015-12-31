@@ -478,7 +478,7 @@
                                       else echo 'Judge Clarification';
                                     ?>
                                   </a>
-                                  <?php echo $clar->clarification_question; ?>
+                                  <?php echo htmlentities($clar->clarification_question); ?>
                                 </p>
                               </div><!-- /.item -->
                               <?php if($clar->clarification_status != 0 && $clar->clarification_status != 2) { ?>
@@ -487,7 +487,7 @@
                                 <i class="online fa fa-user-secret"></i>
                                 <p class="message">
                                   <a class="name" href="#">Judge</a>
-                                  <?php echo $clar->clarification_reply; ?>
+                                  <?php echo htmlentities($clar->clarification_reply); ?>
                                 </p>
                               </div><!-- /.item -->
                               <?php } ?>
