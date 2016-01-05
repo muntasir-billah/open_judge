@@ -339,6 +339,17 @@ class M_admin extends Ci_model {
         return $this->db->get('submissions_without_source')->result();
     }
 
+    public function get_sub_for_contest_count($contest_id) {
+        $this->db->where('contest_id', $contest_id);
+        return $this->db->get('submissions_without_source')->num_rows();
+    }
+
+    public function get_processed_sub_for_contest_count($contest_id) {
+        $this->db->where('contest_id', $contest_id);
+        $this->db->where('submission_status', '0');
+        return $this->db->get('submissions_without_source')->num_rows();
+    }
+
     public function get_user($user_id) {
         $this->db->where('user_id', $user_id);
         return $this->db->get('user')->row();

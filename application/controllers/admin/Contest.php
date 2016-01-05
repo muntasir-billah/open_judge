@@ -553,6 +553,8 @@ class Contest extends OJ_Controller {
         // Page JS Scripts
         $data['page_scripts'] = array('js_global_rejudge.php');
 
+        $data['count'] = $this->m_admin->get_sub_for_contest_count($contest_id);
+
         if(!$data['contest'] = $this->m_admin->get_single_contest($contest_id)) {
             redirect(base_url('four'));
         }
@@ -654,8 +656,9 @@ class Contest extends OJ_Controller {
             $rank[$key] = $temp_rank;
         }
         $aff = $this->m_admin->update_batch_rank($rank);
-        if($aff) echo 'success';
-        else echo 'failed';
+        // if($aff) echo 'success';
+        // else echo 'failed';
+        echo 'finish';
     }
 
     public function reset_prob_cont_rel($contest_id=0) {
@@ -674,15 +677,16 @@ class Contest extends OJ_Controller {
 
         //$this->printer($rel);
         $aff = $this->m_admin->update_batch_prob_cont_rel($rel);
-        if($aff) echo 'success';
-        else echo 'failed';
+        // if($aff) echo 'success';
+        // else echo 'failed';
+        echo 'finish';
     }
 
     public function reset_submissions($contest_id=0) {
         if($contest_id==0) redirect(base_url($this->module.'/contest'));
 
         $submissions = $this->m_admin->get_sub_for_contest_without_source($contest_id);
-        $this->printer($submissions);
+        //$this->printer($submissions);
         $total_sub = array();
         foreach($submissions as $key => $sub) {
             $temp_sub = array();
@@ -695,8 +699,14 @@ class Contest extends OJ_Controller {
 
         //$this->printer($total_sub);
         $aff = $this->m_admin->update_batch_submission($total_sub);
-        if($aff) echo 'success';
-        else echo 'failed';
+        // if($aff) echo 'success';
+        // else echo 'failed';
+        echo 'finish';
+    }
+
+    public function get_processed_sub_for_contest_count($contest_id = 0) {
+        if($contest_id==0) redirect(base_url($this->module.'/contest'));
+        echo $this->m_admin->get_processed_sub_for_contest_count($contest_id);
     }
 
 }

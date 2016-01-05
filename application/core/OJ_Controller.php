@@ -133,7 +133,7 @@ class OJ_Controller extends CI_Controller
         //exit();
 
         $ext = array(1=>'.c', 2=>'.cpp');
-        $compiler = array(1=>'gcc', 2=>'g++');
+        $compiler = array(1=>'gcc', 2=>'g++ -std=c++11');
 
 
         $file_name = 'program';
@@ -256,7 +256,7 @@ class OJ_Controller extends CI_Controller
                 }
             }
         } // Processing Ends 
-        //$this->__remove_dir($sandbox);
+        $this->__remove_dir($sandbox);
         $res = array('result' => $result, 'time' => $ret['time']);
         return $res;
 
@@ -271,9 +271,18 @@ class OJ_Controller extends CI_Controller
 
         $gener = '';
 
-        $command = "$compiler $path/$file -o $path/$file_name 2> $path/$error";
+        $command = "$compiler -c $path/$file -o $path/$file_name".".o 2> $path/$error";
 
-        //echo $command.'<br />';
+        // gcc -c <source_file> -o <destination_object_file> 
+
+        echo $command.'<br />';
+
+        exec($command); // compiling
+
+        $command = "g++ -o $path/$file_name $path/$file_name".".o";
+        // g++ -o <target_executable_file> <object_file>
+
+        echo $command.'<br />';
 
         exec($command); // compiling
 

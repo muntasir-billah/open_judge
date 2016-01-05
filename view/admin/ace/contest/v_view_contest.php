@@ -154,11 +154,10 @@
 							<th class="oj_tag_column">Tags</th>
 							<th class="hidden-480 oj_tl_ml" title="Time Limit">TL</th>
 							<th class="hidden-480 oj_tl_ml" title="Memory Limit">ML</th>
-
-							<th class="oj_description_column">
+						<!--<th class="oj_description_column">
 								<i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>
 								Description
-							</th>
+							</th> -->
 							<th>Setter</th>
 							<th class="hidden-480">Date Added</th>
 
@@ -183,7 +182,7 @@
 							</td>
 							<td class="hidden-480 oj_tl_ml"><?php echo $problem->problem_time_limit; ?></td>
 							<td class="hidden-480 oj_tl_ml"><?php echo $problem->problem_memory_limit; ?></td>
-							<td class="oj_description_column"><?php echo $problem->problem_excerpt; ?></td>
+							<!--<td class="oj_description_column"><?php echo $problem->problem_excerpt; ?></td> -->
 
 							<td><?php echo $problem->problem_setter; ?></td>
 							<td class="hidden-480"><?php echo date('h:i A, M d, Y', strtotime($problem->problem_add_date)); ?></td>
