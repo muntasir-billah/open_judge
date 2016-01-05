@@ -105,7 +105,7 @@ class Contest extends OJ_Controller {
         foreach($contest_users as $c_key => $cont_user) {
             $data['users'][$cont_user->user_id] = $cont_user->user_name;
         }
-        $data['submissions'] = $this->m_admin->get_sub_for_contest($contest_id);
+        $data['submissions'] = $this->m_admin->get_sub_for_contest_without_source($contest_id);
 
         foreach($data['submissions'] as $key => $sub) {
             if(!isset($data['users'][$sub->user_id])) {
@@ -457,7 +457,7 @@ class Contest extends OJ_Controller {
 
         $aff = $this->m_admin->update_submission($submission_id, $sub);
 
-
+        /*
         if($this->m_admin->if_first_submission($user_id, $contest_id)) {
             $rank = array();
             $rank['user_id'] = $user_id;
@@ -490,7 +490,7 @@ class Contest extends OJ_Controller {
             if($insert_id) echo 'OK';
             else echo 'NOT Inserted';
         }
-        else { // This is not the first submission from this user.
+        else { // This is not the first submission from this user. */
             $current_rank = $this->m_admin->get_rank($user_id, $contest_id);
             $c_rank = explode(',', $current_rank->rank_details);
             $rank = array();
@@ -523,7 +523,7 @@ class Contest extends OJ_Controller {
             $aff = $this->m_admin->update_rank($user_id, $contest_id, $rank);
             if($aff) echo 'OK';
             else echo 'NOT Updated';
-        }
+        /* } */
         echo '<pre>';
         echo 'Rank<br />';
         print_r($rank);
@@ -540,6 +540,28 @@ class Contest extends OJ_Controller {
         //     $temp_data['contest_status'] = 0;
         //     $aff = $this->m_admin->update_contest_status($contest_id, $temp_data);
         // }
+    }
+
+    public function global_rejudge($contest_id=0) {
+        if($contest_id == 0) redirect(base_url($this->module.'/contest'));
+
+        $data = $this->data;
+
+        // Page CSS Files
+        $data['page_css'] = array();
+
+        // Page JS Scripts
+        $data['page_scripts'] = array('js_global_rejudge.php');
+
+        if(!$data['contest'] = $this->m_admin->get_single_contest($contest_id)) {
+            redirect(base_url('four'));
+        }
+
+        $data['title'] .= 'Global Rejudge: '.$data['contest']->contest_name;
+
+
+        $data['content'] = $this->subview.'/v_global_rejudge.php';
+        $this->load->view($this->viewpath.'v_main', $data);
     }
 
     public function process_submissions() {
@@ -608,6 +630,73 @@ class Contest extends OJ_Controller {
     public function fetch_submission($submission_id) {
         $submission = $this->m_admin->get_single_submission($submission_id);
         echo htmlentities($submission->submission_source);
+    }
+
+    public function reset_ranks($contest_id=0) {
+        if($contest_id==0) redirect(base_url($this->module.'/contest'));
+
+        $ranks = $this->m_admin->get_ranklist($contest_id);
+        //$this->printer($ranks);
+        $rank = array();
+        $count = $this->m_admin->get_prob_cont_count($contest_id);
+        foreach($ranks as $key => $single_rank) {
+            $temp_rank = array();
+            $temp_rank['rank_id'] = $single_rank->rank_id;
+            $temp_rank['rank_solved'] = 0;
+            $temp_rank['rank_penalty'] = 0;
+            $temp_rank['rank_details'] = '';
+            $first_flag = true;
+            for($i=0; $i<$count; ++$i) {
+                if($first_flag) $first_flag = false;
+                else $temp_rank['rank_details'] .= ',';
+                $temp_rank['rank_details'] .= '0,NA,0';
+            }
+            $rank[$key] = $temp_rank;
+        }
+        $aff = $this->m_admin->update_batch_rank($rank);
+        if($aff) echo 'success';
+        else echo 'failed';
+    }
+
+    public function reset_prob_cont_rel($contest_id=0) {
+        if($contest_id==0) redirect(base_url($this->module.'/contest'));
+
+        $prob_cont_rel = $this->m_admin->get_prob_cont_rel_for_cont($contest_id);
+        //$this->printer($prob_cont_rel);
+        $rel = array();
+        foreach($prob_cont_rel as $key => $single_rel) {
+            $temp_rel = array();
+            $temp_rel['prob_cont_rel_id'] = $single_rel->prob_cont_rel_id;
+            $temp_rel['prob_cont_tried'] = 0;
+            $temp_rel['prob_cont_solved'] = 0;
+            $rel[$key] = $temp_rel;
+        }
+
+        //$this->printer($rel);
+        $aff = $this->m_admin->update_batch_prob_cont_rel($rel);
+        if($aff) echo 'success';
+        else echo 'failed';
+    }
+
+    public function reset_submissions($contest_id=0) {
+        if($contest_id==0) redirect(base_url($this->module.'/contest'));
+
+        $submissions = $this->m_admin->get_sub_for_contest_without_source($contest_id);
+        $this->printer($submissions);
+        $total_sub = array();
+        foreach($submissions as $key => $sub) {
+            $temp_sub = array();
+            $temp_sub['submission_id'] = $sub->submission_id;
+            $temp_sub['submission_status'] = 1;
+            $temp_sub['submission_result'] = 0;
+            $temp_sub['submission_tle'] = 0;
+            $total_sub[$key] = $temp_sub;
+        }
+
+        //$this->printer($total_sub);
+        $aff = $this->m_admin->update_batch_submission($total_sub);
+        if($aff) echo 'success';
+        else echo 'failed';
     }
 
 }

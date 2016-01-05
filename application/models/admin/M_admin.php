@@ -292,6 +292,11 @@ class M_admin extends Ci_model {
         return $this->db->affected_rows();
     }
 
+    public function update_batch_prob_cont_rel($prob_cont_rel) {
+        $this->db->update_batch('prob_cont_rel', $prob_cont_rel, 'prob_cont_rel_id');
+        return $this->db->affected_rows();
+    }
+
     public function get_judge_io($problem_id) {
         $this->db->select('problem_judge_input, problem_judge_output');
         $this->db->where('problem_id', $problem_id);
@@ -328,6 +333,12 @@ class M_admin extends Ci_model {
         return $this->db->get('submission')->result();
     }
 
+    public function get_sub_for_contest_without_source($contest_id) {
+        $this->db->where('contest_id', $contest_id);
+        $this->db->order_by('submission_time', 'desc');
+        return $this->db->get('submissions_without_source')->result();
+    }
+
     public function get_user($user_id) {
         $this->db->where('user_id', $user_id);
         return $this->db->get('user')->row();
@@ -342,6 +353,11 @@ class M_admin extends Ci_model {
     public function update_submission($submission_id, $submission) {
         $this->db->where('submission_id', $submission_id);
         $this->db->update('submission', $submission);
+        return $this->db->affected_rows();
+    }
+    
+    public function update_batch_submission($submission) {
+        $this->db->update_batch('submission', $submission, 'submission_id');
         return $this->db->affected_rows();
     }
 
@@ -399,6 +415,11 @@ class M_admin extends Ci_model {
 
     public function insert_batch_rank($rank) {
         $this->db->insert_batch('rank', $rank);
+        return $this->db->affected_rows();
+    }
+
+    public function update_batch_rank($rank) {
+        $this->db->update_batch('rank', $rank, 'rank_id');
         return $this->db->affected_rows();
     }
 

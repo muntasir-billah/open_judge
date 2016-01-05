@@ -183,7 +183,14 @@ class OJ_Controller extends CI_Controller
         // $point = fopen($sandbox.'/'.$error, "r"); // Checking for compilation error
         // $content = fread($point,filesize($sandbox.'/'.$error));
         // fclose($point);
+
+        $pos = false;
         if(filesize($sandbox.'/'.$error) > 0) {
+            $error_text = file_get_contents($sandbox.'/'.$error);
+            $pos = strpos($error_text, 'error');
+        }
+        //===================================
+        if($pos !== false) {
             echo 'Compilation Error';
             $result = 5;
         }
@@ -249,7 +256,7 @@ class OJ_Controller extends CI_Controller
                 }
             }
         } // Processing Ends 
-        $this->__remove_dir($sandbox);
+        //$this->__remove_dir($sandbox);
         $res = array('result' => $result, 'time' => $ret['time']);
         return $res;
 
@@ -285,6 +292,14 @@ class OJ_Controller extends CI_Controller
 
         return $ret;
 
+    }
+
+    public function printer($arr, $exit_flag = false) { // for debug purpose
+        echo '<pre>';
+        print_r($arr);
+        echo '</pre>';
+
+        if($exit_flag) exit();
     }
 
 }

@@ -248,4 +248,8 @@
 		});
 	});
 
+	$('#global_rejudge').click(function() {
+		if(!confirm("Oh really? Now you wanna rejudge?\nYOU ARE A BAD JUDGE >_< ")) return false;
+	});
+
 </script>

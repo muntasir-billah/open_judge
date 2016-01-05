@@ -76,6 +76,7 @@ class Dashboard extends OJ_Controller {
 
                     // Creating blank ranks for the contestants of that contest
                     $users = $this->m_admin->get_users_for_contest($contest->contest_id);
+                    $count = $this->m_admin->get_prob_cont_count($contest->contest_id);
                     $rank = array();
                     foreach($users as $u_key => $user) {
                         $temp_rank = array();
@@ -84,10 +85,9 @@ class Dashboard extends OJ_Controller {
                         $temp_rank['rank_solved'] = 0;
                         $temp_rank['rank_penalty'] = 0;
 
-                        $count = $this->m_admin->get_prob_cont_count($contest->contest_id);
                         $temp_rank['rank_details'] = '';
                         $first_flag = true;
-                        while($count--) {
+                        for($i=0; $i<$count; ++$i) {
                             if($first_flag) {
                                 $first_flag = false;
                             }

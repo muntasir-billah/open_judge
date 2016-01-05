@@ -55,6 +55,9 @@
 		<div class="page_actions pull-right">
 			<button class="btn btn-sm btn-info active" id="view_row">View</button>
 			<button class="btn btn-sm btn-warning" id="edit_row">Edit</button>
+			<a href="<?php echo base_url($this->module.'/contest/global_rejudge/'.$contest->contest_id); ?>" target="_blank" class="btn btn-sm btn-primary" id="global_rejudge">
+				Rejudge Contest
+			</a>
 		</div>
 		<h1><?php echo $contest->contest_name; ?></h1>
 	</div><!-- /.page-header -->
@@ -358,13 +361,13 @@
                             <td><?php echo $users[$submission->user_id]; ?></td>
                             <td>
                               <a target="_blank" href="<?php echo base_url($this->module.'/contest/view_contest?contest_id='.$contest->contest_id.'#problems/'.$nos[$submission->problem_id]); ?>">
-                              <?php echo $nos[$submission->problem_id]; ?>
+                              Problem <?php echo $nos[$submission->problem_id]; ?>
                               </a>
                             </td>
                             <td><?php echo $language[$submission->language_id]; ?></td>
                             <td>
                               <?php
-                                if($submission->submission_result != 3)
+                                if($submission->submission_result != 3 && $submission->submission_result != 5)
                                   printf("%.4fs", $submission->submission_tle);
                                 else echo 'N/A';
                               ?>
@@ -374,10 +377,10 @@
                             <td>
                             	<div class="action-buttons">
 
-									<!--<a title="Judge" href="<?php echo base_url($module.'/contest/compile/'.$submission->submission_id); ?>" class="blue col-xs-2">
+									<a target="_blank" title="Judge" href="<?php echo base_url($module.'/contest/compile/'.$submission->submission_id); ?>" class="blue col-xs-2">
 										<i class="ace-icon fa fa-cog bigger-130"></i>
 									</a>
-									-->
+									
 								</div>
                             </td>
                           </tr>
