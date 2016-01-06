@@ -58,7 +58,7 @@
 	var X = 5;
 	//var interval = 1000 * 60 * X; // where X is your every X minutes
 
-	var interval = 1000;
+	var interval = 400;
 
 	setInterval(ajax_call, interval);
 </script>

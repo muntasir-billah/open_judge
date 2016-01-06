@@ -64,6 +64,7 @@
 				//alert('Total: ' + total_sub +', Processed: ' + processed_sub + ', Percentage: ' + percent);
 
 				$('#rejudge').children('label').children('span').html(percent + '%');
+				$('#rejudge').children('label').children('i').html(processed_sub + ' of ' + total_sub);
 				$('#rejudge').children('div.progress').children('div.progress-bar').css('width', percent+'%');
 
 				if(percent == 100) {

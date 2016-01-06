@@ -10,7 +10,7 @@ Admin View Map:
 		iii. Submission ===========================================================
 		iv. Clarification =========================================================
 		v. Standings  =============================================================
-			Global Rejudge
+			Global Rejudge ====================================================
 			Disqualify/Requalify a contestant.
 			Generate Resultant HTML file for the final Ranklist
 	b) Create Contest =================================================================

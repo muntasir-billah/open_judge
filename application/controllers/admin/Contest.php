@@ -422,8 +422,7 @@ class Contest extends OJ_Controller {
         --$order;
         echo '<br />';
 
-        $prev_submissions = $this->m_admin->get_prev_submissions_by_user($user_id, $contest_id, $problem_id);
-        --$prev_submissions;
+        $prev_submissions = $this->m_admin->get_prev_submissions_by_user($user_id, $contest_id, $problem_id, $submission_id);
         echo 'Prev: '.$prev_submissions.'<br /><br />';
 
         // Updating Total Solved for this problem

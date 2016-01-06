@@ -29,7 +29,7 @@
 					</div><!-- Progress Bar -->
 				</div><!-- reset_submissions -->
 				<div id="rejudge" style="display:none">
-					<label>Rejudging <span class="blue">0%</span></label>
+					<label>Rejudging <span class="blue">0%</span> (<i class="blue">0 of <?php echo $count; ?></i>)</label>
 					<div class="progress progress-striped progress-small">
 						<div style="width: 0%" class="progress-bar progress-bar-success active"></div>
 					</div><!-- Progress Bar -->

@@ -372,10 +372,11 @@ class M_admin extends Ci_model {
         return $this->db->affected_rows();
     }
 
-    public function get_prev_submissions_by_user($user_id, $contest_id, $problem_id) {
+    public function get_prev_submissions_by_user($user_id, $contest_id, $problem_id, $submission_id) {
         $this->db->where('user_id', $user_id);
         $this->db->where('contest_id', $contest_id);
         $this->db->where('problem_id', $problem_id);
+        $this->db->where('submission_id <', $submission_id);
         $result = $this->db->get('submission');
         return $result->num_rows();
     }
