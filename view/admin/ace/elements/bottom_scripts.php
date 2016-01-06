@@ -43,23 +43,3 @@
 		$('#view_row').addClass('active');
 	});
 </script>
-
-<?php if($this->session->admin_type == 'admin') { ?>
-<script>
-	var ajax_call = function() {
-
-		var url = "<?php echo base_url($module.'/Dashboard/check_contest_status'); ?>/";
-		$.post( url );
-
-		var url = "<?php echo base_url($module.'/contest/process_submissions'); ?>/";
-		$.post( url );
-	};
-
-	var X = 5;
-	//var interval = 1000 * 60 * X; // where X is your every X minutes
-
-	var interval = 400;
-
-	setInterval(ajax_call, interval);
-</script>
-<?php } ?>

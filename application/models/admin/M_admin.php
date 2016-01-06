@@ -327,6 +327,13 @@ class M_admin extends Ci_model {
         return $this->db->get('submission')->row();
     }
 
+    public function get_submissions_with_limit($limit) {
+        $this->db->where('submission_status', 1);
+        $this->db->order_by('submission_time');
+        $this->db->limit($limit);
+        return $this->db->get('submissions_without_source')->result();
+    }
+
     public function get_sub_for_contest($contest_id) {
         $this->db->where('contest_id', $contest_id);
         $this->db->order_by('submission_time', 'desc');

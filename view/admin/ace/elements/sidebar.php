@@ -147,6 +147,16 @@
 				</li>
 			</ul>
 		</li>
+		<?php
+			if($this->session->admin_type == 'admin') {
+		?>
+		<li class="hover">
+			<a href="<?php echo base_url($module.'/contest/kitchen'); ?>">
+				<i class="menu-icon fa fa-reddit"></i>
+				<span class="menu-text"> Kitchen </span>
+			</a>
+		</li>
+		<?php } ?>
 		<!--  --
 		<li>
 			<a>

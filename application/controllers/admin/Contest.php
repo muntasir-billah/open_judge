@@ -24,6 +24,7 @@ class Contest extends OJ_Controller {
         $this->data['module'] = $this->module;
         $this->data['verdict'] = $this->verdict;
         $this->data['verdict_class'] = $this->verdict_class;
+        $this->data['language'] = $this->language;
     }
     //====================================//
 
@@ -420,10 +421,9 @@ class Contest extends OJ_Controller {
         $prob_count = $this->m_admin->get_prob_cont_count($contest_id);
         $order = $this->m_admin->get_prob_cont_order($contest_id, $problem_id);
         --$order;
-        echo '<br />';
 
         $prev_submissions = $this->m_admin->get_prev_submissions_by_user($user_id, $contest_id, $problem_id, $submission_id);
-        echo 'Prev: '.$prev_submissions.'<br /><br />';
+        //echo 'Prev: '.$prev_submissions.'<br /><br />';
 
         // Updating Total Solved for this problem
         $prob_cont_rel = $this->m_admin->get_prob_cont_rel($problem_id, $contest_id);
@@ -432,7 +432,7 @@ class Contest extends OJ_Controller {
         if($prev_submissions) {
             //checking if this problem is already solved by this user;
             if($this->m_admin->check_existing_solution($user_id, $contest_id, $problem_id)){
-                echo 'Already Solved';
+                echo 'Ignored';
                 $sub = array();
                 $sub['submission_status'] = 0;
                 $sub['submission_result'] = 7;
@@ -448,7 +448,6 @@ class Contest extends OJ_Controller {
         $res = $this->__process($submission_id);
         $result = $res['result'];
         $time = $res['time'];
-        echo '<br />';
         $sub = array();
         $sub['submission_status'] = 0;
         $sub['submission_result'] = $result;
@@ -456,81 +455,43 @@ class Contest extends OJ_Controller {
 
         $aff = $this->m_admin->update_submission($submission_id, $sub);
 
-        /*
-        if($this->m_admin->if_first_submission($user_id, $contest_id)) {
-            $rank = array();
-            $rank['user_id'] = $user_id;
-            $rank['contest_id'] = $contest_id;
-            $minute_diff = 0;
-            if($result == 1) {
-                // Updating Total Solved for this problem
-                $prob_cont_update['prob_cont_solved'] = $prob_cont_rel->prob_cont_solved + 1;
+        $current_rank = $this->m_admin->get_rank($user_id, $contest_id);
+        $c_rank = explode(',', $current_rank->rank_details);
+        $rank = array();
 
-                $rank['rank_solved'] = 1;
-                // Calculating Penalty
-                $second_diff = strtotime($submission->submission_time) - strtotime($contest->contest_start);
-                $minute_diff = (int)($second_diff / 60);
-            }
-            else $rank['rank_solved'] = 0;
-            $rank['rank_penalty'] = $minute_diff;
+        $minute_diff = 0;
+        if($result == 1) {
+            // Updating Total Solved for this problem
+            $prob_cont_update['prob_cont_solved'] = $prob_cont_rel->prob_cont_solved + 1;
 
-            $rank['rank_details'] = '';
-            for($i = 0; $i < $prob_count; ++$i) {
-                if($i > 0) $rank['rank_details'] .= ',';
-                if($i != $order)
-                    $rank['rank_details'] .= '0,NA,0';
-                else {
-                    $rank['rank_details'] .= '1,';
-                    if($result == 1) $rank['rank_details'] .= $minute_diff.','.$minute_diff;
-                    else $rank['rank_details'] .= $minute_diff.',0';
-                }
-            }
-            $insert_id = $this->m_admin->insert_rank($rank);
-            if($insert_id) echo 'OK';
-            else echo 'NOT Inserted';
+            $rank['rank_solved'] = $current_rank->rank_solved + 1;
+            // Calculating Penalty
+            $second_diff = strtotime($submission->submission_time) - strtotime($contest->contest_start);
+            $minute_diff = (int)($second_diff / 60);
+            $penalty = ($prev_submissions * 20) + $minute_diff;
+            $rank['rank_penalty'] = $current_rank->rank_penalty + $penalty;
         }
-        else { // This is not the first submission from this user. */
-            $current_rank = $this->m_admin->get_rank($user_id, $contest_id);
-            $c_rank = explode(',', $current_rank->rank_details);
-            $rank = array();
 
-            $minute_diff = 0;
-            if($result == 1) {
-                // Updating Total Solved for this problem
-                $prob_cont_update['prob_cont_solved'] = $prob_cont_rel->prob_cont_solved + 1;
-
-                $rank['rank_solved'] = $current_rank->rank_solved + 1;
-                // Calculating Penalty
-                $second_diff = strtotime($submission->submission_time) - strtotime($contest->contest_start);
-                $minute_diff = (int)($second_diff / 60);
-                $penalty = ($prev_submissions * 20) + $minute_diff;
-                $rank['rank_penalty'] = $current_rank->rank_penalty + $penalty;
+        $rank['rank_details'] = '';
+        for($i = 0, $k=0; $k < $prob_count; $i += 3, ++$k) {
+            if($i > 0) $rank['rank_details'] .= ',';
+            if($k != $order)
+                $rank['rank_details'] .= $c_rank[$i].','.$c_rank[$i+1].','.$c_rank[$i+2];
+            else {
+                $rank['rank_details'] .=  ($c_rank[$i]+1).',';
+                if($result == 1) $rank['rank_details'] .= $minute_diff.','.$penalty;
+                else $rank['rank_details'] .= $minute_diff.',0';
             }
+        }
 
-            $rank['rank_details'] = '';
-            for($i = 0, $k=0; $k < $prob_count; $i += 3, ++$k) {
-                if($i > 0) $rank['rank_details'] .= ',';
-                if($k != $order)
-                    $rank['rank_details'] .= $c_rank[$i].','.$c_rank[$i+1].','.$c_rank[$i+2];
-                else {
-                    $rank['rank_details'] .=  ($c_rank[$i]+1).',';
-                    if($result == 1) $rank['rank_details'] .= $minute_diff.','.$penalty;
-                    else $rank['rank_details'] .= $minute_diff.',0';
-                }
-            }
+        $aff = $this->m_admin->update_rank($user_id, $contest_id, $rank);
+        if($aff) {
+            // Do nothing
+            //echo 'OK';
+        }
+        else echo 'Failed to Process';
 
-            $aff = $this->m_admin->update_rank($user_id, $contest_id, $rank);
-            if($aff) echo 'OK';
-            else echo 'NOT Updated';
-        /* } */
-        echo '<pre>';
-        echo 'Rank<br />';
-        print_r($rank);
-        echo '</pre>';
-        echo '<pre>';
-        echo 'Rank<br />';
-        print_r($prob_cont_update);
-        echo '</pre>';
+        //$this->printer($rank);
 
         $aff = $this->m_admin->update_prob_cont_rel($prob_cont_rel->prob_cont_rel_id, $prob_cont_update);
 
@@ -706,6 +667,28 @@ class Contest extends OJ_Controller {
     public function get_processed_sub_for_contest_count($contest_id = 0) {
         if($contest_id==0) redirect(base_url($this->module.'/contest'));
         echo $this->m_admin->get_processed_sub_for_contest_count($contest_id);
+    }
+
+    public function kitchen() {
+        //$limit = 3;        
+        $data = $this->data;
+        //$data['submissions'] = $this->m_admin->get_submissions_with_limit($limit);
+        // Page CSS Files
+        $data['page_css'] = array();
+
+        // Page JS Scripts
+        $data['page_scripts'] = array('js_kitchen.php');
+
+        $data['title'] .= 'Open Judge Kitchen';
+
+        $data['content'] = 'v_kitchen.php';
+        $this->load->view($this->viewpath.'v_main', $data);
+    }
+
+    public function fetch_sub_with_limit($limit=10) {
+        $submissions = $this->m_admin->get_submissions_with_limit($limit);
+        $submissions = json_encode($submissions);
+        echo $submissions;
     }
 
 }

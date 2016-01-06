@@ -8,6 +8,7 @@ class OJ_Controller extends CI_Controller
 	public $sandbox_path = 'sandbox/';					// Directory to the sandbox
 	public $verdict = array('In Queue', 'Accepted', 'Wrong Answer', 'Time Limit Exceeded', 'Runtime Error', 'Compilation Error', 'Memory Limit Exceeded', 'Ignored');
     public $verdict_class = array('primary', 'success', 'danger', 'danger', 'danger', 'warning', 'danger', 'default');
+    public $language = array(1=>'GNU C11', 2=>'GNU C++14');
 
 	/*
 	
@@ -126,7 +127,7 @@ class OJ_Controller extends CI_Controller
         $sandbox = $this->config->item('root').$this->sandbox_path.$submission->submission_id;
         mkdir($sandbox);
 
-        echo $sandbox.'<br /><br />';
+        //echo $sandbox.'<br /><br />';
         // echo '<pre>';
         // echo $submission->submission_source;
         // echo '</pre>';
@@ -223,6 +224,7 @@ class OJ_Controller extends CI_Controller
                         // $content2 = fread($point2,filesize($sandbox.'/'.$judge_out));
                         // fclose($point2);
 
+                        /*
                         echo 'Output: ';
                         $len = strlen($content);
                         echo $len."<br />";
@@ -239,9 +241,10 @@ class OJ_Controller extends CI_Controller
                             echo $char.' ';
                         }
                         echo '<br />';
+                        */
 
                         if($content != $content2) {
-                            echo '1st Wrong Answer: Output doesn\'t Match exactly ';
+                            echo 'Wrong Answer';
                             $result = 2;
                         }
                         else {
@@ -263,7 +266,7 @@ class OJ_Controller extends CI_Controller
     }
 
     public function __compile($time, $compiler, $path, $ext, $file, $file_name, $output, $input, $error, $fault) {
-        echo '<pre>';
+        //echo '<pre>';
         $time /= 1000; // Converting to Seconds;
         $tle = 'timeout '.$time.'s ';
 
@@ -275,14 +278,14 @@ class OJ_Controller extends CI_Controller
 
         // gcc -c <source_file> -o <destination_object_file> 
 
-        echo $command.'<br />';
+        //echo $command.'<br />';
 
         exec($command); // compiling
 
         $command = "g++ -o $path/$file_name $path/$file_name".".o";
         // g++ -o <target_executable_file> <object_file>
 
-        echo $command.'<br />';
+        //echo $command.'<br />';
 
         exec($command); // compiling
 

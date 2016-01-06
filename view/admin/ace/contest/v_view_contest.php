@@ -1,7 +1,3 @@
-<?php
-	$language = array(1=>'GNU C11', 2=>'GNU C++14');
-?>
-
 <div class="my_modal" id="clar_reply_box_oj">
 	<span class="my_modal_close btn btn-md btn-danger"><i class="ace-icon fa fa-times bigger-110"></i></span>
 	<div class="my_modal_body">
