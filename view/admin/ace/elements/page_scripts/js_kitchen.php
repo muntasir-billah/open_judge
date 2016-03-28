@@ -47,6 +47,7 @@ $(document).ready(function() {
 		});
 	}
 
+
 	var kitchen = function() {
 		if(count > 0) {
 			if(!busy) compile_function();
@@ -58,4 +59,5 @@ $(document).ready(function() {
 
 	setInterval(kitchen, interval);
 });
+
 </script>

@@ -16,7 +16,7 @@
 		if(confirm("Really? You want to delete this contest?")) {
 			var contestid = $(this).attr('contestid');
 			var id = 'contest' + contestid;
-			var url = "<?php echo base_url($module.'/'.$this->subview.'/delete_contest'); ?>/" + contestid;
+			var url = "<?php echo base_url($module.'/contest/delete_contest'); ?>/" + contestid;
 			$.post( url, function( data ) {
 				if(data == 'yes') {
 					$('#'+id).fadeOut(1000);

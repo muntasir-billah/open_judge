@@ -39,5 +39,15 @@
 <script src="<?php echo $fullpath; ?>assets/js/jquery-ui.custom.min.js"></script>
 <script src="<?php echo $fullpath; ?>assets/js/jquery.ui.touch-punch.min.js"></script>
 
+<script>
+	
+	var contest_status = function() {
+		var status_url = '<?php echo base_url('admin/Dashboard/check_contest_status'); ?>';
+		$.post(status_url);
+	};
 
+	var contest_interval = 400;
 
+	setInterval(contest_status, contest_interval);
+
+</script>

@@ -219,8 +219,11 @@
 	    secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
 
 	    if (t.total <= 0) {
+	    	//alert("hello");
 	      clearInterval(timeinterval);
+	      //contest_status();
 		  	var url = window.location.href;
+		  	//alert(url);
 		  	window.location.href = url;
 	    }
 	  }
